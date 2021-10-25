@@ -1,0 +1,20 @@
+Package: combinIT
+Type: Package
+Title: Combine Interaction Tests for testing interaction in unreplicated two-way tables
+Version: 0.1.0
+Authors@R: c(
+    person("Zahra", "Shenavari", email = "???", role = "aut"),
+    person("Mahmoud", "Kharati", email = "??@??.??", role = "aut"),
+    person("Seyed Morteza", "Najibi", email = "???", role = "aut"),
+    person("Hossein", "Haghbin", email = " haghbin@pgu.ac.ir", role = c("aut", "cre"))
+    )
+Maintainer: The package maintainer <zshenavari@yahoo.com>
+Description: combination
+Dependent: R(>=3.5.1)
+License: Shiraz uni
+Encoding: UTF-8
+LazyData: TRUE
+RoxygenNote: 6.1.1
+Imports: Rcpp
+LinkingTo: Rcpp, RcppArmadillo
+Depends: R (>= 4.0)
