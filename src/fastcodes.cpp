@@ -146,26 +146,22 @@ double  M_f(arma::mat x) {            // Hossein's Codes....
   arma::mat centers;
   arma::kmeans(centers, r, 3, static_spread, 30, false);
   arma::vec af(n,fill::ones);
+  arma::mat  Xi(n,3,fill::zeros);
   for(int i=0; i<n;i++)
   {
     if(abs(r(i)-centers(0,1)) < abs(r(i)-centers(0,0)) && abs(r(i)-centers(0,1)) < abs(r(i)-centers(0,2)))
     {
-      af(i)=2;
+      Xi(i,1)=1;
     } else if(abs(r(i)-centers(0,2)) < abs(r(i)-centers(0,0)) && abs(r(i)-centers(0,2)) < abs(r(i)-centers(0,1)))
     {
-      af(i)=3;
+      Xi(i,2)=1;
+    } else
+    {
+      Xi(i,0)=1;
     }
   }
-  
-  arma::vec  xi(n*3, fill::zeros), a1(n, fill::ones),a2(bl, fill::ones),a3(tr, fill::ones);
+  arma::vec  a1(n, fill::ones),a2(bl, fill::ones),a3(tr, fill::ones);
   arma::mat B3 = arma::diagmat(a3), B2 = arma::diagmat(a2);
-  int j;
-  for(int i=0; i<n;i++)
-  {
-    j = af(i);
-    xi(3*i+j-1)= 1;
-  }
-  arma::mat  Xi = arma::trans( arma::reshape(xi, 3, n));
   arma::mat  K1 = arma::kron(a2,B3);
   arma::mat  K2 = arma::kron(B2,a3);
   arma::mat X = arma::join_horiz(a1,K1,K2,Xi);
