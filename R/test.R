@@ -267,7 +267,7 @@ KKSA.test<-function(x,nsim=1000,distr = "sim",...){
 
   if(!is.matrix(x)){
     stop("The input should be a matrix")
-  } else {
+  }else{
     bl <- nrow(x)
     tr <- ncol(x)
     n<-tr * bl

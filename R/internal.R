@@ -134,10 +134,7 @@ hh.f<-function(x){
   }
 
   fmax<-max(hvalues)
-  # return(fmax)
-  aa=( t(yb1 - apply(yb1, 1, mean) + mean(yb1)) - apply(yb1, 2, mean))^2
-  return(yb1)
-  
+  return(fmax)
 }
 
 #' internal function for hidden and KKSA methods

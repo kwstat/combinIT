@@ -271,12 +271,9 @@ double kk_f(NumericMatrix x){// Hossein's Codes....
         fvalues(count)= 1/fvalues[count];
       pvalues.push_back(1-R::pf(fvalues(count),dfn,dfd,true,false)+R::pf(1/fvalues(count),dfn,dfd,true,false));
       count++;
-      
     }
   }
 return min(pvalues);
-// return pvalues;
-  
 }
 
 
@@ -292,7 +289,7 @@ using namespace Rcpp;
 //' @importFrom Rcpp sourceCpp
 //' 
 // [[Rcpp::export]]
-NumericMatrix hh_f(NumericMatrix x){// Hossein's Codes....
+double hh_f(NumericMatrix x){// Hossein's Codes....
   // calling combn()
   Function combn("combn");
   int bl = x.nrow();
@@ -300,8 +297,8 @@ NumericMatrix hh_f(NumericMatrix x){// Hossein's Codes....
   double mx,sxbi,sse,rss1,rss2,sse7,myb1,sybi;
   int count = 0,i,j,Nsplit,nr,kk;
   bool flag;
-  NumericVector indj,indj2,sxbj,sybj,hvalues,v;
-  NumericMatrix ind,yb1,yb,yb2,I,xb,m;
+  NumericVector indj,indj2,sxbj,sybj,hvalues,v,indj3;
+  NumericMatrix ind,yb1,yb,yb2,I,xb,m,yb4;
   sxbj=rep(0,tr);
   NumericMatrix xx(clone(x));
   
@@ -396,7 +393,7 @@ NumericMatrix hh_f(NumericMatrix x){// Hossein's Codes....
       //______________________________
       sse7=rss1+rss2;
       hvalues.push_back((sse-sse7)*(bl-2)/sse7);
-      count++;
+      // count++;
     }
   }
   // _________________________________________
@@ -404,36 +401,31 @@ NumericMatrix hh_f(NumericMatrix x){// Hossein's Codes....
   NumericMatrix yb3(tr,1);
   for(i=0; i<bl;i++)
   {
-    NumericVector indj3= seq(0,bl-1);
+    indj3= seq(0,bl-1);
     indj3.erase(i);
-    // NumericMatrix yb3(tr,1);
-    for(j=0; j<bl;j++)
+    yb3=NumericMatrix(tr,1,xx(indj3(0),_).begin());
+    for(j=1; j<(bl-1);j++)
       {
-      if(i!=j)
-        {
-        m = NumericMatrix(tr,1,xx(j,_).begin());
+        m = NumericMatrix(tr,1,xx(indj3(j),_).begin());
         yb3=cbind(yb3,m);
-        }
       }
-    
-    NumericMatrix yb=transpose(yb3);
+    yb3 = transpose(yb3);
+    yb4=clone(yb3);
     myb1=mean(yb3);
     sybj = rep(0,tr);
     for(int jj=0;jj<tr;jj++)
-      sybj(jj)=mean(yb3(jj,_));
+      sybj(jj)=mean(yb3(_,jj));
 
     for(int ii=0;ii<(bl-1);ii++)
     {
-      sybi=mean(yb3(_,ii));
+      sybi=mean(yb3(ii,_));
       for(int jj=0;jj<tr;jj++)
-        yb(ii,jj)= pow(yb3(jj,ii)-sybi+myb1-sybj(jj),2);
+        yb4(ii,jj)= pow(yb3(ii,jj)-sybi+myb1-sybj(jj),2);
     }
-    sse7=sum(yb);
+    sse7=sum(yb4);
     hvalues.push_back((sse-sse7)*(bl-2)/sse7);
-    count++;
   }
-  // return max(hvalues);
-  return yb3;
+  return max(hvalues);
 }
 
 

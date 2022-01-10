@@ -128,7 +128,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // hh_f
-NumericMatrix hh_f(NumericMatrix x);
+double hh_f(NumericMatrix x);
 RcppExport SEXP _combinIT_hh_f(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
