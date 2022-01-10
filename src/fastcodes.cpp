@@ -170,3 +170,277 @@ double  M_f(arma::mat x) {            // Hossein's Codes....
   double Tc = ((arma::sum(arma::square(arma::vectorise(r)))-SSE)/2)/(SSE/((tr-1)*(bl-1)-2));
   return Tc;
 }
+
+
+using namespace Rcpp;
+//' @importFrom Rcpp sourceCpp
+//' 
+// [[Rcpp::export]]
+double kk_f(NumericMatrix x){// Hossein's Codes....
+  // calling combn()
+  Function combn("combn");
+  int bl = x.nrow();
+  int tr = x.ncol();
+  // int n = tr*bl;
+  int count = 0,i,jj,dfn,dfd,Nsplit,nr,kk;
+  double rss1,rss2,pvalues2;
+  bool flag;
+  NumericVector indj,indj2,sybj,fvalues,pvalues;
+  NumericMatrix ind,yb1,yb,yb2,I;
+  for(i=2; i<=floor(bl/2);i++)
+  {
+    ind=combn(Named("x")=bl, Named("m")=i);
+    Nsplit = ind.ncol();
+    nr = ind.nrow();
+    if((bl/2.0)==float(i))
+        Nsplit = Nsplit/2;
+    for(int j=0; j<Nsplit;j++)
+    {
+      // Computing rss1___________________________________
+      indj=ind(_,j);
+      yb1 = NumericMatrix(tr,1 , x(indj(0)-1,_).begin());
+      for(int k=1; k<nr;k++)
+      {
+        I = NumericMatrix(tr,1, x(indj(k)-1,_).begin());
+        yb1 = cbind(yb1,I);
+      }
+      yb1 = transpose(yb1);
+      
+      yb = yb1;
+      double myb1=mean(yb1),sybi;
+      sybj = rep(0,tr);
+      for(int jj=0;jj<tr;jj++)
+        sybj(jj)=mean(yb1(_,jj));
+      
+      for(int ii=0;ii<nr;ii++)
+      {
+        sybi=mean(yb1(ii,_));
+        for(int jj=0;jj<tr;jj++)
+        {
+          yb(ii,jj)= pow(yb1(ii,jj)-sybi+myb1-sybj(jj),2);
+        }
+      }
+      rss1=sum(yb);
+      // Computing rss2___________________________________
+      indj2= rep(0,bl-nr);
+      kk =0;
+      for(int m=1; m<=bl;m++)
+        {
+        flag=true;
+        for(int k=0; k<nr;k++)
+          {
+            if(m==indj(k))
+              {
+              flag=false;
+              break;
+              }
+          }
+        if(flag)
+          {
+          indj2(kk)=m;
+          kk++;
+          }
+        
+        }
+      yb2 = NumericMatrix(tr,1 , x(indj2(0)-1,_).begin());
+      for(int k=1; k<(bl-nr);k++)
+        {
+        I = NumericMatrix(tr,1, x(indj2(k)-1,_).begin());
+        yb2 = cbind(yb2,I);
+        }
+      yb2 = transpose(yb2);
+      //_________________
+      yb = yb2;
+      myb1=mean(yb2);
+      sybj = rep(0,tr);
+      for(int jj=0;jj<tr;jj++)
+        sybj(jj)=mean(yb2(_,jj));
+      
+      for(int ii=0;ii<(bl-nr);ii++)
+      {
+        sybi=mean(yb2(ii,_));
+        for(int jj=0;jj<tr;jj++)
+          yb(ii,jj)= pow(yb2(ii,jj)-sybi+myb1-sybj(jj),2);
+      }
+      rss2=sum(yb);
+      //______________________________
+      dfn=(tr-1)*(i-1);
+      dfd=(bl-i-1)*(tr-1);
+      fvalues.push_back((rss1*(bl-i-1))/(rss2*(i-1)));
+      if(fvalues(count)<1)
+        fvalues(count)= 1/fvalues[count];
+      pvalues.push_back(1-R::pf(fvalues(count),dfn,dfd,true,false)+R::pf(1/fvalues(count),dfn,dfd,true,false));
+      count++;
+      
+    }
+  }
+return min(pvalues);
+// return pvalues;
+  
+}
+
+
+
+
+
+
+
+
+
+
+using namespace Rcpp;
+//' @importFrom Rcpp sourceCpp
+//' 
+// [[Rcpp::export]]
+NumericMatrix hh_f(NumericMatrix x){// Hossein's Codes....
+  // calling combn()
+  Function combn("combn");
+  int bl = x.nrow();
+  int tr = x.ncol();
+  double mx,sxbi,sse,rss1,rss2,sse7,myb1,sybi;
+  int count = 0,i,j,Nsplit,nr,kk;
+  bool flag;
+  NumericVector indj,indj2,sxbj,sybj,hvalues,v;
+  NumericMatrix ind,yb1,yb,yb2,I,xb,m;
+  sxbj=rep(0,tr);
+  NumericMatrix xx(clone(x));
+  
+  mx=mean(xx);
+  for(j=0;j<tr;j++)
+    sxbj(j)=mean(xx(_,j));
+  xb = clone(xx);
+  for(int i=0;i<bl;i++)
+  {
+    sxbi=mean(xx(i,_));
+    for(int j=0;j<tr;j++)
+      xb(i,j)= pow(xx(i,j)-sxbi+mx-sxbj(j),2);
+  }
+  sse = sum(xb);
+  // ________________________
+  for(i=2; i<=floor(bl/2);i++)
+  {
+    ind=combn(Named("x")=bl, Named("m")=i);
+    Nsplit = ind.ncol();
+    nr = ind.nrow();
+    if((bl/2.0)==float(i))
+      Nsplit = Nsplit/2;
+    for(int j=0; j<Nsplit;j++)
+    {
+      // Computing rss1___________________________________
+      indj=ind(_,j);
+      yb1 = NumericMatrix(tr,1 , x(indj(0)-1,_).begin());
+      for(int k=1; k<nr;k++)
+      {
+        I = NumericMatrix(tr,1, x(indj(k)-1,_).begin());
+        yb1 = cbind(yb1,I);
+      }
+      yb1 = transpose(yb1);
+      
+      yb = clone(yb1);
+      myb1=mean(yb1);
+      sybj = rep(0,tr);
+      for(int jj=0;jj<tr;jj++)
+        sybj(jj)=mean(yb1(_,jj));
+      
+      for(int ii=0;ii<nr;ii++)
+      {
+        sybi=mean(yb1(ii,_));
+        for(int jj=0;jj<tr;jj++)
+        {
+          yb(ii,jj)= pow(yb1(ii,jj)-sybi+myb1-sybj(jj),2);
+        }
+      }
+      rss1=sum(yb);
+      // Computing rss2___________________________________
+      indj2= rep(0,bl-nr);
+      kk =0;
+      for(int m=1; m<=bl;m++)
+      {
+        flag=true;
+        for(int k=0; k<nr;k++)
+        {
+          if(m==indj(k))
+          {
+            flag=false;
+            break;
+          }
+        }
+        if(flag)
+        {
+          indj2(kk)=m;
+          kk++;
+        }
+        
+      }
+      yb2 = NumericMatrix(tr,1 , x(indj2(0)-1,_).begin());
+      for(int k=1; k<(bl-nr);k++)
+      {
+        I = NumericMatrix(tr,1, x(indj2(k)-1,_).begin());
+        yb2 = cbind(yb2,I);
+      }
+      yb2 = transpose(yb2);
+      //_________________
+      yb = yb2;
+      myb1=mean(yb2);
+      sybj = rep(0,tr);
+      for(int jj=0;jj<tr;jj++)
+        sybj(jj)=mean(yb2(_,jj));
+      
+      for(int ii=0;ii<(bl-nr);ii++)
+      {
+        sybi=mean(yb2(ii,_));
+        for(int jj=0;jj<tr;jj++)
+          yb(ii,jj)= pow(yb2(ii,jj)-sybi+myb1-sybj(jj),2);
+      }
+      rss2=sum(yb);
+      //______________________________
+      sse7=rss1+rss2;
+      hvalues.push_back((sse-sse7)*(bl-2)/sse7);
+      count++;
+    }
+  }
+  // _________________________________________
+  xx=clone(x);
+  NumericMatrix yb3(tr,1);
+  for(i=0; i<bl;i++)
+  {
+    NumericVector indj3= seq(0,bl-1);
+    indj3.erase(i);
+    // NumericMatrix yb3(tr,1);
+    for(j=0; j<bl;j++)
+      {
+      if(i!=j)
+        {
+        m = NumericMatrix(tr,1,xx(j,_).begin());
+        yb3=cbind(yb3,m);
+        }
+      }
+    
+    NumericMatrix yb=transpose(yb3);
+    myb1=mean(yb3);
+    sybj = rep(0,tr);
+    for(int jj=0;jj<tr;jj++)
+      sybj(jj)=mean(yb3(jj,_));
+
+    for(int ii=0;ii<(bl-1);ii++)
+    {
+      sybi=mean(yb3(_,ii));
+      for(int jj=0;jj<tr;jj++)
+        yb(ii,jj)= pow(yb3(jj,ii)-sybi+myb1-sybj(jj),2);
+    }
+    sse7=sum(yb);
+    hvalues.push_back((sse-sse7)*(bl-2)/sse7);
+    count++;
+  }
+  // return max(hvalues);
+  return yb3;
+}
+
+
+
+
+
+
+
+
+

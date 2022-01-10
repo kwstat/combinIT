@@ -4,7 +4,7 @@
 \alias{hh.f}
 \title{internal function for hidden method}
 \usage{
-hh.f(x, bl)
+hh.f(x)
 }
 \arguments{
 \item{x}{A data matrix}

@@ -15,23 +15,6 @@ B.f <-function(x,p){
 }
 
 
-# M.f <-function(x){
-#   tr <- ncol(x)
-#   bl <- nrow(x)
-#   n <- tr * bl
-#   block <- gl(bl, tr)
-#   treatment <- gl(tr, 1, bl * tr)
-#   RES <- t(t(x - apply(x, 1, mean) + mean(x)) - apply(x, 2, mean))
-#   y <- c(t(x))
-#   r<-c(t(RES))
-#   kmean <- kmeans(x = r, centers = 3, nstart = 100)
-#   af <- kmean$cluster
-#   Tc <- mylm(x,af,y,r)
-#   return(Tc)
-# }
-
-
-
 #' This is an internal function which compute Kronecker product for PIC method
 #'
 #' @keywords internal
@@ -90,7 +73,9 @@ piepho<-function(x,bl,tr ){
 #' @param x A data matrix
 #' @keywords internal
 #'
-kk.f<-function(x,bl,tr){
+kk.f<-function(x){
+  bl <- nrow(x)
+  tr <- ncol(x)
   Nrow<-2:(as.integer(bl/2))
   fvalues<-rep(0,0)
   pvalues<-rep(0,0)
@@ -108,7 +93,7 @@ kk.f<-function(x,bl,tr){
       dfn<-(tr-1)*(i-1)
       dfd<-(bl-i-1)*(tr-1)
       fvalues[count]<-(rss1*(bl-i-1))/(rss2*(i-1))
-      if(fvalues[count]<1)fvalues[count]<-1/fvalues[count]
+      if(fvalues[count]<1) fvalues[count]<-1/fvalues[count]
       pvalues[count]<-1-pf(fvalues[count],dfn,dfd)+pf(1/fvalues[count],dfn,dfd)
      }
    }
@@ -121,7 +106,8 @@ kk.f<-function(x,bl,tr){
 #' @param x A data matrix
 #' @keywords internal
 #'
-hh.f<-function(x,bl){
+hh.f<-function(x){
+  bl <- nrow(x)
   Nrow<-2:(as.integer(bl/2))
   sse<-sum((t(x - apply(x, 1, mean) + mean(x)) - apply(x, 2, mean))^2)
   hvalues<-rep(0,0)
@@ -148,7 +134,10 @@ hh.f<-function(x,bl){
   }
 
   fmax<-max(hvalues)
-  return(fmax)
+  # return(fmax)
+  aa=( t(yb1 - apply(yb1, 1, mean) + mean(yb1)) - apply(yb1, 2, mean))^2
+  return(yb1)
+  
 }
 
 #' internal function for hidden and KKSA methods

@@ -279,18 +279,14 @@ KKSA.test<-function(x,nsim=1000,distr = "sim",...){
 
     } else{
       cck <- 2^(bl - 1) - 1 - bl
-      statistics <-kk.f(x,bl,tr)
+      statistics <-kk_f(x)
       if(distr != "sim" && distr != "asy") distr="sim"
 
       if (distr == "sim")
        {
         simu <-rep(0,0)
         for (i in 1:nsim){
-          simu[i]<-kk.f(matrix(rnorm(n),nrow=bl),bl,tr)
-          # cat(paste(round(i / nsim * 100), '% completed'))
-          #Sys.sleep(.1)
-          # if (i == nsim) cat(': Done')
-          # else cat('\014')
+          simu[i]<-kk_f(matrix(rnorm(n),nrow=bl))
         }
         KKSA.p <- mean(statistics > simu)
       } else if (distr == "asy") {

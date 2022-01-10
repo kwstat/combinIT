@@ -116,6 +116,28 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// kk_f
+double kk_f(NumericMatrix x);
+RcppExport SEXP _combinIT_kk_f(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(kk_f(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// hh_f
+NumericMatrix hh_f(NumericMatrix x);
+RcppExport SEXP _combinIT_hh_f(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(hh_f(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_combinIT_Bfc", (DL_FUNC) &_combinIT_Bfc, 4},
@@ -126,6 +148,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_combinIT_piephoC", (DL_FUNC) &_combinIT_piephoC, 3},
     {"_combinIT_Piephosim", (DL_FUNC) &_combinIT_Piephosim, 3},
     {"_combinIT_M_f", (DL_FUNC) &_combinIT_M_f, 1},
+    {"_combinIT_kk_f", (DL_FUNC) &_combinIT_kk_f, 1},
+    {"_combinIT_hh_f", (DL_FUNC) &_combinIT_hh_f, 1},
     {NULL, NULL, 0}
 };
 

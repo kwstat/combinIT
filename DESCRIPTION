@@ -14,7 +14,7 @@ Dependent: R(>=3.5.1)
 License: Shiraz uni
 Encoding: UTF-8
 LazyData: TRUE
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.2
 Imports: Rcpp
 LinkingTo: Rcpp, RcppArmadillo
 Depends: R (>= 4.0)

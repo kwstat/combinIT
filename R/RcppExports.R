@@ -51,3 +51,15 @@ M_f <- function(x) {
     .Call('_combinIT_M_f', PACKAGE = 'combinIT', x)
 }
 
+#' @importFrom Rcpp sourceCpp
+#' 
+kk_f <- function(x) {
+    .Call('_combinIT_kk_f', PACKAGE = 'combinIT', x)
+}
+
+#' @importFrom Rcpp sourceCpp
+#' 
+hh_f <- function(x) {
+    .Call('_combinIT_hh_f', PACKAGE = 'combinIT', x)
+}
+
