@@ -233,7 +233,7 @@ comb<-function(pvalues){
   S<-(1-rohat)*i+rohat*j
   minp<-min(P)
   m<-qnorm(minp)
-  GC<-1-pmvnorm(lower=rep(m,k),upper=Inf,sigma=S)
+  GC<-1-mvtnorm::pmvnorm(lower=rep(m,k),upper=Inf,sigma=S)
   q0<-max(1/minp-1,1)
   q<-min(q0,(k-1))
   Bon<-min(minp*k,1)

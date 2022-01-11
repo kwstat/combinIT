@@ -39,38 +39,6 @@ Boik.test <- function(x, nsim=1000, ...) {
   }
 
 
-#' @export
-Boik.test.old <- function(x, nsim=1000, ...) {
-  if (!is.matrix(x)) {
-    stop("The input should be a matrix")
-  } else {
-    tr <- ncol(x)
-    bl <- nrow(x)
-    n <- tr * bl
-    p <- min(tr - 1, bl - 1)
-    q <- max(tr - 1, bl - 1)
-
-    statistics <-B.f(x,p)
-    simu <-rep(0,0)
-    for (i in 1:nsim){
-      simu[i]<-B.f(matrix(rnorm(n),nrow = bl),p)
-      #        cat(paste(round(i / nsim * 100), '% completed'))
-      #        #Sys.sleep(.0001)
-      #        if (i == nsim) cat(': Done')
-      #        else cat('\014')
-    }
-    boik.p <- mean(statistics > simu)
-    Tb<-(1/statistics-1)
-    T<-p*q*Tb/2
-    df<-(p+2)*(p-1)/2
-    if(p==2) asyboik.p <-pbeta(Tb,1,(q-1)/2)
-    else asyboik.p <- pchisq(T, df )
-    out <- list(exact.pvalue = boik.p,asy.pvalue = asyboik.p,
-                nsim = nsim,
-                statistics = statistics)
-    return(out)
-  }
-}
 
 #' Malik's test for interaction
 #'
@@ -145,32 +113,6 @@ PIC.test <- function(x, nsim=1000,nc0=10000, ...) {
 }
 
 
-#' @export
-PIC.test.old <- function(x, nsim=1000,nc0=10000, ...) {
-
-  if (!is.matrix(x)) {
-    stop("The input should be a matrix")
-  } else {
-    y <- c(t(x))
-    tr <- ncol(x)
-    bl <- nrow(x)
-    n <- tr * bl
-    kp<- kpr(bl, tr)
-    c0<-mean(replicate(nc0,{median(abs(kp%*%rnorm(n)))}))
-    statistics <-pic.f(y,kp,c0)
-    simu <-rep(0,0)
-    for (i in 1:nsim){
-      simu[i]<-pic.f(rnorm(n),kp,c0)
-#      cat(paste(round(i / nsim * 100), '% completed'))
-      #Sys.sleep(.05)
-#      if (i == nsim) cat(': Done')
-#      else cat('\014')
-    }
-    PIC <- mean(statistics < simu)
-
-    list(pvalue = PIC,nsim=nsim,statistics=statistics)
-  }
-}
 
 #' Piepho's third version test for interaction
 #'
@@ -210,33 +152,6 @@ piepho.test<-function(x,nsim=1000,...){
 }
 
 
-#' @export
-piepho.test.old<-function(x,nsim=1000,...){
-  if(!is.matrix(x)){
-    stop("The input should be a matrix")
-  } else {
-    tr <- ncol(x)
-    bl <- nrow(x)
-    n<-tr * bl
-    statistics <-piepho(x,bl,tr)
-    simu <-rep(0,0)
-    for (i in 1:nsim){
-      simu[i]<-piepho(matrix(rnorm(n),nrow = bl),bl,tr)
-      #cat(paste(round(i / nsim * 100), '% completed'))
-      #Sys.sleep(.05)
-      #if (i == nsim) cat(': Done')
-      #else cat('\014')
-    }
-    pieph <- mean(statistics < simu)
-    df = bl-1
-    asypieph <- 1-pchisq(statistics, df = df)
-    
-    out <- list(exact.pvalue = pieph,asypvalue = asypieph,
-                nsim = nsim
-                ,statistics = statistics)
-    return(out)
-  }
-}
 
 #' Kharrati-Kopaei and Sadooghi-Alvandi's test for interaction
 #'
@@ -336,14 +251,14 @@ hiddenf.test<-function(x,nsim=1000,dist = "sim",...){
 
     }else{
      cch <- 2^(bl - 1) - 1
-     statistics <-hh.f(x,bl)
+     statistics <-hh_f(x)
      if(dist != "sim" || dist != "asy") dist="sim"
 
      if (dist == "sim")
      {
        simu <-rep(0,0)
        for (i in 1:nsim){
-         simu[i]<-hh.f(matrix(rnorm(n),nrow=bl),bl)
+         simu[i]<-hh_f(matrix(rnorm(n),nrow=bl))
          cat(paste(round(i / nsim * 100), '% completed'))
          #Sys.sleep(.1)
          if (i == nsim) cat(': Done')
@@ -415,7 +330,7 @@ combinep<-function(x,nsim=500,nc0=10000,...){
     Mstat <-sta$Tc
     pistat<-sta$piepho
     pstat <-pic.f(y,kp,c0)
-    if(bl==3)Hstat<-hh.f(x,bl)
+    if(bl==3)Hstat<-hh_f(x)
     else{
       Ksimu <-rep(0,0)
       kh<-kh.f(x,bl,tr)
@@ -433,7 +348,7 @@ combinep<-function(x,nsim=500,nc0=10000,...){
         pisimu[i]<-sta$piepho
         psimu[i]<-pic.f(y,kp,c0)
         if(bl==3)
-          Hsimu[i]<-hh.f(x,bl)else{
+          Hsimu[i]<-hh_f(x)else{
         kh<-kh.f(x,bl,tr)
         Ksimu[i]<-kh$fmin
         Hsimu[i]<-kh$fmax
