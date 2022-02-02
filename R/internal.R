@@ -192,7 +192,7 @@ kh.f <- function(x, bl, tr) {
   list(fmin = fmin, fmax = fmax)
 }
 
-#' internal function fo rBoik.Malik.Piepho
+#' internal function for Boik.Malik.Piepho
 #'
 #' @keywords internal
 #'
@@ -227,10 +227,12 @@ bmp.f <- function(x, y, block, treatment, bl, tr, p) {
 }
 
 #' internal function forcombining pvalues
-#' #library(mvtnorm)
+
 #'
 #' @keywords internal
 #'
+#' @importFrom mvtnorm pmvnorm
+
 comb <- function(pvalues) {
   P <- pvalues
   P[P == 0] <- 10^(-6)

@@ -235,7 +235,7 @@ Piepho.test <- function(x, nsim = 10000, ...) {
 #' @param \eqn{x} numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels
 #'   , respectively.
 #' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
-#' @param dist a character, if dist="sim", a Monte Carlo simulation is used for calculating exact p-value. If dist="asy", the Bonferroni-adjusted p-value is calculated. The default is "sim".
+#' @param dist a character, if dist="sim", a Monte Carlo simulation is used for calculating exact p-value. If dist="adj", the Bonferroni-adjusted p-value is calculated. The default is "sim".
 #' 
 #' @details  Suppose that \eqn{b>=a} and \eqn{b>=4}. Consider the \eqn{l}-th division of the data table into two sub-tables,
 #'  obtained by putting \eqn{b_1} (\eqn{2≤b_1≤b-2}) rows in the first sub-table and the remaining \eqn{b_2} rows in the second sub-table (\eqn{b_1+b_2=a}).
@@ -283,7 +283,7 @@ KKSA.test <- function(x, nsim = 10000, distr = "sim", ...) {
     } else {
       cck <- 2^(bl - 1) - 1 - bl
       statistics <- kk.f(x, bl, tr)
-      if (distr != "sim" && distr != "asy") distr <- "sim"
+      if (distr != "sim" && distr != "adj") distr <- "sim"
 
       if (distr == "sim") {
         simu <- rep(0, 0)
@@ -298,7 +298,7 @@ KKSA.test <- function(x, nsim = 10000, distr = "sim", ...) {
           }
         }
         KKSA.p <- mean(statistics > simu)
-      } else if (distr == "asy") {
+      } else if (distr == "adj") {
         KKSA.p <- statistics * cck
         KKSA.p <- min(1, KKSA.p)
       }
@@ -320,7 +320,7 @@ KKSA.test <- function(x, nsim = 10000, distr = "sim", ...) {
 #'   , respectively.
 #' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
 #' @param dist a character, if dist="sim", a Monte Carlo simulation is used for calculating exact p-value,
-#'  and if dist="asy", the Bonferroni-adjusted p-value is calculated. The default is "sim".
+#'  and if dist="adj", the Bonferroni-adjusted p-value is calculated. The default is "sim".
 #'  
 #' @details Franck et al. (2013) derived a test statistic based on the “hidden additivity” structure.
 #'  They defined this structure as “the levels of one factor belong in two or more groups such that within each group the effects of the two factors are additive but the groups may interact with the ungrouped factor”.
@@ -369,7 +369,8 @@ Franck.test <- function(x, nsim = 1000, dist = "sim", ...) {
     } else {
       cch <- 2^(bl - 1) - 1
       statistics <- hh.f(x, bl)
-      if (dist != "sim" || dist != "asy") dist <- "sim"
+      if (dist != "sim" & dist != "adj")
+        stop("\"dist\" parameter should be equal to \"sim\" or \"adj\".")
 
       if (dist == "sim") {
         simu <- rep(0, 0)
@@ -384,7 +385,8 @@ Franck.test <- function(x, nsim = 1000, dist = "sim", ...) {
           }
         }
         hidden <- mean(statistics < simu)
-      } else if (dist == "asy") {
+      } 
+      if (dist == "adj") {
         adjpvalue <- (1 - pf(statistics, (tr - 1), (tr - 1) * (bl - 2))) * cch
         hidden <- min(1, adjpvalue)
       }
@@ -434,8 +436,8 @@ Franck.test <- function(x, nsim = 1000, dist = "sim", ...) {
 #'  Unreplicated Two-Way Layouts Based on Combining Multiple Interaction Tests. International Statistical Review
 #'  86(3): 469-487.
 #' @examples \dontrun{this is an example}
-#' data(CNV)
-#' CPI.test(CNV,nsim=500,nc0=10000)
+#' data(RDWW)
+#' CPI.test(RDWW,nsim=500,nc0=10000)
 #' @export
 CPI.test <- function(x, nsim = 500, nc0 = 10000, ...) {
   if (!is.matrix(x)) {

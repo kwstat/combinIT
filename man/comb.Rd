@@ -2,13 +2,11 @@
 % Please edit documentation in R/internal.R
 \name{comb}
 \alias{comb}
-\title{internal function forcombining pvalues
-#library(mvtnorm)}
+\title{internal function forcombining pvalues}
 \usage{
 comb(pvalues)
 }
 \description{
 internal function forcombining pvalues
-#library(mvtnorm)
 }
 \keyword{internal}

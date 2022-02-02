@@ -2,11 +2,11 @@
 % Please edit documentation in R/internal.R
 \name{bmp.f}
 \alias{bmp.f}
-\title{internal function fo rBoik.Malik.Piepho}
+\title{internal function for Boik.Malik.Piepho}
 \usage{
 bmp.f(x, y, block, treatment, bl, tr, p)
 }
 \description{
-internal function fo rBoik.Malik.Piepho
+internal function for Boik.Malik.Piepho
 }
 \keyword{internal}

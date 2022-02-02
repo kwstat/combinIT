@@ -12,7 +12,7 @@ KKSA.test(x, nsim = 10000, distr = "sim", ...)
 \item{\eqn{x}}{numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels
 , respectively.}
 
-\item{dist}{a character, if dist="sim", a Monte Carlo simulation is used for calculating exact p-value. If dist="asy", the Bonferroni-adjusted p-value is calculated. The default is "sim".}
+\item{dist}{a character, if dist="sim", a Monte Carlo simulation is used for calculating exact p-value. If dist="adj", the Bonferroni-adjusted p-value is calculated. The default is "sim".}
 }
 \value{
 A list of consisting of:
