@@ -7,7 +7,7 @@
 interactionplot(x, ...)
 }
 \arguments{
-\item{x}{A data matrix in two-factor analysis}
+\item{\eqn{x}}{numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels, respectively.}
 }
 \value{
 An interaction plot for input
@@ -21,5 +21,5 @@ data(cnv6)
 interactionplot(cnv6)
 }
 \author{
-Zahra. Shenavari, ...
+Shenavari, Z.; Haghbin, H.; Kharrati-Kopaei, M.; Najibi, S.M.
 }

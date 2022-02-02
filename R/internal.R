@@ -14,6 +14,20 @@ B.f <-function(x,p){
   return(Boik)
 }
 
+#' internal function for Malik method
+#'
+#' @keywords internal
+#'
+M.f <-function(x,y,block , treatment ){
+  RES <- t(t(x - apply(x, 1, mean) + mean(x)) - apply(x, 2, mean))
+  r<-c(t(RES))
+  kmean <- kmeans(x = r, centers = 3, nstart = 100)
+  af <- kmean$cluster
+  modclus <- lm(y ~ block + treatment + as.factor(af))
+  amodclus <- anova(modclus)
+  Tc <- (amodclus[3, 2]/amodclus[3, 1])/(amodclus[4, 2]/amodclus[4,1])
+  return(Tc)
+}
 
 #' This is an internal function which compute Kronecker product for PIC method
 #'
@@ -73,9 +87,7 @@ piepho<-function(x,bl,tr ){
 #' @param x A data matrix
 #' @keywords internal
 #'
-kk.f<-function(x){
-  bl <- nrow(x)
-  tr <- ncol(x)
+kk.f<-function(x,bl,tr){
   Nrow<-2:(as.integer(bl/2))
   fvalues<-rep(0,0)
   pvalues<-rep(0,0)
@@ -93,7 +105,7 @@ kk.f<-function(x){
       dfn<-(tr-1)*(i-1)
       dfd<-(bl-i-1)*(tr-1)
       fvalues[count]<-(rss1*(bl-i-1))/(rss2*(i-1))
-      if(fvalues[count]<1) fvalues[count]<-1/fvalues[count]
+      if(fvalues[count]<1)fvalues[count]<-1/fvalues[count]
       pvalues[count]<-1-pf(fvalues[count],dfn,dfd)+pf(1/fvalues[count],dfn,dfd)
      }
    }
@@ -106,8 +118,7 @@ kk.f<-function(x){
 #' @param x A data matrix
 #' @keywords internal
 #'
-hh.f<-function(x){
-  bl <- nrow(x)
+hh.f<-function(x,bl){
   Nrow<-2:(as.integer(bl/2))
   sse<-sum((t(x - apply(x, 1, mean) + mean(x)) - apply(x, 2, mean))^2)
   hvalues<-rep(0,0)
@@ -233,7 +244,7 @@ comb<-function(pvalues){
   S<-(1-rohat)*i+rohat*j
   minp<-min(P)
   m<-qnorm(minp)
-  GC<-1-mvtnorm::pmvnorm(lower=rep(m,k),upper=Inf,sigma=S)
+  GC<-1-pmvnorm(lower=rep(m,k),upper=Inf,sigma=S)
   q0<-max(1/minp-1,1)
   q<-min(q0,(k-1))
   Bon<-min(minp*k,1)

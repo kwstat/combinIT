@@ -1,20 +1,37 @@
-#' Boik's LBI test
+#' Boik (1993) locally best invariant (LBI) test
 #'
-#' Computes LBI's test statistics \eqn{(tr(R'R))^2/(p tr((R'R)^2))}, where R is residual
-#' matrix of input data matrix under additivity assumption, and returns corresponung p-value.
-#' @param x A b-by-t data matrix, which rows corresponding
-#'  to b-block effects and columns are t-treatment effects.
-#' @param nsim Number of simulation for compueting exact p-value. The defaut value is 1000.
-#' @return Exact and asymptotic p-value for input
-#' @author Zahra. Shenavari, ....
-#' @references Boik, R. J. (1993a). Testing additivity in two-way classifications
+#' This function calculates the LBI test statistic for testing the null hypothesis \eqn{H_0:} there is no interaction.
+#' It returns an exact Monte Carlo p-value (when \eqn{p>2}) and an asymptotic chi-squared p-value.
+#' 
+#' @param \eqn{x} a numeric matrix, \eqn{b \times a} data matrix where the number of row and column are corresponding to the number of block and treatment levels, respectively.
+#' @param nsim a numeric value, the number of Monte Carlo samples for calculating an exact Monte Carlo p-value. The default value is 10000.
+#' 
+#' @return  A list of consisting of:
+#' @return exact.pvalue, an exact Monte Carlo p-value when \eqn{p>2}. For \eqn{p=2} an exact p-value is calculated.
+#' @return asy.pvalue, a chi-squared asymptotic p-value.
+#' @return nsim, the number of Monte Carlo samples that are used to estimate p-value.
+#' @return statistic, the value of test statistic.
+#' 
+#' @details The LBI test statistic is \eqn{T_B93=(tr(R'R))^2/(p tr((R'R)^2))} where \eqn{p=min{a-1,b-1}} and \eqn{R} is the residual
+#'   matrix of the input data matrix, \eqn{x}, under the null hypothesis \eqn{H_0:} there is no interaction. This test rejects the null hypothesis of no interaction when \eqn{T_B93} is small.
+#'   Boik (1993) provided the exact distribution of \eqn{T_B93} when \eqn{p=2} under \eqn{H_0}. In addition, he provided an asymptotic approximation of \eqn{T_B93} under \eqn{H_0} when \eqn{q} tends to infinity where \eqn{q=max{a-1,b-1}}.
+#'   Note that the LBI test is powerful when the \eqn{a \times b} matrix of interaction terms has small rank and one singular value dominates the remaining singular values or
+#'   in practice, if the largest eigenvalue of \eqn{RR'} is expected to dominate the remaining eigenvalues.
+#'   
+#' @author Shenavari, Z.; Haghbin, H.; Kharrati-Kopaei, M.; Najibi, S.M.
+#' 
+#' @references Boik, R.J. (1993). Testing additivity in two-way classifications
 #'  with no replications: the locally best invariant test. Journal of Applied
 #'  Statistics 20(1): 41-55.
+#'  
+#'  Shenavari, Z., Kharrati-Kopaei, M. (2018). A Method for Testing Additivity in
+#'  Unreplicated Two-Way Layouts Based on Combining Multiple Interaction Tests. International Statistical Review
+#'  86(3): 469-487.
 #' @examples \dontrun{this is an example}
 #' data(MVGH)
 #' Boik.test(MVGH, nsim=10000)
 #' @export
-Boik.test <- function(x, nsim=1000, ...) {
+Boik.test <- function(x, nsim=10000, ...) {
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
@@ -29,72 +46,109 @@ Boik.test <- function(x, nsim=1000, ...) {
     Tb<-(1/statistics-1)
     T<-p*q*Tb/2
     df<-(p+2)*(p-1)/2
-    if(p==2) asyboik.p <-pbeta(Tb,1,(q-1)/2)
-    else asyboik.p <- pchisq(T, df )
+    if(p==2) asyboik.p <-1-pbeta(Tb,1,(q-1)/2)
+    else asyboik.p <- 1-pchisq(T, df )
     out <- list(exact.pvalue = boik.p,asy.pvalue = asyboik.p,
                 nsim = nsim,
-                statistics = statistics)
+                statistic = statistics)
   }
     return(out)
   }
 
-
-
-#' Malik's test for interaction
+#' Malik (2016) et al. test for interaction
 #'
-#' Repors the exact p-value from \code{\link{Malik et al. (2016)}}.They proposed to partition
-#' the residuals(components of residual matrix R of input data matrix under additivity
-#' assumption) into three clusters using a suitable clustering method like “k-means clustering”.
-#' The hypothesis of no interaction can be interpreted as the effects of the three
-#' clusters are equal.Compute Malik's test statistics and corresponding p-value by Monte Carlo simulation.
-#' @param x A b-by-t data matrix, which rows corresponding
-#'  to b-block effects and columns are t-treatment effects
-#' @param nsim Number of simulation for compueting exact p-value. The defaut value is 500
-#' @return An exact p-value for input
-#' @author Zahra. Shenavari, ..
-#' @references Malik, W. A., Mo ̈hring, J., Piepho, H. P. (2016). A
+#' The Malik's (2016) et al. test statistics is calculated and the corresponding exact p-value is calculated by a Monte Carlo simulation.
+#' 
+#' @param \eqn{x} numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels, respectively.
+#' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
+#' 
+#' @return A list of consisting of:
+#' @return pvalue, the calculated exact Monte Carlo p-value.
+#' @return nsim, the number of Monte Carlo samples that are used to estimate p-value.
+#' @return statistic, the value of test statistic.
+#' 
+#' @details 
+#'  Malik (2016) et al. proposed to partition
+#'  the residuals into three clusters using a suitable clustering method like “k-means clustering”.
+#'  The hypothesis of no interaction can be interpreted as the effect of the three
+#'  clusters are equal.
+#'  Note that the Malik's et al. test performs well when there are some outliers in the residuals; i.e. some cells produce large negative or positive residuals due to the significant interaction.
+#'  Further, the distribution of the Malik's et al. test statistic is not known under additivity and the corresponding p-value is calculated by a Monte Carlo simulation.
+#' 
+#' @author Shenavari, Z.; Haghbin, H.; Kharrati-Kopaei, M.; Najibi, S.M.
+#' 
+#' @references Malik, W.A., Mohring, J., Piepho, H.P. (2016). A
 #' clustering-based test for non-additivity in an unreplicated two-way layout.
 #' Communications in Statistics-Simulation and Computation 45(2):660-670.
+#' 
+#' Shenavari, Z., Kharrati-Kopaei, M. (2018). A Method for Testing Additivity in
+#' Unreplicated Two-Way Layouts Based on Combining Multiple Interaction Tests. International Statistical Review
+#' 86(3): 469-487.
 #' @examples \dontrun{this is an example}
 #' data(impurity)
-#' Malik.test(impurity,nsim=1000)
+#' Malik.test(impurity,nsim=10000)
 #' @export
-Malik.test <- function(x, nsim=500) {
+Malik.test <- function(x, nsim=10000) {
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
     tr <- ncol(x)
     bl <- nrow(x)
     n <- tr * bl
-    statistics <- M_f(x)
+    block <- gl(bl, tr)
+    treatment <- gl(tr, 1, bl * tr)
+    y <- c(t(x))
+    statistic <-M.f(x,y,block , treatment)
     simu <-rep(0,0)
     for (i in 1:nsim){
          y<-rnorm(n)
-        simu[i] <- M_f(matrix(y,nrow = bl))
+        simu[i]<-M.f(matrix(y,nrow = bl),y,block , treatment)
+        #cat(paste(round(i / nsim * 100), '% completed'))
+        #Sys.sleep(.05)
+        #if (i == nsim) cat(': Done')
+        #else cat('\014')
       }
-      malik <- mean(statistics < simu)
-    list(pvalue = malik,nsim=nsim,statistics=statistics)
+      malik <- mean(statistic < simu)
+
+    list(pvalue = malik,nsim=nsim,statistic=statistic)
   }
 }
 
-#' Kharrati-Kopaei and Miller's test for interaction
+#' Kharrati-Kopaei and Miller (2016) test for interaction
 #'
-#' Computes the test statistics and corresponding p-value based on inspecting all
-#' Pairwise Interaction Contrasts (PICs) for testing interaction
+#' This function calculates the test statistic for testing \eqn{H_0:} no interaction and corresponding Monte Carlo p-value
 #' proposed by Kharrati-Kopaei and Miller(2016).
-#' @param x A b-by-t data matrix, which rows corresponding
-#'  to b-block effects and columns are t-treatment effects
-#' @param nsim Number of simulation for compueting exact p-value. The defaut value is 1000
-#' @return An exact p-value for input
-#' @author Zahra. Shenavari, ...
+#' 
+#' @param \eqn{x} numerix matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels, respectively.
+#' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
+#' @param nc0 a numeric value, the number of Monte Carlo samples for computing the unbiasing constant \eqn{c_0}. The default value is 10000.
+#' 
+#' @return A list of consisting of:
+#' @return pvalue, the calculated exact Monte Carlo p-value.
+#' @return nsim, the number of Monte Carlo samples that are used to estimate p-value.
+#' @return statistic, the value of test statistic.
+#' @author Shenavari, Z.; Haghbin, H.; Kharrati-Kopaei, M.; Najibi, S.M.
+#' 
+#' @details 
+#' Kharrati-Kopaei and Miller(2016) proposed a test statistic for testing interaction
+#' based on inspecting all pairwise interaction contrasts (PIC).
+#' This test depends on an unbiasing constant \eqn{c_0} that is calculated by a Monte Carlo simulation.   
+#' In addition, the null distribution of the test statistic is calculated by a Monte Carlo simulation. 
+#' Note that this test procedure is powerful when significant interactions are caused by some data cells. 
+#' 
 #' @references Kharrati-Kopaei, M., Miller, A. (2016). A method for testing interaction in
 #'  unreplicated two-way tables: using all pairwise interaction contrasts. Statistical
-#'   Computation and Simulation 86(6):1203-1215.
+#'  Computation and Simulation 86(6):1203-1215.
+#'   
+#'  Shenavari, Z., Kharrati-Kopaei, M. (2018). A Method for Testing Additivity in
+#'  Unreplicated Two-Way Layouts Based on Combining Multiple Interaction Tests. International Statistical Review
+#'  86(3): 469-487.
+
 #' @examples \dontrun{this is an example}
 #' data(ratio)
-#' PIC.test(ratio,nsim=10000,nc0=10000)
+#' KKM.test(ratio,nsim=10000,nc0=10000)
 #' @export
-PIC.test <- function(x, nsim=1000,nc0=10000, ...) {
+KKM.test <- function(x, nsim=1000,nc0=10000, ...) {
 
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
@@ -108,31 +162,47 @@ PIC.test <- function(x, nsim=1000,nc0=10000, ...) {
     statistics <-picf(y,kp,c0)
     simu <- PICfsim(nsim,kp,c0,n)
     PIC <- mean(statistics < simu)
-    list(pvalue = PIC,nsim=nsim,statistics=statistics)
+    list(pvalue = PIC,nsim=nsim,statistic=statistics)
   }
 }
 
 
-
-#' Piepho's third version test for interaction
+#' Piepho (1994) test for interaction
 #'
-#' Piepho (1994) proposed three test statistics.The third one is
-#' based on Grubbs’ (1948) type estimator of variance for each level of block effect.
-#' reports Piepho's test statistics and coresponding p-value by Monte Carlo datasets
-#' or asympthotic distribution.
-#' @param x A b-by-t data matrix, which rows corresponding
-#'  to b-block effects and columns are t-treatment effects
-#' @param nsim Number of simulation for compueting exact p-value. The defaut value is 1000
-#' @return Exact and asymptotic p-value for input
-#' @author Zahra. Shenavari, ...
-#' @references Kharrati-Kopaei, M., Miller, A. (2016). A method for testing
-#' interaction in unreplicated two-way tables: using all pairwise interaction contrasts.
-#'  Statistical Computation and Simulation 86(6):1203-1215.
+#' This function tests the interaction based on a statistic proposed by Piepho (1994).
+#' This function reports Piepho's test statistic, and an asymptotic and Monte Carlo p-values.
+#' 
+#' @param \eqn{x} numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels
+#'   , respectively.
+#' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
+#' 
+#' @return A list of consisting of:
+#' @return exact.pvalue, an exact Monte Carlo p-value.
+#' @return asy.pvalue, an asymptotic p-value.
+#' @return nsim, the number of Monte Carlo samples that are used to estimate p-value.
+#' @return statistic, the value of test statistic.
+#' 
+#' @details Piepho (1994) proposed three test statistics.The third one is
+#'  based on Grubbs’ (1948) type estimator of variance for each level of block effect.
+#'  This type of estimator is used in this function. Piepho (1994) proposed an asymptotic distribution of test statistic; however, we use a Monte Carlo method to calculate the p-value.
+#'  Note that Piepho’s test is powerful for detecting interactions when the Grubbs’ type estimators of variances are heterogeneous across the levels of one factor.
+#'  
+#' @author Shenavari, Z.; Haghbin, H.; Kharrati-Kopaei, M.; Najibi, S.M.
+#' 
+#' @references Piepho, H. P. (1994). On Tests for Interaction in a Nonreplicated Two-Way Layout. Australian
+#' Journal of Statistics 36:363-369.
+#' 
+#' Shenavari, Z., Kharrati-Kopaei, M. (2018). A Method for Testing Additivity in
+#' Unreplicated Two-Way Layouts Based on Combining Multiple Interaction Tests. International Statistical Review
+#' 86(3): 469-487.
+#' 
+#' Grubbs, F.E. (1948). On Estimating Precision of Measuring Instruments and Product Variability. Journal of the American Statistical Association 43(242): 243-264.
+#' 
 #' @examples \dontrun{this is an example}
 #' data(MVGH)
-#' piepho.test(MVGH,sim=1000)
+#' Piepho.test(MVGH,sim=1000)
 #' @export
-piepho.test<-function(x,nsim=1000,...){
+Piepho.test<-function(x,nsim=10000,...){
   if(!is.matrix(x)){
     stop("The input should be a matrix")
   } else {
@@ -144,64 +214,78 @@ piepho.test<-function(x,nsim=1000,...){
     pieph <- mean(statistics < simu)
     df = bl-1
     asypieph <- 1-pchisq(statistics, df = df)
-    out <- list(exact.pvalue = pieph,asypvalue = asypieph,
+    out <- list(exact.pvalue = pieph,asy.pvalue = asypieph,
                   nsim = nsim
-                  ,statistics = statistics)
+                  ,statistic = statistics)
     return(out)
   }
 }
 
 
-
-#' Kharrati-Kopaei and Sadooghi-Alvandi's test for interaction
+#' Kharrati-Kopaei and Sadooghi-Alvandi (2007) test for interaction
 #'
-#' computes Kharrati-Kopaei and Sadooghi-Alvandi's test statistics and corresponding p-value.
-#' They proposed a test procedure for testing non-additivity based on splitting the b-by-t data
-#' matrix into two non empty sub-matrixes by dividing the rows, each having at least two rows.
-#' Suppose that b≥t and b≥4.Divided mean square errors for any two sub-matrixes such that
-#' maximize its ratio and computed the corresponding p-value. Their test statistics are the
-#' minimum value of p-values over all possible configurations: 2^(b-1)-b-1.
-#' @param x A b-by-t data matrix, which rows corresponding
-#'  to b-block effects and columns are t-treatment effects
-#' @details If rows numer(b) of data matrix is less than it's columns number(t) at fiest
-#'  transposing data matrix. In addition requires that data matrix has more than three
-#'   rows or columns
-#' @param nsim Number of simulation for compueting exact p-value
-#' @param dist If dist="sim", we used Monte Carlo simulation for estimating exact p-value,
-#'  and if dist="asy", Bonferroni-adjusted p-value computed. The defaut value is "sim"
-#' @return A p-value for input
-#' @author Zahra. Shenavari, ...
-#' @references Kharrati-Kopaei, M., Sadooghi-Alvandi, S. M. (2007). A New Method for
+#' This function calculates Kharrati-Kopaei and Sadooghi-Alvandi's test statistic and corresponding p-value for testing interaction.
+#' 
+#' @param \eqn{x} numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels
+#'   , respectively.
+#' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
+#' @param dist a character, if dist="sim", a Monte Carlo simulation is used for calculating exact p-value. If dist="asy", the Bonferroni-adjusted p-value is calculated. The default is "sim".
+#' 
+#' @details  Suppose that \eqn{b>=a} and \eqn{b>=4}. Consider the \eqn{l}-th division of the data table into two sub-tables,
+#'  obtained by putting \eqn{b_1} (\eqn{2≤b_1≤b-2}) rows in the first sub-table and the remaining \eqn{b_2} rows in the second sub-table (\eqn{b_1+b_2=a}).
+#'  Let RSS1 and RSS2 denote the residual sum of squares for these two sub-tables, respectively. For a particular division \eqn{l}, let \eqn{F_l=max⁡(F_l,1/F_l }
+#'  where \eqn{F_l=(b_2-1)RSS1/((b_1-1)RSS2)} and let \eqn{P_l} denote the corresponding p-value.
+#'  Kharrati-Kopaei and Sadooghi-Alvandi (2007) proposed their test statistic as the minimum value of \eqn{P_l} over \eqn{l=1,…,2^(b-1)-b-1} all possible divisions of the table.
+#'  Note that if the rows number, \eqn{b}, of data matrix is less than the columns number, \eqn{a}, the data matrix is transposed. In addition, this method of testing requires that the data matrix has more than three
+#'  rows or columns. This test procedure is powerful for detecting interaction when the magnitude of interaction effects is heteroscedastic across the sub-tables of observations.
+#'  
+#' @return A list of consisting of:
+#' @return pvalue, an exact Monte Carlo p-value.
+#' @return nsim, the number of Monte Carlo samples that are used to estimate p-value.
+#' @return statistic, the value of test statistic.
+#' 
+#' @author Shenavari, Z.; Haghbin, H.; Kharrati-Kopaei, M.; Najibi, S.M.
+#' 
+#' @references Kharrati-Kopaei, M., Sadooghi-Alvandi, S.M. (2007). A New Method for
 #'  Testing Interaction in Unreplicated Two-Way Analysis of Variance. Communications
-#'   in Statistics-Theory and Methods 36:2787–2803.
+#'  in Statistics-Theory and Methods 36:2787–2803.
+#'   
+#'  Shenavari, Z., Kharrati-Kopaei, M. (2018). A Method for Testing Additivity in
+#'  Unreplicated Two-Way Layouts Based on Combining Multiple Interaction Tests. International Statistical Review
+#'  86(3): 469-487.
+#'   
 #' @examples \dontrun{this is an example}
 #' data(impurity)
-#' KKSA.test(impurity,nsim=1000,dist = "sim")
+#' KKSA.test(impurity,nsim=10000,dist = "sim")
 #' @export
-KKSA.test<-function(x,nsim=1000,distr = "sim",...){
+KKSA.test<-function(x,nsim=10000,distr = "sim",...){
 
   if(!is.matrix(x)){
     stop("The input should be a matrix")
-  }else{
+  } else {
     bl <- nrow(x)
     tr <- ncol(x)
     n<-tr * bl
     if (bl < tr)
-    {warning("transpose the input matrix")
+    {warning("The input data matrix is trasposed")
       x<-t(x);te<-bl;bl<-tr;tr<-te}
     if (bl < 4) {
       stop("KKSA needs at least 4 levels of blocking factor")
 
     } else{
       cck <- 2^(bl - 1) - 1 - bl
-      statistics <-kk_f(x)
+      statistics <-kk.f(x,bl,tr)
       if(distr != "sim" && distr != "asy") distr="sim"
 
       if (distr == "sim")
        {
         simu <-rep(0,0)
         for (i in 1:nsim){
-          simu[i]<-kk_f(matrix(rnorm(n),nrow=bl))
+          simu[i]<-kk.f(matrix(rnorm(n),nrow=bl),bl,tr)
+          cat(paste(round(i / nsim * 100), '% completed'))
+          #Sys.sleep(.1)
+          if (i == nsim) cat(': Done', "\n")
+          else cat('\014', "\n")
         }
         KKSA.p <- mean(statistics > simu)
       } else if (distr == "asy") {
@@ -210,33 +294,51 @@ KKSA.test<-function(x,nsim=1000,distr = "sim",...){
        }
       out <- list(pvalue = KKSA.p,
                 nsim = nsim,distr=distr,
-                statistics = statistics)
+                statistic = statistics)
       return(out)
     }
   }
 }
 
-#' Franck et al.'s test for interaction
+#' Franck (2013) et al. test for interaction
 #'
-#' computes Franck et al's. (2013) test statistic,ACMIF, and corresponding p-value.
-#' @param x A b-by-t data matrix, which rows corresponding
-#'  to b-block effects and columns are t-treatment effects
-#' @details If rows numer(b) of data matrix is less than it's columns number(t) at fiest
-#'  transposing data matrix. In addition requires that data matrix has more than two
-#'   rows or columns
-#' @param nsim Number of simulation for compueting exact p-value
-#' @param dist If dist="sim", we used Monte Carlo simulation for estimating exact p-value,
-#'  and if dist="asy", Bonferroni-adjusted p-value computed. The defaut value is "sim"
-#' @return A p-value for input
-#' @author Zahra. Shenavari, ...
-#' @references Franck, C., Nielsen, D., Osborne, J. A. (2013). A method for detecting
-#' hidden additivity in two-factor unreplicated experiments. Computational Statistics
-#'  and Data Analysis 67:95-104.
+#' This function calculates Franck (2013) et al. test statistic,ACMIF, and corresponding p-value.
+#' 
+#' @param \eqn{x} numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels
+#'   , respectively.
+#' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
+#' @param dist a character, if dist="sim", a Monte Carlo simulation is used for calculating exact p-value,
+#'  and if dist="asy", the Bonferroni-adjusted p-value is calculated. The default is "sim".
+#'  
+#' @details Franck et al. (2013) derived a test statistic based on the “hidden additivity” structure.
+#'  They defined this structure as “the levels of one factor belong in two or more groups such that within each group the effects of the two factors are additive but the groups may interact with the ungrouped factor”.
+#'  To detect hidden additivity, Franck et al. (2013) divided the table of data into two sub-tables and an interaction F-test was developed.
+#'  Then, they performed a search over all possible configurations of data and used the maximum of the interaction F-ratios as a test statistic. The hypothesis of no interaction is rejected when the maximum interaction F-ratio is large.
+#'  Note that, if rows number, \eqn{b}, of data matrix is less than the columns number, \eqn{a}, 
+#'  the data matrix is transposed. Note that the this test method is powerful when there is a hidden additivity structure in the data set.
+#'  
+#' @return pvalue, calculated p-value.
+#' @return nsim, the number of Monte Carlo samples that are used to estimate p-value.
+#' @return statistic, the value of test statistic.
+#' 
+#' @author Shenavari, Z.; Haghbin, H.; Kharrati-Kopaei, M.; Najibi, S.M.
+#' 
+#' @references
+#'  Franck, C., Nielsen, D., Osborne, J.A. (2013). A method for detecting hidden additivity in two-factor unreplicated experiments.
+#'  Computational Statistics and Data Analysis 67:95-104. 
+#'  
+#'  Franck, C., Osborne, J.A. (2016).  Exploring Interaction Effects in Two-Factor Studies using the hidden Package in R.
+#'  R Journal 8 (1):159-172.
+#'  
+#'  Shenavari, Z., Kharrati-Kopaei, M. (2018). A Method for Testing Additivity in
+#'  Unreplicated Two-Way Layouts Based on Combining Multiple Interaction Tests. International Statistical Review
+#'  86(3): 469-487.
+#'   
 #' @examples \dontrun{this is an example}
 #' data(cnv6)
-#' hiddenf.test(cnv6,nsim=1000,dist = "sim")
+#' Franck.test(cnv6,nsim=1000,dist = "sim")
 #' @export
-hiddenf.test<-function(x,nsim=1000,dist = "sim",...){
+Franck.test<-function(x,nsim=1000,dist = "sim",...){
 
   if(!is.matrix(x)){
     stop("The input should be a matrix")
@@ -244,25 +346,25 @@ hiddenf.test<-function(x,nsim=1000,dist = "sim",...){
     bl <- nrow(x)
     tr <- ncol(x)
     n<-tr * bl
-    if (bl < tr) {warning("transpose the input matrix")
+    if (bl < tr) {warning("The input data matrix is transposed")
       x<-t(x);te<-bl;bl<-tr;tr<-te}
     if (bl < 3) {
       stop("hiddenf needs at least 3 levels of blocking factor")
 
     }else{
      cch <- 2^(bl - 1) - 1
-     statistics <-hh_f(x)
+     statistics <-hh.f(x,bl)
      if(dist != "sim" || dist != "asy") dist="sim"
 
      if (dist == "sim")
      {
        simu <-rep(0,0)
        for (i in 1:nsim){
-         simu[i]<-hh_f(matrix(rnorm(n),nrow=bl))
-         cat(paste(round(i / nsim * 100), '% completed'))
+         simu[i]<-hh.f(matrix(rnorm(n),nrow=bl),bl)
+         cat(paste(round(i / nsim * 100), '% completed', "\n"))
          #Sys.sleep(.1)
-         if (i == nsim) cat(': Done')
-         else cat('\014')
+         if (i == nsim) cat(': Done', "\n")
+         else cat('\014', "\n")
        }
        hidden <- mean(statistics < simu)
      } else if (dist == "asy") {
@@ -271,37 +373,52 @@ hiddenf.test<-function(x,nsim=1000,dist = "sim",...){
      }
      out <- list(pvalue = hidden,
                 nsim = nsim,dist=dist
-                ,statistics = statistics)
+                ,statistic = statistics)
      return(out)
      }
    }
 }
 
-#' Combined several interaction tests
+#' Combined p-value interaction test
 #'
-#' Reports p-values tests for non-additivity developed by Boik (1993a), Piepho (1994),
+#' This function reports the p-values of the tests for non-additivity developed by Boik (1993), Piepho (1994),
 #' Kharrati-Kopaei and Sadooghi-Alvandi (2007), Franck et al. (2013), Malik et al. (2016)
-#' and Kharrati-Kopaei and Miller (2016). In addition by use of four combination methods:
-#' Bonferroni, Sidak, Jacobi expantion, and Gaussian Copula combined reported p-values.
-#' @param x A data matrix in two-factor analysis
-#' @details If rows numer(b) of data matrix is less than it's columns number(t) we
-#'  transpose data matrix. In addition requires that data matrix has more than two
-#'   rows or columns.
-#' @param nsim Number of simulation for compueting exact p.value
-#' @param dist If dist="sim", we used Monte Carlo simulation for estimating exact p-value,
-#'  and if dist="asy", the p.values is
-#' estimated from an asymptotic distribuion. The defaut value is "sim".
-#' @return  A p.value for input
-#' @details Needs "mvtnorm" packages
-#' @author Zahra. Shenavari, ...
-#' @references Shenavari, Z.,Kharrati-Kopaei, M. (2018). A Method for Testing Additivity
-#' in Unreplicated Two-Way Layouts Based on Combining Multiple Interaction Tests.International
-#' Statistical Review
+#' and Kharrati-Kopaei and Miller (2016). In addition, it combines the p-values of these six methods into a single p-value as a test statistic for testing interaction.
+#' There are four combination methods:
+#' Bonferroni, Sidak, Jacobi expansion, and Gaussian Copula. The results of these four combinations are also reported. 
+#' 
+#' @param \eqn{x} numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels, respectively.
+#' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
+#' @param nc0 a numeric value, the number of Monte Carlo samples for computing the unbiasing constant \eqn{c_0}. The default value is 10000.
+#' 
+#' @details If rows number ,\eqn{b} of data matrix is less than it's columns number, \eqn{a}, 
+#'  the data matrix is transposed. In addition, this test procedure requires that the data matrix has more than two
+#'  rows or columns. This function Needs "mvtnorm" package.
+
+#'  
+#' @return A list of consisting of:
+#' @return nsim, the number of Monte Carlo samples that are used to estimate p-value.
+#' @return piepho.pvalue, the p-value of Piepho's (1994) test.
+#' @return Boik.pvalue, the p-value of Boik's (1993) test.
+#' @return Malik.pvalue, the p-value of Malik's (2016) et al. test.
+#' @return KKM.pvalue, the p-value of Kharrati-Kopaei and Miller's (2016) test.
+#' @return KKSA.pvalue, the p-value of Kharrati-Kopaei and Sadooghi-Alvandi's (2007) test.
+#' @return Franck.pvalue, the p-value of Franck's (2013) et al. test.
+#' @return Bonferroni, the combined p-value by using the Bonferroni method.
+#' @return Sidak, the combined p-value by using the Sidak method.
+#' @return jacobi, the combined p-value by using the Jacobi method.
+#' @return GC, the combined p-value by using the Guassian copula.
+#' 
+#' @author Shenavari, Z.; Haghbin, H.; Kharrati-Kopaei, M.; Najibi, S.M.
+#' 
+#' @references Shenavari, Z., Kharrati-Kopaei, M. (2018). A Method for Testing Additivity in
+#'  Unreplicated Two-Way Layouts Based on Combining Multiple Interaction Tests. International Statistical Review
+#'  86(3): 469-487.
 #' @examples \dontrun{this is an example}
 #' data(cnv6)
-#' combinep(cnv6,nsim=500,nc0=10000)
+#' CPI.test(cnv6,nsim=500,nc0=10000)
 #' @export
-combinep<-function(x,nsim=500,nc0=10000,...){
+CPI.test<-function(x,nsim=500,nc0=10000,...){
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
@@ -330,7 +447,7 @@ combinep<-function(x,nsim=500,nc0=10000,...){
     Mstat <-sta$Tc
     pistat<-sta$piepho
     pstat <-pic.f(y,kp,c0)
-    if(bl==3)Hstat<-hh_f(x)
+    if(bl==3)Hstat<-hh.f(x,bl)
     else{
       Ksimu <-rep(0,0)
       kh<-kh.f(x,bl,tr)
@@ -348,15 +465,15 @@ combinep<-function(x,nsim=500,nc0=10000,...){
         pisimu[i]<-sta$piepho
         psimu[i]<-pic.f(y,kp,c0)
         if(bl==3)
-          Hsimu[i]<-hh_f(x)else{
+          Hsimu[i]<-hh.f(x,bl)else{
         kh<-kh.f(x,bl,tr)
         Ksimu[i]<-kh$fmin
         Hsimu[i]<-kh$fmax
           }
-        cat(paste(round(i / nsim * 100), '% completed'))
+        cat(paste(round(i / nsim * 100), '% completed'), "\n")
         Sys.sleep(.1)
-        if (i == nsim) cat(': Done')
-        else cat('\014')
+        if (i == nsim) cat(': Done', "\n")
+        else cat('\014', "\n")
       }
       Boik.pvalue <- mean(Bstat > Bsimu)
       piepho.pvalue <- mean(pistat < pisimu)
@@ -375,8 +492,8 @@ combinep<-function(x,nsim=500,nc0=10000,...){
     Sidak<-cp$Sidak
     jacobi<-cp$jacobi
     list(nsim=nsim,piepho.pvalue=piepho.pvalue,Boik.pvalue=Boik.pvalue
-         ,Malik.pvalue=Malik.pvalue,PIC.pvalue=PIC.pvalue
-         ,KKSA.pvalue=KKSA.pvalue,hiddenf.pvalue=hiddenf.pvalue,
+         ,Malik.pvalue=Malik.pvalue,KKM.pvalue=PIC.pvalue
+         ,KKSA.pvalue=KKSA.pvalue,Franck.pvalue=hiddenf.pvalue,
          Bonferroni=Bonferroni,Sidak=Sidak,jacobi=jacobi,GC=GC)
     }
   }
@@ -384,9 +501,9 @@ combinep<-function(x,nsim=500,nc0=10000,...){
 
 #' Interaction plot
 #'
-#' @param x A data matrix in two-factor analysis
+#' @param \eqn{x} numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels, respectively.
 #' @return  An interaction plot for input
-#' @author Zahra. Shenavari, ...
+#' @author Shenavari, Z.; Haghbin, H.; Kharrati-Kopaei, M.; Najibi, S.M.
 #' @examples \dontrun{this is an example}
 #' data(cnv6)
 #' interactionplot(cnv6)
@@ -398,23 +515,11 @@ interactionplot<-function(x,...){
     par(mfcol=c(1,2))
     t <- ncol(x)
     b <- nrow(x)
-  matplot(t(x), type = "l",xaxt = "n", ylab = "y", xlab = "Factor1(column)",lty = 1:b,...)
+  matplot(t(x), type = "b",xaxt = "n", ylab = "Observed values", xlab = "Factor1(column)",lty = 1:b ,...)
   axis(1, at = 1:t, labels = 1:t, cex.axis = 1)
-  matplot(x, type = "l",xaxt = "n", ylab = "", xlab = "Factor2(row)",lty = 1:t,...)
+  legend("topright", rep(paste0("row", 1:b)), lty = 1:b, bty = "n", cex = 0.7)
+  matplot(x, type = "b",xaxt = "n", ylab = "", xlab = "Factor2(row)",lty = 1:t,...)
+  legend("topright",rep(paste0("col", 1:t)), lty =1:t , bty = "n", cex = 0.7)
   axis(1, at = 1:b, labels = 1:b, cex.axis = 1)
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -2,22 +2,36 @@
 % Please edit documentation in R/test.R
 \name{Boik.test}
 \alias{Boik.test}
-\title{Boik's LBI test}
+\title{Boik (1993) locally best invariant (LBI) test}
 \usage{
-Boik.test(x, nsim = 1000, ...)
+Boik.test(x, nsim = 10000, ...)
 }
 \arguments{
-\item{x}{A b-by-t data matrix, which rows corresponding
-to b-block effects and columns are t-treatment effects.}
+\item{nsim}{a numeric value, the number of Monte Carlo samples for calculating an exact Monte Carlo p-value. The default value is 10000.}
 
-\item{nsim}{Number of simulation for compueting exact p-value. The defaut value is 1000.}
+\item{\eqn{x}}{a numeric matrix, \eqn{b \times a} data matrix where the number of row and column are corresponding to the number of block and treatment levels, respectively.}
 }
 \value{
-Exact and asymptotic p-value for input
+A list of consisting of:
+
+exact.pvalue, an exact Monte Carlo p-value when \eqn{p>2}. For \eqn{p=2} an exact p-value is calculated.
+
+asy.pvalue, a chi-squared asymptotic p-value.
+
+nsim, the number of Monte Carlo samples that are used to estimate p-value.
+
+statistic, the value of test statistic.
 }
 \description{
-Computes LBI's test statistics \eqn{(tr(R'R))^2/(p tr((R'R)^2))}, where R is residual
-matrix of input data matrix under additivity assumption, and returns corresponung p-value.
+This function calculates the LBI test statistic for testing the null hypothesis \eqn{H_0:} there is no interaction.
+It returns an exact Monte Carlo p-value (when \eqn{p>2}) and an asymptotic chi-squared p-value.
+}
+\details{
+The LBI test statistic is \eqn{T_B93=(tr(R'R))^2/(p tr((R'R)^2))} where \eqn{p=min{a-1,b-1}} and \eqn{R} is the residual
+  matrix of the input data matrix, \eqn{x}, under the null hypothesis \eqn{H_0:} there is no interaction. This test rejects the null hypothesis of no interaction when \eqn{T_B93} is small.
+  Boik (1993) provided the exact distribution of \eqn{T_B93} when \eqn{p=2} under \eqn{H_0}. In addition, he provided an asymptotic approximation of \eqn{T_B93} under \eqn{H_0} when \eqn{q} tends to infinity where \eqn{q=max{a-1,b-1}}.
+  Note that the LBI test is powerful when the \eqn{a \times b} matrix of interaction terms has small rank and one singular value dominates the remaining singular values or
+  in practice, if the largest eigenvalue of \eqn{RR'} is expected to dominate the remaining eigenvalues.
 }
 \examples{
 \dontrun{this is an example}
@@ -25,10 +39,14 @@ data(MVGH)
 Boik.test(MVGH, nsim=10000)
 }
 \references{
-Boik, R. J. (1993a). Testing additivity in two-way classifications
+Boik, R.J. (1993). Testing additivity in two-way classifications
  with no replications: the locally best invariant test. Journal of Applied
  Statistics 20(1): 41-55.
+ 
+ Shenavari, Z., Kharrati-Kopaei, M. (2018). A Method for Testing Additivity in
+ Unreplicated Two-Way Layouts Based on Combining Multiple Interaction Tests. International Statistical Review
+ 86(3): 469-487.
 }
 \author{
-Zahra. Shenavari, ....
+Shenavari, Z.; Haghbin, H.; Kharrati-Kopaei, M.; Najibi, S.M.
 }

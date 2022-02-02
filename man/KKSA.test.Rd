@@ -2,45 +2,53 @@
 % Please edit documentation in R/test.R
 \name{KKSA.test}
 \alias{KKSA.test}
-\title{Kharrati-Kopaei and Sadooghi-Alvandi's test for interaction}
+\title{Kharrati-Kopaei and Sadooghi-Alvandi (2007) test for interaction}
 \usage{
-KKSA.test(x, nsim = 1000, distr = "sim", ...)
+KKSA.test(x, nsim = 10000, distr = "sim", ...)
 }
 \arguments{
-\item{x}{A b-by-t data matrix, which rows corresponding
-to b-block effects and columns are t-treatment effects}
+\item{nsim}{a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.}
 
-\item{nsim}{Number of simulation for compueting exact p-value}
+\item{\eqn{x}}{numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels
+, respectively.}
 
-\item{dist}{If dist="sim", we used Monte Carlo simulation for estimating exact p-value,
-and if dist="asy", Bonferroni-adjusted p-value computed. The defaut value is "sim"}
+\item{dist}{a character, if dist="sim", a Monte Carlo simulation is used for calculating exact p-value. If dist="asy", the Bonferroni-adjusted p-value is calculated. The default is "sim".}
 }
 \value{
-A p-value for input
+A list of consisting of:
+
+pvalue, an exact Monte Carlo p-value.
+
+nsim, the number of Monte Carlo samples that are used to estimate p-value.
+
+statistic, the value of test statistic.
 }
 \description{
-computes Kharrati-Kopaei and Sadooghi-Alvandi's test statistics and corresponding p-value.
-They proposed a test procedure for testing non-additivity based on splitting the b-by-t data
-matrix into two non empty sub-matrixes by dividing the rows, each having at least two rows.
-Suppose that b≥t and b≥4.Divided mean square errors for any two sub-matrixes such that
-maximize its ratio and computed the corresponding p-value. Their test statistics are the
-minimum value of p-values over all possible configurations: 2^(b-1)-b-1.
+This function calculates Kharrati-Kopaei and Sadooghi-Alvandi's test statistic and corresponding p-value for testing interaction.
 }
 \details{
-If rows numer(b) of data matrix is less than it's columns number(t) at fiest
- transposing data matrix. In addition requires that data matrix has more than three
-  rows or columns
+Suppose that \eqn{b>=a} and \eqn{b>=4}. Consider the \eqn{l}-th division of the data table into two sub-tables,
+ obtained by putting \eqn{b_1} (\eqn{2≤b_1≤b-2}) rows in the first sub-table and the remaining \eqn{b_2} rows in the second sub-table (\eqn{b_1+b_2=a}).
+ Let RSS1 and RSS2 denote the residual sum of squares for these two sub-tables, respectively. For a particular division \eqn{l}, let \eqn{F_l=max⁡(F_l,1/F_l }
+ where \eqn{F_l=(b_2-1)RSS1/((b_1-1)RSS2)} and let \eqn{P_l} denote the corresponding p-value.
+ Kharrati-Kopaei and Sadooghi-Alvandi (2007) proposed their test statistic as the minimum value of \eqn{P_l} over \eqn{l=1,…,2^(b-1)-b-1} all possible divisions of the table.
+ Note that if the rows number, \eqn{b}, of data matrix is less than the columns number, \eqn{a}, the data matrix is transposed. In addition, this method of testing requires that the data matrix has more than three
+ rows or columns. This test procedure is powerful for detecting interaction when the magnitude of interaction effects is heteroscedastic across the sub-tables of observations.
 }
 \examples{
 \dontrun{this is an example}
 data(impurity)
-KKSA.test(impurity,nsim=1000,dist = "sim")
+KKSA.test(impurity,nsim=10000,dist = "sim")
 }
 \references{
-Kharrati-Kopaei, M., Sadooghi-Alvandi, S. M. (2007). A New Method for
+Kharrati-Kopaei, M., Sadooghi-Alvandi, S.M. (2007). A New Method for
  Testing Interaction in Unreplicated Two-Way Analysis of Variance. Communications
-  in Statistics-Theory and Methods 36:2787–2803.
+ in Statistics-Theory and Methods 36:2787–2803.
+  
+ Shenavari, Z., Kharrati-Kopaei, M. (2018). A Method for Testing Additivity in
+ Unreplicated Two-Way Layouts Based on Combining Multiple Interaction Tests. International Statistical Review
+ 86(3): 469-487.
 }
 \author{
-Zahra. Shenavari, ...
+Shenavari, Z.; Haghbin, H.; Kharrati-Kopaei, M.; Najibi, S.M.
 }

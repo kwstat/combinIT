@@ -2,36 +2,49 @@
 % Please edit documentation in R/test.R
 \name{Malik.test}
 \alias{Malik.test}
-\title{Malik's test for interaction}
+\title{Malik (2016) et al. test for interaction}
 \usage{
-Malik.test(x, nsim = 500)
+Malik.test(x, nsim = 10000)
 }
 \arguments{
-\item{x}{A b-by-t data matrix, which rows corresponding
-to b-block effects and columns are t-treatment effects}
+\item{nsim}{a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.}
 
-\item{nsim}{Number of simulation for compueting exact p-value. The defaut value is 500}
+\item{\eqn{x}}{numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels, respectively.}
 }
 \value{
-An exact p-value for input
+A list of consisting of:
+
+pvalue, the calculated exact Monte Carlo p-value.
+
+nsim, the number of Monte Carlo samples that are used to estimate p-value.
+
+statistic, the value of test statistic.
 }
 \description{
-Repors the exact p-value from \code{\link{Malik et al. (2016)}}.They proposed to partition
-the residuals(components of residual matrix R of input data matrix under additivity
-assumption) into three clusters using a suitable clustering method like “k-means clustering”.
-The hypothesis of no interaction can be interpreted as the effects of the three
-clusters are equal.Compute Malik's test statistics and corresponding p-value by Monte Carlo simulation.
+The Malik's (2016) et al. test statistics is calculated and the corresponding exact p-value is calculated by a Monte Carlo simulation.
+}
+\details{
+Malik (2016) et al. proposed to partition
+ the residuals into three clusters using a suitable clustering method like “k-means clustering”.
+ The hypothesis of no interaction can be interpreted as the effect of the three
+ clusters are equal.
+ Note that the Malik's et al. test performs well when there are some outliers in the residuals; i.e. some cells produce large negative or positive residuals due to the significant interaction.
+ Further, the distribution of the Malik's et al. test statistic is not known under additivity and the corresponding p-value is calculated by a Monte Carlo simulation.
 }
 \examples{
 \dontrun{this is an example}
 data(impurity)
-Malik.test(impurity,nsim=1000)
+Malik.test(impurity,nsim=10000)
 }
 \references{
-Malik, W. A., Mo ̈hring, J., Piepho, H. P. (2016). A
+Malik, W.A., Mohring, J., Piepho, H.P. (2016). A
 clustering-based test for non-additivity in an unreplicated two-way layout.
 Communications in Statistics-Simulation and Computation 45(2):660-670.
+
+Shenavari, Z., Kharrati-Kopaei, M. (2018). A Method for Testing Additivity in
+Unreplicated Two-Way Layouts Based on Combining Multiple Interaction Tests. International Statistical Review
+86(3): 469-487.
 }
 \author{
-Zahra. Shenavari, ..
+Shenavari, Z.; Haghbin, H.; Kharrati-Kopaei, M.; Najibi, S.M.
 }

@@ -4,7 +4,7 @@
 \alias{kk.f}
 \title{internal function for KKSA method}
 \usage{
-kk.f(x)
+kk.f(x, bl, tr)
 }
 \arguments{
 \item{x}{A data matrix}

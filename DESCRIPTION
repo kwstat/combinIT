@@ -1,7 +1,7 @@
 Package: combinIT
 Type: Package
-Title: Combine Interaction Tests for testing interaction in unreplicated two-way tables
-Version: 0.1.0
+Title: A Combined Intercation Test for Unreplicated Two-Way Tables
+Version: 1.0.0
 Authors@R: c(
     person("Zahra", "Shenavari", email = "zshenavari@yahoo.com", role = "aut"),
     person("Hossein", "Haghbin", email = " haghbin@pgu.ac.ir",role = c("aut", "cre"),
