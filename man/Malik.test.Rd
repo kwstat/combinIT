@@ -33,8 +33,8 @@ Malik (2016) et al. proposed to partition
 }
 \examples{
 \dontrun{this is an example}
-data(impurity)
-Malik.test(impurity,nsim=10000)
+data(IDCP)
+Malik.test(IDCP,nsim=10000)
 }
 \references{
 Malik, W.A., Mohring, J., Piepho, H.P. (2016). A

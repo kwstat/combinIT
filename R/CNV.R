@@ -6,7 +6,7 @@
 #' with higher signals corresponding to higher copy number; see Franck et al. (2013) and Franck and Osborne (2016).
 #' The data set was selected from 5899 sets (the full data have been made available as the supplementary material of the paper published by Franck et al. (2013)).
 #' The test of interaction between the dogs and tisuues is of interest.
-#' 
+#'
 #' @name CNV
 #' @format A matrix with six rows (Dogs) and two columns (Tissues):
 #' \describe{
@@ -28,5 +28,5 @@
 #'  Franck, C., Osborne, J.A. (2016).  Exploring Interaction Effects in Two-Factor Studies using the hidden Package in R.
 #'    R Journal 8 (1):159-172.
 #' }
-#' 
+#'
 NULL

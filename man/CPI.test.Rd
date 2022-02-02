@@ -52,8 +52,8 @@ If rows number ,\eqn{b} of data matrix is less than it's columns number, \eqn{a}
 }
 \examples{
 \dontrun{this is an example}
-data(cnv6)
-CPI.test(cnv6,nsim=500,nc0=10000)
+data(CNV)
+CPI.test(CNV,nsim=500,nc0=10000)
 }
 \references{
 Shenavari, Z., Kharrati-Kopaei, M. (2018). A Method for Testing Additivity in

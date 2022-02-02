@@ -37,8 +37,8 @@ Suppose that \eqn{b>=a} and \eqn{b>=4}. Consider the \eqn{l}-th division of the 
 }
 \examples{
 \dontrun{this is an example}
-data(impurity)
-KKSA.test(impurity,nsim=10000,dist = "sim")
+data(IDCP)
+KKSA.test(IDCP,nsim=10000,dist = "sim")
 }
 \references{
 Kharrati-Kopaei, M., Sadooghi-Alvandi, S.M. (2007). A New Method for

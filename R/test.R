@@ -31,7 +31,7 @@
 #' data(MVGH)
 #' Boik.test(MVGH, nsim=10000)
 #' @export
-Boik.test <- function(x, nsim=10000, ...) {
+Boik.test <- function(x, nsim = 10000, ...) {
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
@@ -40,20 +40,25 @@ Boik.test <- function(x, nsim=10000, ...) {
     n <- tr * bl
     p <- min(tr - 1, bl - 1)
     q <- max(tr - 1, bl - 1)
-    statistics <-Bfc(x,bl,tr,p)
-    simu <- Bfsim(nsim,bl,tr,p)
+    statistics <- Bfc(x, bl, tr, p)
+    simu <- Bfsim(nsim, bl, tr, p)
     boik.p <- mean(statistics > simu)
-    Tb<-(1/statistics-1)
-    T<-p*q*Tb/2
-    df<-(p+2)*(p-1)/2
-    if(p==2) asyboik.p <-1-pbeta(Tb,1,(q-1)/2)
-    else asyboik.p <- 1-pchisq(T, df )
-    out <- list(exact.pvalue = boik.p,asy.pvalue = asyboik.p,
-                nsim = nsim,
-                statistic = statistics)
+    Tb <- (1 / statistics - 1)
+    T <- p * q * Tb / 2
+    df <- (p + 2) * (p - 1) / 2
+    if (p == 2) {
+      asyboik.p <- 1 - pbeta(Tb, 1, (q - 1) / 2)
+    } else {
+      asyboik.p <- 1 - pchisq(T, df)
+    }
+    out <- list(
+      exact.pvalue = boik.p, asy.pvalue = asyboik.p,
+      nsim = nsim,
+      statistic = statistics
+    )
   }
-    return(out)
-  }
+  return(out)
+}
 
 #' Malik (2016) et al. test for interaction
 #'
@@ -85,10 +90,10 @@ Boik.test <- function(x, nsim=10000, ...) {
 #' Unreplicated Two-Way Layouts Based on Combining Multiple Interaction Tests. International Statistical Review
 #' 86(3): 469-487.
 #' @examples \dontrun{this is an example}
-#' data(impurity)
-#' Malik.test(impurity,nsim=10000)
+#' data(IDCP)
+#' Malik.test(IDCP,nsim=10000)
 #' @export
-Malik.test <- function(x, nsim=10000) {
+Malik.test <- function(x, nsim = 10000) {
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
@@ -98,19 +103,19 @@ Malik.test <- function(x, nsim=10000) {
     block <- gl(bl, tr)
     treatment <- gl(tr, 1, bl * tr)
     y <- c(t(x))
-    statistic <-M.f(x,y,block , treatment)
-    simu <-rep(0,0)
-    for (i in 1:nsim){
-         y<-rnorm(n)
-        simu[i]<-M.f(matrix(y,nrow = bl),y,block , treatment)
-        #cat(paste(round(i / nsim * 100), '% completed'))
-        #Sys.sleep(.05)
-        #if (i == nsim) cat(': Done')
-        #else cat('\014')
-      }
-      malik <- mean(statistic < simu)
+    statistic <- M.f(x, y, block, treatment)
+    simu <- rep(0, 0)
+    for (i in 1:nsim) {
+      y <- rnorm(n)
+      simu[i] <- M.f(matrix(y, nrow = bl), y, block, treatment)
+      # cat(paste(round(i / nsim * 100), '% completed'))
+      # Sys.sleep(.05)
+      # if (i == nsim) cat(': Done')
+      # else cat('\014')
+    }
+    malik <- mean(statistic < simu)
 
-    list(pvalue = malik,nsim=nsim,statistic=statistic)
+    list(pvalue = malik, nsim = nsim, statistic = statistic)
   }
 }
 
@@ -145,11 +150,10 @@ Malik.test <- function(x, nsim=10000) {
 #'  86(3): 469-487.
 
 #' @examples \dontrun{this is an example}
-#' data(ratio)
-#' KKM.test(ratio,nsim=10000,nc0=10000)
+#' data(RDWW)
+#' KKM.test(RDWW,nsim=10000,nc0=10000)
 #' @export
-KKM.test <- function(x, nsim=1000,nc0=10000, ...) {
-
+KKM.test <- function(x, nsim = 1000, nc0 = 10000, ...) {
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
@@ -157,12 +161,12 @@ KKM.test <- function(x, nsim=1000,nc0=10000, ...) {
     tr <- ncol(x)
     bl <- nrow(x)
     n <- tr * bl
-    kp<- kpr(bl, tr)
-    c0<-C0(kp,n,nc0)
-    statistics <-picf(y,kp,c0)
-    simu <- PICfsim(nsim,kp,c0,n)
+    kp <- kpr(bl, tr)
+    c0 <- C0(kp, n, nc0)
+    statistics <- picf(y, kp, c0)
+    simu <- PICfsim(nsim, kp, c0, n)
     PIC <- mean(statistics < simu)
-    list(pvalue = PIC,nsim=nsim,statistic=statistics)
+    list(pvalue = PIC, nsim = nsim, statistic = statistics)
   }
 }
 
@@ -202,21 +206,23 @@ KKM.test <- function(x, nsim=1000,nc0=10000, ...) {
 #' data(MVGH)
 #' Piepho.test(MVGH,sim=1000)
 #' @export
-Piepho.test<-function(x,nsim=10000,...){
-  if(!is.matrix(x)){
+Piepho.test <- function(x, nsim = 10000, ...) {
+  if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
     tr <- ncol(x)
     bl <- nrow(x)
-    n<-tr * bl
-    statistics <-piephoC(x,bl,tr)
-    simu <- Piephosim(nsim,bl,tr)
+    n <- tr * bl
+    statistics <- piephoC(x, bl, tr)
+    simu <- Piephosim(nsim, bl, tr)
     pieph <- mean(statistics < simu)
-    df = bl-1
-    asypieph <- 1-pchisq(statistics, df = df)
-    out <- list(exact.pvalue = pieph,asy.pvalue = asypieph,
-                  nsim = nsim
-                  ,statistic = statistics)
+    df <- bl - 1
+    asypieph <- 1 - pchisq(statistics, df = df)
+    out <- list(
+      exact.pvalue = pieph, asy.pvalue = asypieph,
+      nsim = nsim,
+      statistic = statistics
+    )
     return(out)
   }
 }
@@ -255,46 +261,52 @@ Piepho.test<-function(x,nsim=10000,...){
 #'  86(3): 469-487.
 #'   
 #' @examples \dontrun{this is an example}
-#' data(impurity)
-#' KKSA.test(impurity,nsim=10000,dist = "sim")
+#' data(IDCP)
+#' KKSA.test(IDCP,nsim=10000,dist = "sim")
 #' @export
-KKSA.test<-function(x,nsim=10000,distr = "sim",...){
-
-  if(!is.matrix(x)){
+KKSA.test <- function(x, nsim = 10000, distr = "sim", ...) {
+  if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
     bl <- nrow(x)
     tr <- ncol(x)
-    n<-tr * bl
-    if (bl < tr)
-    {warning("The input data matrix is trasposed")
-      x<-t(x);te<-bl;bl<-tr;tr<-te}
+    n <- tr * bl
+    if (bl < tr) {
+      warning("The input data matrix is trasposed")
+      x <- t(x)
+      te <- bl
+      bl <- tr
+      tr <- te
+    }
     if (bl < 4) {
       stop("KKSA needs at least 4 levels of blocking factor")
-
-    } else{
+    } else {
       cck <- 2^(bl - 1) - 1 - bl
-      statistics <-kk.f(x,bl,tr)
-      if(distr != "sim" && distr != "asy") distr="sim"
+      statistics <- kk.f(x, bl, tr)
+      if (distr != "sim" && distr != "asy") distr <- "sim"
 
-      if (distr == "sim")
-       {
-        simu <-rep(0,0)
-        for (i in 1:nsim){
-          simu[i]<-kk.f(matrix(rnorm(n),nrow=bl),bl,tr)
-          cat(paste(round(i / nsim * 100), '% completed'))
-          #Sys.sleep(.1)
-          if (i == nsim) cat(': Done', "\n")
-          else cat('\014', "\n")
+      if (distr == "sim") {
+        simu <- rep(0, 0)
+        for (i in 1:nsim) {
+          simu[i] <- kk.f(matrix(rnorm(n), nrow = bl), bl, tr)
+          cat(paste(round(i / nsim * 100), "% completed"))
+          # Sys.sleep(.1)
+          if (i == nsim) {
+            cat(": Done", "\n")
+          } else {
+            cat("\014", "\n")
+          }
         }
         KKSA.p <- mean(statistics > simu)
       } else if (distr == "asy") {
-        KKSA.p<-statistics*cck
-        KKSA.p<- min(1,KKSA.p)
-       }
-      out <- list(pvalue = KKSA.p,
-                nsim = nsim,distr=distr,
-                statistic = statistics)
+        KKSA.p <- statistics * cck
+        KKSA.p <- min(1, KKSA.p)
+      }
+      out <- list(
+        pvalue = KKSA.p,
+        nsim = nsim, distr = distr,
+        statistic = statistics
+      )
       return(out)
     }
   }
@@ -313,7 +325,7 @@ KKSA.test<-function(x,nsim=10000,distr = "sim",...){
 #' @details Franck et al. (2013) derived a test statistic based on the “hidden additivity” structure.
 #'  They defined this structure as “the levels of one factor belong in two or more groups such that within each group the effects of the two factors are additive but the groups may interact with the ungrouped factor”.
 #'  To detect hidden additivity, Franck et al. (2013) divided the table of data into two sub-tables and an interaction F-test was developed.
-#'  Then, they performed a search over all possible configurations of data and used the maximum of the interaction F-ratios as a test statistic. The hypothesis of no interaction is rejected when the maximum interaction F-ratio is large.
+#'  Then, they performed a search over all possible configuRDWWns of data and used the maximum of the interaction F-RDWWs as a test statistic. The hypothesis of no interaction is rejected when the maximum interaction F-RDWW is large.
 #'  Note that, if rows number, \eqn{b}, of data matrix is less than the columns number, \eqn{a}, 
 #'  the data matrix is transposed. Note that the this test method is powerful when there is a hidden additivity structure in the data set.
 #'  
@@ -335,48 +347,55 @@ KKSA.test<-function(x,nsim=10000,distr = "sim",...){
 #'  86(3): 469-487.
 #'   
 #' @examples \dontrun{this is an example}
-#' data(cnv6)
-#' Franck.test(cnv6,nsim=1000,dist = "sim")
+#' data(CNV)
+#' Franck.test(CNV,nsim=1000,dist = "sim")
 #' @export
-Franck.test<-function(x,nsim=1000,dist = "sim",...){
-
-  if(!is.matrix(x)){
+Franck.test <- function(x, nsim = 1000, dist = "sim", ...) {
+  if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
     bl <- nrow(x)
     tr <- ncol(x)
-    n<-tr * bl
-    if (bl < tr) {warning("The input data matrix is transposed")
-      x<-t(x);te<-bl;bl<-tr;tr<-te}
+    n <- tr * bl
+    if (bl < tr) {
+      warning("The input data matrix is transposed")
+      x <- t(x)
+      te <- bl
+      bl <- tr
+      tr <- te
+    }
     if (bl < 3) {
       stop("hiddenf needs at least 3 levels of blocking factor")
+    } else {
+      cch <- 2^(bl - 1) - 1
+      statistics <- hh.f(x, bl)
+      if (dist != "sim" || dist != "asy") dist <- "sim"
 
-    }else{
-     cch <- 2^(bl - 1) - 1
-     statistics <-hh.f(x,bl)
-     if(dist != "sim" || dist != "asy") dist="sim"
-
-     if (dist == "sim")
-     {
-       simu <-rep(0,0)
-       for (i in 1:nsim){
-         simu[i]<-hh.f(matrix(rnorm(n),nrow=bl),bl)
-         cat(paste(round(i / nsim * 100), '% completed', "\n"))
-         #Sys.sleep(.1)
-         if (i == nsim) cat(': Done', "\n")
-         else cat('\014', "\n")
-       }
-       hidden <- mean(statistics < simu)
-     } else if (dist == "asy") {
-       adjpvalue<-(1-pf(statistics,(tr-1),(tr-1)*(bl-2)))*cch
-       hidden<- min(1,adjpvalue)
-     }
-     out <- list(pvalue = hidden,
-                nsim = nsim,dist=dist
-                ,statistic = statistics)
-     return(out)
-     }
-   }
+      if (dist == "sim") {
+        simu <- rep(0, 0)
+        for (i in 1:nsim) {
+          simu[i] <- hh.f(matrix(rnorm(n), nrow = bl), bl)
+          cat(paste(round(i / nsim * 100), "% completed", "\n"))
+          # Sys.sleep(.1)
+          if (i == nsim) {
+            cat(": Done", "\n")
+          } else {
+            cat("\014", "\n")
+          }
+        }
+        hidden <- mean(statistics < simu)
+      } else if (dist == "asy") {
+        adjpvalue <- (1 - pf(statistics, (tr - 1), (tr - 1) * (bl - 2))) * cch
+        hidden <- min(1, adjpvalue)
+      }
+      out <- list(
+        pvalue = hidden,
+        nsim = nsim, dist = dist,
+        statistic = statistics
+      )
+      return(out)
+    }
+  }
 }
 
 #' Combined p-value interaction test
@@ -415,10 +434,10 @@ Franck.test<-function(x,nsim=1000,dist = "sim",...){
 #'  Unreplicated Two-Way Layouts Based on Combining Multiple Interaction Tests. International Statistical Review
 #'  86(3): 469-487.
 #' @examples \dontrun{this is an example}
-#' data(cnv6)
-#' CPI.test(cnv6,nsim=500,nc0=10000)
+#' data(CNV)
+#' CPI.test(CNV,nsim=500,nc0=10000)
 #' @export
-CPI.test<-function(x,nsim=500,nc0=10000,...){
+CPI.test <- function(x, nsim = 500, nc0 = 10000, ...) {
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
@@ -426,11 +445,14 @@ CPI.test<-function(x,nsim=500,nc0=10000,...){
     tr <- ncol(x)
     bl <- nrow(x)
     if (bl < tr) warning("transpose the input matrix")
-    x<-t(x);te<-bl;bl<-tr;tr<-te}
-    if (bl < 3) {
-      stop("hiddenf needs at least 3 levels of blocking factor")
-
-    }else{
+    x <- t(x)
+    te <- bl
+    bl <- tr
+    tr <- te
+  }
+  if (bl < 3) {
+    stop("hiddenf needs at least 3 levels of blocking factor")
+  } else {
     n <- tr * bl
     block <- gl(bl, tr)
     treatment <- gl(tr, 1, bl * tr)
@@ -439,64 +461,73 @@ CPI.test<-function(x,nsim=500,nc0=10000,...){
     cck <- 2^(bl - 1) - 1 - bl
     cch <- 2^(bl - 1) - 1
     kp <- kpr(bl, tr)
-    c0<-mean(replicate(nc0,{median(abs(kp%*%rnorm(n)))}))
+    c0 <- mean(replicate(nc0, {
+      median(abs(kp %*% rnorm(n)))
+    }))
 
-    sta<-bmp.f(x,y, block , treatment,bl,tr,p)
+    sta <- bmp.f(x, y, block, treatment, bl, tr, p)
 
-    Bstat <-sta$Boik
-    Mstat <-sta$Tc
-    pistat<-sta$piepho
-    pstat <-pic.f(y,kp,c0)
-    if(bl==3)Hstat<-hh.f(x,bl)
-    else{
-      Ksimu <-rep(0,0)
-      kh<-kh.f(x,bl,tr)
-      Kstat<-kh$fmin
-      Hstat<-kh$fmax
+    Bstat <- sta$Boik
+    Mstat <- sta$Tc
+    pistat <- sta$piepho
+    pstat <- pic.f(y, kp, c0)
+    if (bl == 3) {
+      Hstat <- hh.f(x, bl)
+    } else {
+      Ksimu <- rep(0, 0)
+      kh <- kh.f(x, bl, tr)
+      Kstat <- kh$fmin
+      Hstat <- kh$fmax
     }
 
-      Bsimu <-Msimu <-psimu <-pisimu <-Hsimu <-rep(0,0)
-      for (i in 1:nsim){
-        y<-rnorm(n)
-        x<-matrix(y,nrow = bl,byrow=TRUE)
-        sta<-bmp.f(x,y, block , treatment,bl,tr,p)
-        Bsimu[i]<-sta$Boik
-        Msimu[i]<-sta$Tc
-        pisimu[i]<-sta$piepho
-        psimu[i]<-pic.f(y,kp,c0)
-        if(bl==3)
-          Hsimu[i]<-hh.f(x,bl)else{
-        kh<-kh.f(x,bl,tr)
-        Ksimu[i]<-kh$fmin
-        Hsimu[i]<-kh$fmax
-          }
-        cat(paste(round(i / nsim * 100), '% completed'), "\n")
-        Sys.sleep(.1)
-        if (i == nsim) cat(': Done', "\n")
-        else cat('\014', "\n")
+    Bsimu <- Msimu <- psimu <- pisimu <- Hsimu <- rep(0, 0)
+    for (i in 1:nsim) {
+      y <- rnorm(n)
+      x <- matrix(y, nrow = bl, byrow = TRUE)
+      sta <- bmp.f(x, y, block, treatment, bl, tr, p)
+      Bsimu[i] <- sta$Boik
+      Msimu[i] <- sta$Tc
+      pisimu[i] <- sta$piepho
+      psimu[i] <- pic.f(y, kp, c0)
+      if (bl == 3) {
+        Hsimu[i] <- hh.f(x, bl)
+      } else {
+        kh <- kh.f(x, bl, tr)
+        Ksimu[i] <- kh$fmin
+        Hsimu[i] <- kh$fmax
       }
-      Boik.pvalue <- mean(Bstat > Bsimu)
-      piepho.pvalue <- mean(pistat < pisimu)
-      PIC.pvalue <- mean(pstat < psimu)
-      Malik.pvalue <- mean(Mstat < Msimu)
-      hiddenf.pvalue <- mean(Hstat < Hsimu)
-      if(bl==3)
-        KKSA.pvalue<- NULL else{
-
-        KKSA.pvalue<- mean(Kstat > Ksimu)
+      cat(paste(round(i / nsim * 100), "% completed"), "\n")
+      Sys.sleep(.1)
+      if (i == nsim) {
+        cat(": Done", "\n")
+      } else {
+        cat("\014", "\n")
       }
-    pvalues <- c(Boik.pvalue,piepho.pvalue,hiddenf.pvalue,Malik.pvalue,PIC.pvalue,KKSA.pvalue)
-    cp<-comb(pvalues)
-    Bonferroni<-cp$Bon
-    GC<-cp$GC
-    Sidak<-cp$Sidak
-    jacobi<-cp$jacobi
-    list(nsim=nsim,piepho.pvalue=piepho.pvalue,Boik.pvalue=Boik.pvalue
-         ,Malik.pvalue=Malik.pvalue,KKM.pvalue=PIC.pvalue
-         ,KKSA.pvalue=KKSA.pvalue,Franck.pvalue=hiddenf.pvalue,
-         Bonferroni=Bonferroni,Sidak=Sidak,jacobi=jacobi,GC=GC)
     }
+    Boik.pvalue <- mean(Bstat > Bsimu)
+    piepho.pvalue <- mean(pistat < pisimu)
+    PIC.pvalue <- mean(pstat < psimu)
+    Malik.pvalue <- mean(Mstat < Msimu)
+    hiddenf.pvalue <- mean(Hstat < Hsimu)
+    if (bl == 3) {
+      KKSA.pvalue <- NULL
+    } else {
+      KKSA.pvalue <- mean(Kstat > Ksimu)
+    }
+    pvalues <- c(Boik.pvalue, piepho.pvalue, hiddenf.pvalue, Malik.pvalue, PIC.pvalue, KKSA.pvalue)
+    cp <- comb(pvalues)
+    Bonferroni <- cp$Bon
+    GC <- cp$GC
+    Sidak <- cp$Sidak
+    jacobi <- cp$jacobi
+    list(
+      nsim = nsim, piepho.pvalue = piepho.pvalue, Boik.pvalue = Boik.pvalue,
+      Malik.pvalue = Malik.pvalue, KKM.pvalue = PIC.pvalue,
+      KKSA.pvalue = KKSA.pvalue, Franck.pvalue = hiddenf.pvalue,
+      Bonferroni = Bonferroni, Sidak = Sidak, jacobi = jacobi, GC = GC
+    )
   }
+}
 
 
 #' Interaction plot
@@ -505,21 +536,21 @@ CPI.test<-function(x,nsim=500,nc0=10000,...){
 #' @return  An interaction plot for input
 #' @author Shenavari, Z.; Haghbin, H.; Kharrati-Kopaei, M.; Najibi, S.M.
 #' @examples \dontrun{this is an example}
-#' data(cnv6)
-#' interactionplot(cnv6)
+#' data(CNV)
+#' interactionplot(CNV)
 #' @export
-interactionplot<-function(x,...){
+interactionplot <- function(x, ...) {
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
-    par(mfcol=c(1,2))
+    par(mfcol = c(1, 2))
     t <- ncol(x)
     b <- nrow(x)
-  matplot(t(x), type = "b",xaxt = "n", ylab = "Observed values", xlab = "Factor1(column)",lty = 1:b ,...)
-  axis(1, at = 1:t, labels = 1:t, cex.axis = 1)
-  legend("topright", rep(paste0("row", 1:b)), lty = 1:b, bty = "n", cex = 0.7)
-  matplot(x, type = "b",xaxt = "n", ylab = "", xlab = "Factor2(row)",lty = 1:t,...)
-  legend("topright",rep(paste0("col", 1:t)), lty =1:t , bty = "n", cex = 0.7)
-  axis(1, at = 1:b, labels = 1:b, cex.axis = 1)
+    matplot(t(x), type = "b", xaxt = "n", ylab = "Observed values", xlab = "Factor1(column)", lty = 1:b, ...)
+    axis(1, at = 1:t, labels = 1:t, cex.axis = 1)
+    legend("topright", rep(paste0("row", 1:b)), lty = 1:b, bty = "n", cex = 0.7)
+    matplot(x, type = "b", xaxt = "n", ylab = "", xlab = "Factor2(row)", lty = 1:t, ...)
+    legend("topright", rep(paste0("col", 1:t)), lty = 1:t, bty = "n", cex = 0.7)
+    axis(1, at = 1:b, labels = 1:b, cex.axis = 1)
   }
 }

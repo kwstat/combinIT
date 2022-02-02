@@ -35,8 +35,8 @@ Note that this test procedure is powerful when significant interactions are caus
 }
 \examples{
 \dontrun{this is an example}
-data(ratio)
-KKM.test(ratio,nsim=10000,nc0=10000)
+data(RDWW)
+KKM.test(RDWW,nsim=10000,nc0=10000)
 }
 \references{
 Kharrati-Kopaei, M., Miller, A. (2016). A method for testing interaction in

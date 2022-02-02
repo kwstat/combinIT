@@ -4,7 +4,7 @@
 #' This data set has been previously analyzed by Alin and Kurt (2006). There three levels of zinc:
 #' Zinc deficient, Pair-fed, and Control. There are also  three levels of thyroid hormone: Hypothyroid, Euthyroid, and Hyperthyroid.
 #' The test of interaction between the zinc and thyroid hormone is of interest.
-#' 
+#'
 #' @name MVGH
 #' @format A matrix with three rows (Thyroid levels) and three columns (Zinc levels):
 #' \describe{
@@ -25,5 +25,5 @@
 #'   Actions and interactions of thyroid hormone and zinc status in growing rats.
 #'   Journal of Nutrition 131:1135–41.
 #' }
-#' 
+#'
 NULL

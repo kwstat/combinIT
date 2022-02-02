@@ -4,7 +4,7 @@
 #' This data were collected in an experiment to assess the impurity present in a chemical product.
 #' The impurity is affected by two factors: pressure and temperature. Montgomery (2001, p. 193)
 #' analyzed the data by using the Tukey single-degree-of-freedom test
-#' and concluded that there is no evidence of interaction. 
+#' and concluded that there is no evidence of interaction.
 #' @name IDCP
 #' @format A matrix with five rows (Pressures) and three columns (Temperatures):
 #' \describe{
@@ -23,5 +23,5 @@
 #'  Montgomery, D. C. (2001). Design and analysis of experiments, 5th Edition, p 193.
 #'  John Wiley & Sons.
 #' }
-#' 
+#'
 NULL

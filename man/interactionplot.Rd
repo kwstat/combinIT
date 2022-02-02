@@ -17,8 +17,8 @@ Interaction plot
 }
 \examples{
 \dontrun{this is an example}
-data(cnv6)
-interactionplot(cnv6)
+data(CNV)
+interactionplot(CNV)
 }
 \author{
 Shenavari, Z.; Haghbin, H.; Kharrati-Kopaei, M.; Najibi, S.M.
