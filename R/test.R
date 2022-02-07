@@ -1,4 +1,4 @@
-#' Boik (1993) locally best invariant (LBI) test
+#' Boik (1993) locally best invariant (LBI) test.
 #'
 #' This function calculates the LBI test statistic for testing the null hypothesis \eqn{H_0:} there is no interaction.
 #' It returns an exact Monte Carlo p-value (when \eqn{p>2}) and an asymptotic chi-squared p-value.
