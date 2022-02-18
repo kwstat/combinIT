@@ -477,7 +477,7 @@ CPI.test <- function(x, nsim = 500, nc0 = 10000, ...) {
       Hstat <- hh_f(x, bl)
     } else {
       Ksimu <- rep(0, 0)
-      kh <- kh.f(x, bl, tr)
+      kh <- kh_f(x)
       Kstat <- kh$fmin
       Hstat <- kh$fmax
     }
@@ -494,7 +494,7 @@ CPI.test <- function(x, nsim = 500, nc0 = 10000, ...) {
       if (bl == 3) {
         Hsimu[i] <- hh_f(x, bl)
       } else {
-        kh <- kh.f(x, bl, tr)
+        kh <- kh_f(x)
         Ksimu[i] <- kh$fmin
         Hsimu[i] <- kh$fmax
       }
