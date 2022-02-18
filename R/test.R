@@ -103,11 +103,11 @@ Malik.test <- function(x, nsim = 10000) {
     block <- gl(bl, tr)
     treatment <- gl(tr, 1, bl * tr)
     y <- c(t(x))
-    statistic <- M.f(x, y, block, treatment)
+    statistic <- M_f(x)
     simu <- rep(0, 0)
     for (i in 1:nsim) {
       y <- rnorm(n)
-      simu[i] <- M.f(matrix(y, nrow = bl), y, block, treatment)
+      simu[i] <- M_f(matrix(y, nrow = bl))
       # cat(paste(round(i / nsim * 100), '% completed'))
       # Sys.sleep(.05)
       # if (i == nsim) cat(': Done')
@@ -282,13 +282,13 @@ KKSA.test <- function(x, nsim = 10000, distr = "sim", ...) {
       stop("KKSA needs at least 4 levels of blocking factor")
     } else {
       cck <- 2^(bl - 1) - 1 - bl
-      statistics <- kk.f(x, bl, tr)
+      statistics <- kk_f(x)
       if (distr != "sim" && distr != "adj") distr <- "sim"
 
       if (distr == "sim") {
         simu <- rep(0, 0)
         for (i in 1:nsim) {
-          simu[i] <- kk.f(matrix(rnorm(n), nrow = bl), bl, tr)
+          simu[i] <- kk_f(matrix(rnorm(n), nrow = bl))
           cat(paste(round(i / nsim * 100), "% completed"))
           # Sys.sleep(.1)
           if (i == nsim) {
@@ -368,14 +368,14 @@ Franck.test <- function(x, nsim = 1000, dist = "sim", ...) {
       stop("hiddenf needs at least 3 levels of blocking factor")
     } else {
       cch <- 2^(bl - 1) - 1
-      statistics <- hh.f(x, bl)
+      statistics <- hh_f(x)
       if (dist != "sim" & dist != "adj")
         stop("\"dist\" parameter should be equal to \"sim\" or \"adj\".")
 
       if (dist == "sim") {
         simu <- rep(0, 0)
         for (i in 1:nsim) {
-          simu[i] <- hh.f(matrix(rnorm(n), nrow = bl), bl)
+          simu[i] <- hh_f(matrix(rnorm(n), nrow = bl))
           cat(paste(round(i / nsim * 100), "% completed", "\n"))
           # Sys.sleep(.1)
           if (i == nsim) {
@@ -474,7 +474,7 @@ CPI.test <- function(x, nsim = 500, nc0 = 10000, ...) {
     pistat <- sta$piepho
     pstat <- pic.f(y, kp, c0)
     if (bl == 3) {
-      Hstat <- hh.f(x, bl)
+      Hstat <- hh_f(x, bl)
     } else {
       Ksimu <- rep(0, 0)
       kh <- kh.f(x, bl, tr)
@@ -492,7 +492,7 @@ CPI.test <- function(x, nsim = 500, nc0 = 10000, ...) {
       pisimu[i] <- sta$piepho
       psimu[i] <- pic.f(y, kp, c0)
       if (bl == 3) {
-        Hsimu[i] <- hh.f(x, bl)
+        Hsimu[i] <- hh_f(x, bl)
       } else {
         kh <- kh.f(x, bl, tr)
         Ksimu[i] <- kh$fmin
