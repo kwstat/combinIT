@@ -554,9 +554,6 @@ List kh_f(NumericMatrix x){// Hossein's Codes....
       count++;
     }
   }
-  
-  
-  
   fmin = min(pvalues);
   xx=clone(x);
   NumericMatrix yb3(tr,1);
@@ -590,10 +587,44 @@ List kh_f(NumericMatrix x){// Hossein's Codes....
   List out;
   out = List::create(Named("fmin") = fmin , _["fmax"] = fmax);
   return out;
-  
 }
 
 
 
+
+
+
+using namespace Rcpp;
+//' @importFrom Rcpp sourceCpp
+//' 
+// [[Rcpp::export]]
+NumericMatrix bmp_f(NumericMatrix x){// Hossein's Codes....
+  IntegerVector Nrow;
+  double mx,sxbi;
+  int i,j;
+  bool flag;
+  NumericVector sxbj;
+  NumericMatrix RES;
+  
+  int bl = x.nrow();
+  int tr = x.ncol();
+  Function combn("combn");
+  Nrow = seq(2,floor(bl/2));
+  // _________________________________________
+  sxbj=rep(0,tr);
+  NumericMatrix xx(clone(x));
+  mx=mean(xx);
+  for(j=0;j<tr;j++)
+    sxbj(j)=mean(xx(_,j));
+  RES = clone(xx);
+  for(int i=0;i<bl;i++)
+  {
+    sxbi=mean(xx(i,_));
+    for(int j=0;j<tr;j++)
+      RES(i,j)=xx(i,j)-sxbi+mx-sxbj(j);
+  }
+  return RES;
+  
+}
 
 
