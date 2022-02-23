@@ -598,7 +598,8 @@ using namespace Rcpp;
 //' @importFrom Rcpp sourceCpp
 //' 
 // [[Rcpp::export]]
-NumericVector bmp_f(NumericMatrix x){// Hossein's Codes....
+
+NumericMatrix bmp_f(NumericMatrix x){// Hossein's Codes....
   IntegerVector Nrow;
   double mx,sxbi;
   int i,j;
@@ -625,9 +626,7 @@ NumericVector bmp_f(NumericMatrix x){// Hossein's Codes....
       RES(i,j)=xx(i,j)-sxbi+mx-sxbj(j);
     r = c(r,RES(i,_));
   }
-  
-  
-  return r;
+  return RES;
 }
 
 
