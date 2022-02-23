@@ -598,18 +598,29 @@ using namespace Rcpp;
 //' @importFrom Rcpp sourceCpp
 //' 
 // [[Rcpp::export]]
+<<<<<<< HEAD
 NumericVector bmp_f(NumericMatrix x){// Hossein's Codes....
+=======
+NumericMatrix bmp_f(NumericMatrix x){// Hossein's Codes....
+>>>>>>> 5bfb6edbdf6ccbb281df08348a1f4fd1c981c4c3
   IntegerVector Nrow;
   double mx,sxbi;
   int i,j;
   bool flag;
+<<<<<<< HEAD
   NumericVector sxbj,r;
+=======
+  NumericVector sxbj;
+>>>>>>> 5bfb6edbdf6ccbb281df08348a1f4fd1c981c4c3
   NumericMatrix RES;
   
   int bl = x.nrow();
   int tr = x.ncol();
   Function combn("combn");
+<<<<<<< HEAD
   Function c("c");
+=======
+>>>>>>> 5bfb6edbdf6ccbb281df08348a1f4fd1c981c4c3
   Nrow = seq(2,floor(bl/2));
   // _________________________________________
   sxbj=rep(0,tr);
@@ -623,11 +634,17 @@ NumericVector bmp_f(NumericMatrix x){// Hossein's Codes....
     sxbi=mean(xx(i,_));
     for(int j=0;j<tr;j++)
       RES(i,j)=xx(i,j)-sxbi+mx-sxbj(j);
+<<<<<<< HEAD
     r = c(r,RES(i,_));
   }
   
   
   return r;
+=======
+  }
+  return RES;
+  
+>>>>>>> 5bfb6edbdf6ccbb281df08348a1f4fd1c981c4c3
 }
 
 

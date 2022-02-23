@@ -150,7 +150,11 @@ BEGIN_RCPP
 END_RCPP
 }
 // bmp_f
+<<<<<<< HEAD
 NumericVector bmp_f(NumericMatrix x);
+=======
+NumericMatrix bmp_f(NumericMatrix x);
+>>>>>>> 5bfb6edbdf6ccbb281df08348a1f4fd1c981c4c3
 RcppExport SEXP _combinIT_bmp_f(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
