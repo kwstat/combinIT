@@ -150,12 +150,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // bmp_f
-NumericMatrix bmp_f(NumericMatrix x);
+List bmp_f(arma::mat x);
 RcppExport SEXP _combinIT_bmp_f(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
     rcpp_result_gen = Rcpp::wrap(bmp_f(x));
     return rcpp_result_gen;
 END_RCPP
