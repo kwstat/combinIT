@@ -70,6 +70,7 @@ kh_f <- function(x) {
 }
 
 #' @importFrom Rcpp sourceCpp
+#' @useDynLib combinIT
 #' 
 bmp_f <- function(x) {
     .Call('_combinIT_bmp_f', PACKAGE = 'combinIT', x)

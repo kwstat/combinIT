@@ -466,9 +466,7 @@ CPI.test <- function(x, nsim = 500, nc0 = 10000, ...) {
     c0 <- mean(replicate(nc0, {
       median(abs(kp %*% rnorm(n)))
     }))
-
-    sta <- bmp.f(x, y, block, treatment, bl, tr, p)
-
+    sta <- bmp_f(x)
     Bstat <- sta$Boik
     Mstat <- sta$Tc
     pistat <- sta$piepho
@@ -481,12 +479,11 @@ CPI.test <- function(x, nsim = 500, nc0 = 10000, ...) {
       Kstat <- kh$fmin
       Hstat <- kh$fmax
     }
-
     Bsimu <- Msimu <- psimu <- pisimu <- Hsimu <- rep(0, 0)
     for (i in 1:nsim) {
       y <- rnorm(n)
       x <- matrix(y, nrow = bl, byrow = TRUE)
-      sta <- bmp.f(x, y, block, treatment, bl, tr, p)
+      sta <- bmp_f(x)
       Bsimu[i] <- sta$Boik
       Msimu[i] <- sta$Tc
       pisimu[i] <- sta$piepho
@@ -499,13 +496,16 @@ CPI.test <- function(x, nsim = 500, nc0 = 10000, ...) {
         Hsimu[i] <- kh$fmax
       }
       cat(paste(round(i / nsim * 100), "% completed"), "\n")
-      Sys.sleep(.1)
+      #Sys.sleep(.1)
       if (i == nsim) {
         cat(": Done", "\n")
       } else {
         cat("\014", "\n")
       }
+      
     }
+      
+    
     Boik.pvalue <- mean(Bstat > Bsimu)
     piepho.pvalue <- mean(pistat < pisimu)
     PIC.pvalue <- mean(pstat < psimu)
@@ -516,6 +516,7 @@ CPI.test <- function(x, nsim = 500, nc0 = 10000, ...) {
     } else {
       KKSA.pvalue <- mean(Kstat > Ksimu)
     }
+    
     pvalues <- c(Boik.pvalue, piepho.pvalue, hiddenf.pvalue, Malik.pvalue, PIC.pvalue, KKSA.pvalue)
     cp <- comb(pvalues)
     Bonferroni <- cp$Bon

@@ -182,8 +182,8 @@ double kk_f(NumericMatrix x){// Hossein's Codes....
   int bl = x.nrow();
   int tr = x.ncol();
   // int n = tr*bl;
-  int count = 0,i,jj,dfn,dfd,Nsplit,nr,kk;
-  double rss1,rss2,pvalues2;
+  int count = 0,i,dfn,dfd,Nsplit,nr,kk;
+  double rss1,rss2;
   bool flag;
   NumericVector indj,indj2,sybj,fvalues,pvalues;
   NumericMatrix ind,yb1,yb,yb2,I;
@@ -295,7 +295,7 @@ double hh_f(NumericMatrix x){// Hossein's Codes....
   int bl = x.nrow();
   int tr = x.ncol();
   double mx,sxbi,sse,rss1,rss2,sse7,myb1,sybi;
-  int count = 0,i,j,Nsplit,nr,kk;
+  int i,j,Nsplit,nr,kk;
   bool flag;
   NumericVector indj,indj2,sxbj,sybj,hvalues,v,indj3;
   NumericMatrix ind,yb1,yb,yb2,I,xb,m,yb4;
@@ -393,7 +393,6 @@ double hh_f(NumericMatrix x){// Hossein's Codes....
       //______________________________
       sse7=rss1+rss2;
       hvalues.push_back((sse-sse7)*(bl-2)/sse7);
-      // count++;
     }
   }
   // _________________________________________
@@ -591,42 +590,92 @@ List kh_f(NumericMatrix x){// Hossein's Codes....
 
 
 
-
-
-
+#include <RcppArmadillo.h>
 using namespace Rcpp;
+using namespace arma;
+
+// [[Rcpp::depends(RcppArmadillo)]]
 //' @importFrom Rcpp sourceCpp
+//' @useDynLib combinIT
 //' 
 // [[Rcpp::export]]
 
-NumericMatrix bmp_f(NumericMatrix x){// Hossein's Codes....
-  IntegerVector Nrow;
-  double mx,sxbi;
-  int i,j;
-  bool flag;
-  NumericVector sxbj,r;
-  NumericMatrix RES;
-  
-  int bl = x.nrow();
-  int tr = x.ncol();
-  Function combn("combn");
-  Function c("c");
-  Nrow = seq(2,floor(bl/2));
-  // _________________________________________
-  sxbj=rep(0,tr);
-  NumericMatrix xx(clone(x));
-  mx=mean(xx);
-  for(j=0;j<tr;j++)
-    sxbj(j)=mean(xx(_,j));
-  RES = clone(xx);
-  for(int i=0;i<bl;i++)
+List bmp_f(arma::mat x) {            // Hossein's Codes....
+  arma::vec W,delta;
+  double sum_w;
+  int bl = x.n_rows;
+  int tr = x.n_cols;
+  int n = bl*tr;
+  int p = tr - 1;
+  if (bl<tr)
+    p = bl - 1;
+
+  arma::vec treatment = arma::repelem(arma::regspace(1,  bl), tr, 1);
+  arma::vec y = arma::trans(x.as_row());
+  arma::mat RES(bl,tr);
+  arma::vec RowMean = arma::mean(x,1);
+  arma::vec ColMean= trans(mean(x,0));
+  double Mean = accu(x)/(tr*bl);
+  for(int i=0; i<bl;i++)
   {
-    sxbi=mean(xx(i,_));
-    for(int j=0;j<tr;j++)
-      RES(i,j)=xx(i,j)-sxbi+mx-sxbj(j);
-    r = c(r,RES(i,_));
+    for(int j=0;j< tr;j++)
+    {
+      RES(i,j) = x(i,j)-RowMean(i)-ColMean(j)+Mean; 
+    }
   }
-  return RES;
+  W=zeros(bl);
+  delta=zeros(bl);
+  sum_w =  accu(pow(RES,2));
+  W = arma::sum(pow(RES,2),1);
+  delta = bl * (bl - 1) * W - sum(W);
+  double h1=0;
+  for(int i=0;i<(bl-1);i++)
+    for(int j=(i+1);j<bl;j++)
+      h1 = delta(i) * delta(j) + h1;
+  
+  double U = 2 * bl * h1 / ((bl - 1) * pow(sum(delta),2));
+  double piepho = -(tr - 1) * (bl - 1) * (bl - 2) * log(U) / 2;
+
+  arma::mat r = RES.as_row();  
+  arma::mat centers;
+  arma::kmeans(centers, r, 3, static_spread, 30, false);
+  arma::vec af(n,fill::ones);
+  arma::mat  Xi(n,3,fill::zeros);
+  for(int i=0; i<n;i++)
+  {
+    if(abs(r(i)-centers(0,1)) < abs(r(i)-centers(0,0)) && abs(r(i)-centers(0,1)) < abs(r(i)-centers(0,2)))
+    {
+      Xi(i,1)=1;
+    } else if(abs(r(i)-centers(0,2)) < abs(r(i)-centers(0,0)) && abs(r(i)-centers(0,2)) < abs(r(i)-centers(0,1)))
+    {
+      Xi(i,2)=1;
+    } else
+    {
+      Xi(i,0)=1;
+    }
+  }
+  arma::vec  a1(n, fill::ones),a2(bl, fill::ones),a3(tr, fill::ones);
+  arma::mat B3 = arma::diagmat(a3), B2 = arma::diagmat(a2);
+  arma::mat  K1 = arma::kron(a2,B3);
+  arma::mat  K2 = arma::kron(B2,a3);
+  arma::mat X = arma::join_horiz(a1,K1,K2,Xi);
+  arma::vec yhat = X*arma::pinv(arma::trans(X)*X)*arma::trans(X)*y;
+  double  SSE = arma::sum(arma::square(y-yhat));
+  double Tc = ((arma::sum(arma::square(arma::vectorise(r)))-SSE)/2)/(SSE/((tr-1)*(bl-1)-2));
+  arma::mat EE1 = RES.t()*RES;
+  arma::mat EE2 = EE1*EE1;
+  double trace1=arma::trace(EE1);
+  double trace2=arma::trace(EE2);
+  double  Boik = (trace1*trace1) / (p * trace2);
+  List out;
+  out = List::create(Named("Boik") = Boik , _["Tc"] = Tc, _["piepho"] = piepho);
+  return out;
 }
+
+
+
+
+
+
 
 
