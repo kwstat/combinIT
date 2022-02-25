@@ -34,9 +34,10 @@ In addition, the null distribution of the test statistic is calculated by a Mont
 Note that this test procedure is powerful when significant interactions are caused by some data cells.
 }
 \examples{
-\dontrun{this is an example}
+\dontrun{
 data(RDWW)
 KKM.test(RDWW,nsim=10000,nc0=10000)
+}
 }
 \references{
 Kharrati-Kopaei, M., Miller, A. (2016). A method for testing interaction in

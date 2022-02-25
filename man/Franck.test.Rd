@@ -34,10 +34,10 @@ Franck et al. (2013) derived a test statistic based on the â€œhidden additivityâ
  the data matrix is transposed. Note that the this test method is powerful when there is a hidden additivity structure in the data set.
 }
 \examples{
-\dontrun{this is an example}
+\dontrun{
 data(CNV)
 Franck.test(CNV,nsim=1000,dist = "sim")
-
+}
 }
 \references{
 Franck, C., Nielsen, D., Osborne, J.A. (2013). A method for detecting hidden additivity in two-factor unreplicated experiments.

@@ -36,9 +36,10 @@ Suppose that \eqn{b>=a} and \eqn{b>=4}. Consider the \eqn{l}-th division of the 
  rows or columns. This test procedure is powerful for detecting interaction when the magnitude of interaction effects is heteroscedastic across the sub-tables of observations.
 }
 \examples{
-\dontrun{this is an example}
+\dontrun{
 data(IDCP)
 KKSA.test(IDCP,nsim=10000,dist = "sim")
+}
 }
 \references{
 Kharrati-Kopaei, M., Sadooghi-Alvandi, S.M. (2007). A New Method for

@@ -34,9 +34,10 @@ Piepho (1994) proposed three test statistics.The third one is
  Note that Piepho’s test is powerful for detecting interactions when the Grubbs’ type estimators of variances are heterogeneous across the levels of one factor.
 }
 \examples{
-\dontrun{this is an example}
+\dontrun{
 data(MVGH)
 Piepho.test(MVGH,nsim=1000)
+}
 }
 \references{
 Piepho, H. P. (1994). On Tests for Interaction in a Nonreplicated Two-Way Layout. Australian

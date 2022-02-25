@@ -34,10 +34,10 @@ The LBI test statistic is \eqn{T_B93=(tr(R'R))^2/(p tr((R'R)^2))} where \eqn{p=m
   in practice, if the largest eigenvalue of \eqn{RR'} is expected to dominate the remaining eigenvalues.
 }
 \examples{
-\dontrun{this is an example}
+\dontrun{
 data(MVGH)
 Boik.test(MVGH, nsim=10000)
-
+}
 }
 \references{
 Boik, R.J. (1993). Testing additivity in two-way classifications

@@ -4,7 +4,7 @@ Title: A Combined Intercation Test for Unreplicated Two-Way Tables
 Version: 1.0.0
 Authors@R: c(
     person("Zahra", "Shenavari", email = "zshenavari@yahoo.com", role = "aut"),
-    person("Hossein", "Haghbin", email = " haghbin@pgu.ac.ir",role = c("aut", "cre"),
+    person("Hossein", "Haghbin", email = "haghbin@pgu.ac.ir",role = c("aut", "cre"),
         comment = c(ORCID = "0000-0001-8416-2354")),
     person("Mahmood", "Kharrati-Kopaei", email = "mkharati@shirazu.ac.ir", role = "aut",
         comment = c(ORCID = "0000-0001-5555-253X")),
@@ -17,7 +17,7 @@ License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: TRUE
 RoxygenNote: 7.1.2
-Imports: Rcpp,mvtnorm,ClusterR
+Imports: Rcpp,mvtnorm
 LinkingTo: Rcpp, RcppArmadillo
 Depends: R (>= 4.0)
 

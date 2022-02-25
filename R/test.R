@@ -27,10 +27,11 @@
 #'  Shenavari, Z., Kharrati-Kopaei, M. (2018). A Method for Testing Additivity in
 #'  Unreplicated Two-Way Layouts Based on Combining Multiple Interaction Tests. International Statistical Review
 #'  86(3): 469-487.
-#' @examples \dontrun{this is an example}
+#' @examples 
+#' \dontrun{
 #' data(MVGH)
 #' Boik.test(MVGH, nsim=10000)
-#' 
+#' }
 #' @importFrom stats median pbeta rnorm
 #' @export
 Boik.test <- function(x, nsim = 10000) {
@@ -91,9 +92,11 @@ Boik.test <- function(x, nsim = 10000) {
 #' Shenavari, Z., Kharrati-Kopaei, M. (2018). A Method for Testing Additivity in
 #' Unreplicated Two-Way Layouts Based on Combining Multiple Interaction Tests. International Statistical Review
 #' 86(3): 469-487.
-#' @examples \dontrun{this is an example}
+#' @examples 
+#' \dontrun{
 #' data(IDCP)
 #' Malik.test(IDCP,nsim=10000)
+#' }
 #' @export
 Malik.test <- function(x, nsim = 10000) {
   if (!is.matrix(x)) {
@@ -151,9 +154,11 @@ Malik.test <- function(x, nsim = 10000) {
 #'  Unreplicated Two-Way Layouts Based on Combining Multiple Interaction Tests. International Statistical Review
 #'  86(3): 469-487.
 
-#' @examples \dontrun{this is an example}
+#' @examples 
+#' \dontrun{
 #' data(RDWW)
 #' KKM.test(RDWW,nsim=10000,nc0=10000)
+#' }
 #' @export
 KKM.test <- function(x, nsim = 1000, nc0 = 10000) {
   if (!is.matrix(x)) {
@@ -204,9 +209,11 @@ KKM.test <- function(x, nsim = 1000, nc0 = 10000) {
 #' 
 #' Grubbs, F.E. (1948). On Estimating Precision of Measuring Instruments and Product Variability. Journal of the American Statistical Association 43(242): 243-264.
 #' 
-#' @examples \dontrun{this is an example}
+#' @examples 
+#' \dontrun{
 #' data(MVGH)
 #' Piepho.test(MVGH,nsim=1000)
+#' }
 #' @export
 Piepho.test <- function(x, nsim = 10000) {
   if (!is.matrix(x)) {
@@ -262,9 +269,11 @@ Piepho.test <- function(x, nsim = 10000) {
 #'  Unreplicated Two-Way Layouts Based on Combining Multiple Interaction Tests. International Statistical Review
 #'  86(3): 469-487.
 #'   
-#' @examples \dontrun{this is an example}
+#' @examples
+#' \dontrun{
 #' data(IDCP)
 #' KKSA.test(IDCP,nsim=10000,dist = "sim")
+#' }
 #' @export
 KKSA.test <- function(x, nsim = 10000, distr = "sim") {
   if (!is.matrix(x)) {
@@ -348,10 +357,11 @@ KKSA.test <- function(x, nsim = 10000, distr = "sim") {
 #'  Unreplicated Two-Way Layouts Based on Combining Multiple Interaction Tests. International Statistical Review
 #'  86(3): 469-487.
 #'   
-#' @examples \dontrun{this is an example}
+#' @examples 
+#' \dontrun{
 #' data(CNV)
 #' Franck.test(CNV,nsim=1000,dist = "sim")
-#' 
+#' }
 #' @importFrom stats pchisq pf qnorm var
 #' @export
 Franck.test <- function(x, nsim = 1000, dist = "sim") {
@@ -439,10 +449,11 @@ Franck.test <- function(x, nsim = 1000, dist = "sim") {
 #' @references Shenavari, Z., Kharrati-Kopaei, M. (2018). A Method for Testing Additivity in
 #'  Unreplicated Two-Way Layouts Based on Combining Multiple Interaction Tests. International Statistical Review
 #'  86(3): 469-487.
-#' @examples \dontrun{this is an example}
+#' @examples 
+#' \dontrun{
 #' data(RDWW)
 #' CPI.test(RDWW,nsim=500,nc0=10000)
-#' 
+#' }
 #' @importFrom stats pchisq pf qnorm var
 #' @export
 CPI.test <- function(x, nsim = 500, nc0 = 10000) {
