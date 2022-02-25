@@ -20,8 +20,8 @@ picf <- function(y, kp, c0) {
     .Call('_combinIT_picf', PACKAGE = 'combinIT', y, kp, c0)
 }
 
-#' Module  function
 #' @importFrom Rcpp sourceCpp
+#' 
 PICfsim <- function(nsim, kp, c0, n) {
     .Call('_combinIT_PICfsim', PACKAGE = 'combinIT', nsim, kp, c0, n)
 }

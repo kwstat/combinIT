@@ -49,8 +49,9 @@ double picf(arma::vec y,arma::mat kp,float c0){
     arma::vec PIC=max(z,0)/PSE(0);
     return PIC(0);
 }
-//' Module  function
+
 //' @importFrom Rcpp sourceCpp
+//' 
 // [[Rcpp::export]]
 arma::vec PICfsim(int nsim,arma::mat kp, float c0, int n){
   arma::vec sam(n);

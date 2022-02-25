@@ -3,7 +3,7 @@
 #' This function calculates the LBI test statistic for testing the null hypothesis \eqn{H_0:} there is no interaction.
 #' It returns an exact Monte Carlo p-value (when \eqn{p>2}) and an asymptotic chi-squared p-value.
 #' 
-#' @param \eqn{x} a numeric matrix, \eqn{b \times a} data matrix where the number of row and column are corresponding to the number of block and treatment levels, respectively.
+#' @param x a numeric matrix, \eqn{b \times a} data matrix where the number of row and column are corresponding to the number of block and treatment levels, respectively.
 #' @param nsim a numeric value, the number of Monte Carlo samples for calculating an exact Monte Carlo p-value. The default value is 10000.
 #' 
 #' @return  A list of consisting of:
@@ -30,8 +30,10 @@
 #' @examples \dontrun{this is an example}
 #' data(MVGH)
 #' Boik.test(MVGH, nsim=10000)
+#' 
+#' @importFrom stats median pbeta rnorm
 #' @export
-Boik.test <- function(x, nsim = 10000, ...) {
+Boik.test <- function(x, nsim = 10000) {
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
@@ -64,7 +66,7 @@ Boik.test <- function(x, nsim = 10000, ...) {
 #'
 #' The Malik's (2016) et al. test statistics is calculated and the corresponding exact p-value is calculated by a Monte Carlo simulation.
 #' 
-#' @param \eqn{x} numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels, respectively.
+#' @param x numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels, respectively.
 #' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
 #' 
 #' @return A list of consisting of:
@@ -124,7 +126,7 @@ Malik.test <- function(x, nsim = 10000) {
 #' This function calculates the test statistic for testing \eqn{H_0:} no interaction and corresponding Monte Carlo p-value
 #' proposed by Kharrati-Kopaei and Miller(2016).
 #' 
-#' @param \eqn{x} numerix matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels, respectively.
+#' @param x numerix matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels, respectively.
 #' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
 #' @param nc0 a numeric value, the number of Monte Carlo samples for computing the unbiasing constant \eqn{c_0}. The default value is 10000.
 #' 
@@ -153,7 +155,7 @@ Malik.test <- function(x, nsim = 10000) {
 #' data(RDWW)
 #' KKM.test(RDWW,nsim=10000,nc0=10000)
 #' @export
-KKM.test <- function(x, nsim = 1000, nc0 = 10000, ...) {
+KKM.test <- function(x, nsim = 1000, nc0 = 10000) {
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
@@ -176,7 +178,7 @@ KKM.test <- function(x, nsim = 1000, nc0 = 10000, ...) {
 #' This function tests the interaction based on a statistic proposed by Piepho (1994).
 #' This function reports Piepho's test statistic, and an asymptotic and Monte Carlo p-values.
 #' 
-#' @param \eqn{x} numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels
+#' @param x numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels
 #'   , respectively.
 #' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
 #' 
@@ -204,9 +206,9 @@ KKM.test <- function(x, nsim = 1000, nc0 = 10000, ...) {
 #' 
 #' @examples \dontrun{this is an example}
 #' data(MVGH)
-#' Piepho.test(MVGH,sim=1000)
+#' Piepho.test(MVGH,nsim=1000)
 #' @export
-Piepho.test <- function(x, nsim = 10000, ...) {
+Piepho.test <- function(x, nsim = 10000) {
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
@@ -232,10 +234,10 @@ Piepho.test <- function(x, nsim = 10000, ...) {
 #'
 #' This function calculates Kharrati-Kopaei and Sadooghi-Alvandi's test statistic and corresponding p-value for testing interaction.
 #' 
-#' @param \eqn{x} numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels
+#' @param x numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels
 #'   , respectively.
 #' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
-#' @param dist a character, if dist="sim", a Monte Carlo simulation is used for calculating exact p-value. If dist="adj", the Bonferroni-adjusted p-value is calculated. The default is "sim".
+#' @param distr a character, if dist="sim", a Monte Carlo simulation is used for calculating exact p-value. If dist="adj", the Bonferroni-adjusted p-value is calculated. The default is "sim".
 #' 
 #' @details  Suppose that \eqn{b>=a} and \eqn{b>=4}. Consider the \eqn{l}-th division of the data table into two sub-tables,
 #'  obtained by putting \eqn{b_1} (\eqn{2≤b_1≤b-2}) rows in the first sub-table and the remaining \eqn{b_2} rows in the second sub-table (\eqn{b_1+b_2=a}).
@@ -264,7 +266,7 @@ Piepho.test <- function(x, nsim = 10000, ...) {
 #' data(IDCP)
 #' KKSA.test(IDCP,nsim=10000,dist = "sim")
 #' @export
-KKSA.test <- function(x, nsim = 10000, distr = "sim", ...) {
+KKSA.test <- function(x, nsim = 10000, distr = "sim") {
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
@@ -316,7 +318,7 @@ KKSA.test <- function(x, nsim = 10000, distr = "sim", ...) {
 #'
 #' This function calculates Franck (2013) et al. test statistic,ACMIF, and corresponding p-value.
 #' 
-#' @param \eqn{x} numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels
+#' @param x numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels
 #'   , respectively.
 #' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
 #' @param dist a character, if dist="sim", a Monte Carlo simulation is used for calculating exact p-value,
@@ -349,8 +351,10 @@ KKSA.test <- function(x, nsim = 10000, distr = "sim", ...) {
 #' @examples \dontrun{this is an example}
 #' data(CNV)
 #' Franck.test(CNV,nsim=1000,dist = "sim")
+#' 
+#' @importFrom stats pchisq pf qnorm var
 #' @export
-Franck.test <- function(x, nsim = 1000, dist = "sim", ...) {
+Franck.test <- function(x, nsim = 1000, dist = "sim") {
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
@@ -375,7 +379,7 @@ Franck.test <- function(x, nsim = 1000, dist = "sim", ...) {
       if (dist == "sim") {
         simu <- rep(0, 0)
         for (i in 1:nsim) {
-          simu[i] <- hh_f(matrix(rnorm(n), nrow = bl))
+          simu[i] <- hh_f(matrix(rnorm(n)))
           cat(paste(round(i / nsim * 100), "% completed", "\n"))
           # Sys.sleep(.1)
           if (i == nsim) {
@@ -408,7 +412,7 @@ Franck.test <- function(x, nsim = 1000, dist = "sim", ...) {
 #' There are four combination methods:
 #' Bonferroni, Sidak, Jacobi expansion, and Gaussian Copula. The results of these four combinations are also reported. 
 #' 
-#' @param \eqn{x} numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels, respectively.
+#' @param x numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels, respectively.
 #' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
 #' @param nc0 a numeric value, the number of Monte Carlo samples for computing the unbiasing constant \eqn{c_0}. The default value is 10000.
 #' 
@@ -438,8 +442,10 @@ Franck.test <- function(x, nsim = 1000, dist = "sim", ...) {
 #' @examples \dontrun{this is an example}
 #' data(RDWW)
 #' CPI.test(RDWW,nsim=500,nc0=10000)
+#' 
+#' @importFrom stats pchisq pf qnorm var
 #' @export
-CPI.test <- function(x, nsim = 500, nc0 = 10000, ...) {
+CPI.test <- function(x, nsim = 500, nc0 = 10000) {
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
@@ -470,9 +476,9 @@ CPI.test <- function(x, nsim = 500, nc0 = 10000, ...) {
     Bstat <- sta$Boik
     Mstat <- sta$Tc
     pistat <- sta$piepho
-    pstat <- pic.f(y, kp, c0)
+    pstat <- picf(y, kp, c0)
     if (bl == 3) {
-      Hstat <- hh_f(x, bl)
+      Hstat <- hh_f(x)
     } else {
       Ksimu <- rep(0, 0)
       kh <- kh_f(x)
@@ -487,9 +493,9 @@ CPI.test <- function(x, nsim = 500, nc0 = 10000, ...) {
       Bsimu[i] <- sta$Boik
       Msimu[i] <- sta$Tc
       pisimu[i] <- sta$piepho
-      psimu[i] <- pic.f(y, kp, c0)
+      psimu[i] <- picf(y, kp, c0)
       if (bl == 3) {
-        Hsimu[i] <- hh_f(x, bl)
+        Hsimu[i] <- hh_f(x)
       } else {
         kh <- kh_f(x)
         Ksimu[i] <- kh$fmin
@@ -533,27 +539,3 @@ CPI.test <- function(x, nsim = 500, nc0 = 10000, ...) {
 }
 
 
-#' Interaction plot
-#'
-#' @param \eqn{x} numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels, respectively.
-#' @return  An interaction plot for input
-#' @author Shenavari, Z.; Haghbin, H.; Kharrati-Kopaei, M.; Najibi, S.M.
-#' @examples \dontrun{this is an example}
-#' data(CNV)
-#' interactionplot(CNV)
-#' @export
-interactionplot <- function(x, ...) {
-  if (!is.matrix(x)) {
-    stop("The input should be a matrix")
-  } else {
-    par(mfcol = c(1, 2))
-    t <- ncol(x)
-    b <- nrow(x)
-    matplot(t(x), type = "b", xaxt = "n", ylab = "Observed values", xlab = "Factor1(column)", lty = 1:b, ...)
-    axis(1, at = 1:t, labels = 1:t, cex.axis = 1)
-    legend("topright", rep(paste0("row", 1:b)), lty = 1:b, bty = "n", cex = 0.7)
-    matplot(x, type = "b", xaxt = "n", ylab = "", xlab = "Factor2(row)", lty = 1:t, ...)
-    legend("topright", rep(paste0("col", 1:t)), lty = 1:t, bty = "n", cex = 0.7)
-    axis(1, at = 1:b, labels = 1:b, cex.axis = 1)
-  }
-}
