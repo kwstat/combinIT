@@ -4,16 +4,16 @@
 \alias{Franck.test}
 \title{Franck (2013) et al. test for interaction}
 \usage{
-Franck.test(x, nsim = 1000, dist = "sim", ...)
+Franck.test(x, nsim = 1000, dist = "sim")
 }
 \arguments{
+\item{x}{numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels
+, respectively.}
+
 \item{nsim}{a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.}
 
 \item{dist}{a character, if dist="sim", a Monte Carlo simulation is used for calculating exact p-value,
 and if dist="adj", the Bonferroni-adjusted p-value is calculated. The default is "sim".}
-
-\item{\eqn{x}}{numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels
-, respectively.}
 }
 \value{
 pvalue, calculated p-value.
@@ -37,6 +37,7 @@ Franck et al. (2013) derived a test statistic based on the â€œhidden additivityâ
 \dontrun{this is an example}
 data(CNV)
 Franck.test(CNV,nsim=1000,dist = "sim")
+
 }
 \references{
 Franck, C., Nielsen, D., Osborne, J.A. (2013). A method for detecting hidden additivity in two-factor unreplicated experiments.

@@ -4,14 +4,14 @@
 \alias{CPI.test}
 \title{Combined p-value interaction test}
 \usage{
-CPI.test(x, nsim = 500, nc0 = 10000, ...)
+CPI.test(x, nsim = 500, nc0 = 10000)
 }
 \arguments{
+\item{x}{numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels, respectively.}
+
 \item{nsim}{a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.}
 
 \item{nc0}{a numeric value, the number of Monte Carlo samples for computing the unbiasing constant \eqn{c_0}. The default value is 10000.}
-
-\item{\eqn{x}}{numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels, respectively.}
 }
 \value{
 A list of consisting of:
@@ -54,6 +54,7 @@ If rows number ,\eqn{b} of data matrix is less than it's columns number, \eqn{a}
 \dontrun{this is an example}
 data(RDWW)
 CPI.test(RDWW,nsim=500,nc0=10000)
+
 }
 \references{
 Shenavari, Z., Kharrati-Kopaei, M. (2018). A Method for Testing Additivity in

@@ -4,15 +4,15 @@
 \alias{KKSA.test}
 \title{Kharrati-Kopaei and Sadooghi-Alvandi (2007) test for interaction}
 \usage{
-KKSA.test(x, nsim = 10000, distr = "sim", ...)
+KKSA.test(x, nsim = 10000, distr = "sim")
 }
 \arguments{
-\item{nsim}{a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.}
-
-\item{\eqn{x}}{numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels
+\item{x}{numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels
 , respectively.}
 
-\item{dist}{a character, if dist="sim", a Monte Carlo simulation is used for calculating exact p-value. If dist="adj", the Bonferroni-adjusted p-value is calculated. The default is "sim".}
+\item{nsim}{a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.}
+
+\item{distr}{a character, if dist="sim", a Monte Carlo simulation is used for calculating exact p-value. If dist="adj", the Bonferroni-adjusted p-value is calculated. The default is "sim".}
 }
 \value{
 A list of consisting of:

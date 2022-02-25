@@ -4,12 +4,12 @@
 \alias{Boik.test}
 \title{Boik (1993) locally best invariant (LBI) test}
 \usage{
-Boik.test(x, nsim = 10000, ...)
+Boik.test(x, nsim = 10000)
 }
 \arguments{
-\item{nsim}{a numeric value, the number of Monte Carlo samples for calculating an exact Monte Carlo p-value. The default value is 10000.}
+\item{x}{a numeric matrix, \eqn{b \times a} data matrix where the number of row and column are corresponding to the number of block and treatment levels, respectively.}
 
-\item{\eqn{x}}{a numeric matrix, \eqn{b \times a} data matrix where the number of row and column are corresponding to the number of block and treatment levels, respectively.}
+\item{nsim}{a numeric value, the number of Monte Carlo samples for calculating an exact Monte Carlo p-value. The default value is 10000.}
 }
 \value{
 A list of consisting of:
@@ -37,6 +37,7 @@ The LBI test statistic is \eqn{T_B93=(tr(R'R))^2/(p tr((R'R)^2))} where \eqn{p=m
 \dontrun{this is an example}
 data(MVGH)
 Boik.test(MVGH, nsim=10000)
+
 }
 \references{
 Boik, R.J. (1993). Testing additivity in two-way classifications

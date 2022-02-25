@@ -4,13 +4,13 @@
 \alias{Piepho.test}
 \title{Piepho (1994) test for interaction}
 \usage{
-Piepho.test(x, nsim = 10000, ...)
+Piepho.test(x, nsim = 10000)
 }
 \arguments{
-\item{nsim}{a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.}
-
-\item{\eqn{x}}{numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels
+\item{x}{numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels
 , respectively.}
+
+\item{nsim}{a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.}
 }
 \value{
 A list of consisting of:
@@ -36,7 +36,7 @@ Piepho (1994) proposed three test statistics.The third one is
 \examples{
 \dontrun{this is an example}
 data(MVGH)
-Piepho.test(MVGH,sim=1000)
+Piepho.test(MVGH,nsim=1000)
 }
 \references{
 Piepho, H. P. (1994). On Tests for Interaction in a Nonreplicated Two-Way Layout. Australian
