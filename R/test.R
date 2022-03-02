@@ -452,18 +452,18 @@ Franck.test <- function(x, nsim = 1000, dist = "sim") {
 #' @examples 
 #' \dontrun{
 #' data(RDWW)
-#' CPI.test(RDWW,nsim=500,nc0=10000)
+#' CPI.test(RDWW,nsim=10000,nc0=10000)
 #' }
 #' @importFrom stats pchisq pf qnorm var
 #' @export
-CPI.test <- function(x, nsim = 500, nc0 = 10000) {
+CPI.test <- function(x, nsim = 10000, nc0 = 10000) {
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
     y <- c(t(x))
     tr <- ncol(x)
     bl <- nrow(x)
-    if (bl < tr) warning("transpose the input matrix")
+    if (bl < tr) warning("The input matrix data was transposed")
     x <- t(x)
     te <- bl
     bl <- tr
@@ -540,6 +540,17 @@ CPI.test <- function(x, nsim = 500, nc0 = 10000) {
     GC <- cp$GC
     Sidak <- cp$Sidak
     jacobi <- cp$jacobi
+    if (cp$Bon & cp$GC & cp$Sidak & cp$jacobi >= 0.05) cat("No significant interaction type was detected at the 5% level", "\n")
+    if (cp$Bon | cp$Sidak | cp$jacobi < 0.05) {
+      cat("There are significant interaction types at the 5% level", "\n")
+      if (min(pvalues) == Boik.pvalue) cat("The multiplicative form of interaction migth exist; see Boik (1993) for more detials.", "\n")
+      if (min(pvalues) == piepho.pvalue) cat("The detected significant interaction might due to the Grubbs’ type estimators of variances are heterogeneous across the levels of one factor; see Piepho (1994) for more detials.", "\n")
+      if (min(pvalues) == hiddenf.pvalue) cat("A hidden structure of intercation might exist; see Franck et al. (2013) for more detials.", "\n")
+      if (min(pvalues) == Malik.pvalue) cat("Some cells produce large negative or positive residuals due to the significant interaction; see Malik et al. (2016) for more detials.", "\n")
+      if (min(pvalues) == PIC.pvalue) cat("Significant interactions are caused by some cells; see Kharrati-Kopaei and Miller (2016) for more detials.", "\n")
+      if (min(pvalues) == KKSA.pvalue) cat("The magnitude of interaction effects is heteroscedastic across the sub-tables of observations; see Kharrati-Kopaei and Sadooghi-Alvandi (2007) for more detials.", "\n")
+      
+    }
     list(
       nsim = nsim, piepho.pvalue = piepho.pvalue, Boik.pvalue = Boik.pvalue,
       Malik.pvalue = Malik.pvalue, KKM.pvalue = PIC.pvalue,

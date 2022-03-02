@@ -4,7 +4,7 @@
 \alias{CPI.test}
 \title{Combined p-value interaction test}
 \usage{
-CPI.test(x, nsim = 500, nc0 = 10000)
+CPI.test(x, nsim = 10000, nc0 = 10000)
 }
 \arguments{
 \item{x}{numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels, respectively.}
@@ -53,7 +53,7 @@ If rows number ,\eqn{b} of data matrix is less than it's columns number, \eqn{a}
 \examples{
 \dontrun{
 data(RDWW)
-CPI.test(RDWW,nsim=500,nc0=10000)
+CPI.test(RDWW,nsim=10000,nc0=10000)
 }
 }
 \references{
