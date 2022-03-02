@@ -2,7 +2,7 @@
 % Please edit documentation in R/test.R
 \name{KKM.test}
 \alias{KKM.test}
-\title{Kharrati-Kopaei and Miller (2016) test for interaction}
+\title{Kharrati-Kopaei and Miller's (2016) test for interaction}
 \usage{
 KKM.test(x, nsim = 1000, nc0 = 10000)
 }

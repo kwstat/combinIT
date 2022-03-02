@@ -2,9 +2,9 @@
 % Please edit documentation in R/test.R
 \name{Franck.test}
 \alias{Franck.test}
-\title{Franck (2013) et al. test for interaction}
+\title{Franck's (2013) et al. test for interaction}
 \usage{
-Franck.test(x, nsim = 1000, dist = "sim")
+Franck.test(x, nsim = 10000, dist = "sim")
 }
 \arguments{
 \item{x}{numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels
@@ -29,14 +29,14 @@ This function calculates Franck (2013) et al. test statistic,ACMIF, and correspo
 Franck et al. (2013) derived a test statistic based on the “hidden additivity” structure.
  They defined this structure as “the levels of one factor belong in two or more groups such that within each group the effects of the two factors are additive but the groups may interact with the ungrouped factor”.
  To detect hidden additivity, Franck et al. (2013) divided the table of data into two sub-tables and an interaction F-test was developed.
- Then, they performed a search over all possible configuRDWWns of data and used the maximum of the interaction F-RDWWs as a test statistic. The hypothesis of no interaction is rejected when the maximum interaction F-RDWW is large.
+ Then, they performed a search over all possible configures of data and used the maximum of the interaction F-test as a test statistic. The hypothesis of no interaction is rejected when the maximum interaction F-test is large.
  Note that, if rows number, \eqn{b}, of data matrix is less than the columns number, \eqn{a}, 
  the data matrix is transposed. Note that the this test method is powerful when there is a hidden additivity structure in the data set.
 }
 \examples{
 \dontrun{
 data(CNV)
-Franck.test(CNV,nsim=1000,dist = "sim")
+Franck.test(CNV,nsim=10000,dist = "sim")
 }
 }
 \references{

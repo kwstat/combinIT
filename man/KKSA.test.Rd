@@ -2,7 +2,7 @@
 % Please edit documentation in R/test.R
 \name{KKSA.test}
 \alias{KKSA.test}
-\title{Kharrati-Kopaei and Sadooghi-Alvandi (2007) test for interaction}
+\title{Kharrati-Kopaei and Sadooghi-Alvandi's (2007) test for interaction}
 \usage{
 KKSA.test(x, nsim = 10000, distr = "sim")
 }

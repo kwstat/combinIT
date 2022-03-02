@@ -2,7 +2,7 @@
 % Please edit documentation in R/test.R
 \name{Boik.test}
 \alias{Boik.test}
-\title{Boik (1993) locally best invariant (LBI) test}
+\title{Boik's (1993) locally best invariant (LBI) test}
 \usage{
 Boik.test(x, nsim = 10000)
 }

@@ -43,12 +43,12 @@ This function reports the p-values of the tests for non-additivity developed by 
 Kharrati-Kopaei and Sadooghi-Alvandi (2007), Franck et al. (2013), Malik et al. (2016)
 and Kharrati-Kopaei and Miller (2016). In addition, it combines the p-values of these six methods into a single p-value as a test statistic for testing interaction.
 There are four combination methods:
-Bonferroni, Sidak, Jacobi expansion, and Gaussian Copula. The results of these four combinations are also reported.
+Bonferroni, Sidak, Jacobi expansion, and Gaussian Copula. The results of these four combinations are also reported. If there is a significant interaction, the type of interaction is also provided.
 }
 \details{
 If rows number ,\eqn{b} of data matrix is less than it's columns number, \eqn{a}, 
  the data matrix is transposed. In addition, this test procedure requires that the data matrix has more than two
- rows or columns. This function Needs "mvtnorm" package.
+ rows or columns. This function دeeds "mvtnorm" package.
 }
 \examples{
 \dontrun{

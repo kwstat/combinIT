@@ -36,7 +36,7 @@ Piepho (1994) proposed three test statistics.The third one is
 \examples{
 \dontrun{
 data(MVGH)
-Piepho.test(MVGH,nsim=1000)
+Piepho.test(MVGH,nsim=10000)
 }
 }
 \references{

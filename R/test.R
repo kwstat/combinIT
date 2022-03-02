@@ -1,4 +1,4 @@
-#' Boik (1993) locally best invariant (LBI) test
+#' Boik's (1993) locally best invariant (LBI) test
 #'
 #' This function calculates the LBI test statistic for testing the null hypothesis \eqn{H_0:} there is no interaction.
 #' It returns an exact Monte Carlo p-value (when \eqn{p>2}) and an asymptotic chi-squared p-value.
@@ -124,7 +124,7 @@ Malik.test <- function(x, nsim = 10000) {
   }
 }
 
-#' Kharrati-Kopaei and Miller (2016) test for interaction
+#' Kharrati-Kopaei and Miller's (2016) test for interaction
 #'
 #' This function calculates the test statistic for testing \eqn{H_0:} no interaction and corresponding Monte Carlo p-value
 #' proposed by Kharrati-Kopaei and Miller(2016).
@@ -212,7 +212,7 @@ KKM.test <- function(x, nsim = 1000, nc0 = 10000) {
 #' @examples 
 #' \dontrun{
 #' data(MVGH)
-#' Piepho.test(MVGH,nsim=1000)
+#' Piepho.test(MVGH,nsim=10000)
 #' }
 #' @export
 Piepho.test <- function(x, nsim = 10000) {
@@ -237,7 +237,7 @@ Piepho.test <- function(x, nsim = 10000) {
 }
 
 
-#' Kharrati-Kopaei and Sadooghi-Alvandi (2007) test for interaction
+#' Kharrati-Kopaei and Sadooghi-Alvandi's (2007) test for interaction
 #'
 #' This function calculates Kharrati-Kopaei and Sadooghi-Alvandi's test statistic and corresponding p-value for testing interaction.
 #' 
@@ -323,7 +323,7 @@ KKSA.test <- function(x, nsim = 10000, distr = "sim") {
   }
 }
 
-#' Franck (2013) et al. test for interaction
+#' Franck's (2013) et al. test for interaction
 #'
 #' This function calculates Franck (2013) et al. test statistic,ACMIF, and corresponding p-value.
 #' 
@@ -336,7 +336,7 @@ KKSA.test <- function(x, nsim = 10000, distr = "sim") {
 #' @details Franck et al. (2013) derived a test statistic based on the “hidden additivity” structure.
 #'  They defined this structure as “the levels of one factor belong in two or more groups such that within each group the effects of the two factors are additive but the groups may interact with the ungrouped factor”.
 #'  To detect hidden additivity, Franck et al. (2013) divided the table of data into two sub-tables and an interaction F-test was developed.
-#'  Then, they performed a search over all possible configuRDWWns of data and used the maximum of the interaction F-RDWWs as a test statistic. The hypothesis of no interaction is rejected when the maximum interaction F-RDWW is large.
+#'  Then, they performed a search over all possible configures of data and used the maximum of the interaction F-test as a test statistic. The hypothesis of no interaction is rejected when the maximum interaction F-test is large.
 #'  Note that, if rows number, \eqn{b}, of data matrix is less than the columns number, \eqn{a}, 
 #'  the data matrix is transposed. Note that the this test method is powerful when there is a hidden additivity structure in the data set.
 #'  
@@ -360,11 +360,11 @@ KKSA.test <- function(x, nsim = 10000, distr = "sim") {
 #' @examples 
 #' \dontrun{
 #' data(CNV)
-#' Franck.test(CNV,nsim=1000,dist = "sim")
+#' Franck.test(CNV,nsim=10000,dist = "sim")
 #' }
 #' @importFrom stats pchisq pf qnorm var
 #' @export
-Franck.test <- function(x, nsim = 1000, dist = "sim") {
+Franck.test <- function(x, nsim = 10000, dist = "sim") {
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
@@ -420,7 +420,7 @@ Franck.test <- function(x, nsim = 1000, dist = "sim") {
 #' Kharrati-Kopaei and Sadooghi-Alvandi (2007), Franck et al. (2013), Malik et al. (2016)
 #' and Kharrati-Kopaei and Miller (2016). In addition, it combines the p-values of these six methods into a single p-value as a test statistic for testing interaction.
 #' There are four combination methods:
-#' Bonferroni, Sidak, Jacobi expansion, and Gaussian Copula. The results of these four combinations are also reported. 
+#' Bonferroni, Sidak, Jacobi expansion, and Gaussian Copula. The results of these four combinations are also reported. If there is a significant interaction, the type of interaction is also provided.
 #' 
 #' @param x numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels, respectively.
 #' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
@@ -428,7 +428,7 @@ Franck.test <- function(x, nsim = 1000, dist = "sim") {
 #' 
 #' @details If rows number ,\eqn{b} of data matrix is less than it's columns number, \eqn{a}, 
 #'  the data matrix is transposed. In addition, this test procedure requires that the data matrix has more than two
-#'  rows or columns. This function Needs "mvtnorm" package.
+#'  rows or columns. This function دeeds "mvtnorm" package.
 
 #'  
 #' @return A list of consisting of:
