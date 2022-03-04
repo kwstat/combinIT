@@ -115,10 +115,12 @@ Malik.test <- function(x, nsim = 10000) {
     block <- gl(bl, tr)
     treatment <- gl(tr, 1, bl * tr)
     y <- c(t(x))
-    statistic <- M_f(x)
+    statistic <- M.f(x, y, block, treatment)
     simu <- rep(0, 0)
     for (i in 1:nsim) {
-      simu[i] <- M_f(matrix(rnorm(n), nrow = bl))
+      x0=matrix(rnorm(n), nrow = bl)
+      y0=c(t(x))          
+      simu[i] <- M.f(x=x0,y=y0, block, treatment)
       cat(paste(round(i / nsim * 100), "% completed"), "\n")
       if (i == nsim){
         cat(": Done", "\n")

@@ -145,7 +145,7 @@ double  M_f(arma::mat x) {            // Hossein's Codes....
   }
   arma::mat r = RES.as_row();  
   arma::mat centers;
-  arma::kmeans(centers, r, 3, static_spread, 30, false);
+  arma::kmeans(centers, r, 3, static_spread, 100, false);
   arma::vec af(n,fill::ones);
   arma::mat  Xi(n,3,fill::zeros);
   for(int i=0; i<n;i++)
