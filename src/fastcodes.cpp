@@ -43,7 +43,7 @@ double picf(arma::vec y,arma::mat kp,float c0){
   arma::vec z= kp * y;
   for(unsigned int i=0;i<kp.n_rows;i++)
     z(i)=fabs(z(i));
-    arma::vec s0=median(z,0);
+    arma::vec s0=median(z,0)/c0;
     arma::uvec ids = find(z <= (5*s0(0)) );
     arma::vec PSE=median(z.elem(ids),0);
     arma::vec PIC=max(z,0)/PSE(0);

@@ -44,16 +44,23 @@ Boik.test <- function(x, nsim = 10000) {
     p <- min(tr - 1, bl - 1)
     q <- max(tr - 1, bl - 1)
     statistics <- Bfc(x, bl, tr, p)
-    simu <- Bfsim(nsim, bl, tr, p)
-    boik.p <- mean(statistics > simu)
     Tb <- (1 / statistics - 1)
     T <- p * q * Tb / 2
     df <- (p + 2) * (p - 1) / 2
-    if (p == 2) {
-      asyboik.p <- 1 - pbeta(Tb, 1, (q - 1) / 2)
-    } else {
+    if (p == 1) {
+        asyboik.p <- 1 
+        simu <- Bfsim(nsim, bl, tr, p)
+        boik.p <- mean(statistics >= simu)
+    }
+    if (p > 2) {
+      simu <- Bfsim(nsim, bl, tr, p)
+      boik.p <- mean(statistics >= simu)
       asyboik.p <- 1 - pchisq(T, df)
     }
+    if (p == 2) {
+      boik.p <- 1 - pbeta(Tb, 1, (q - 1) / 2)
+      asyboik.p <- 1 - pchisq(T, df)
+    } 
     out <- list(
       exact.pvalue = boik.p, asy.pvalue = asyboik.p,
       nsim = nsim,
@@ -111,15 +118,15 @@ Malik.test <- function(x, nsim = 10000) {
     statistic <- M_f(x)
     simu <- rep(0, 0)
     for (i in 1:nsim) {
-      y <- rnorm(n)
-      simu[i] <- M_f(matrix(y, nrow = bl))
-      # cat(paste(round(i / nsim * 100), '% completed'))
-      # Sys.sleep(.05)
-      # if (i == nsim) cat(': Done')
-      # else cat('\014')
+      simu[i] <- M_f(matrix(rnorm(n), nrow = bl))
+      cat(paste(round(i / nsim * 100), "% completed"), "\n")
+      if (i == nsim){
+        cat(": Done", "\n")
+      } else{
+        cat("\014", "\n")
+      }
     }
     malik <- mean(statistic < simu)
-
     list(pvalue = malik, nsim = nsim, statistic = statistic)
   }
 }
@@ -244,7 +251,7 @@ Piepho.test <- function(x, nsim = 10000) {
 #' @param x numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels
 #'   , respectively.
 #' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
-#' @param distr a character, if dist="sim", a Monte Carlo simulation is used for calculating exact p-value. If dist="adj", the Bonferroni-adjusted p-value is calculated. The default is "sim".
+#' @param dist a character, if dist="sim", a Monte Carlo simulation is used for calculating exact p-value. If dist="adj", the Bonferroni-adjusted p-value is calculated. The default is "sim".
 #' 
 #' @details  Suppose that \eqn{b>=a} and \eqn{b>=4}. Consider the \eqn{l}-th division of the data table into two sub-tables,
 #'  obtained by putting \eqn{b_1} (\eqn{2≤b_1≤b-2}) rows in the first sub-table and the remaining \eqn{b_2} rows in the second sub-table (\eqn{b_1+b_2=a}).
@@ -275,7 +282,7 @@ Piepho.test <- function(x, nsim = 10000) {
 #' KKSA.test(IDCP,nsim=10000,dist = "sim")
 #' }
 #' @export
-KKSA.test <- function(x, nsim = 10000, distr = "sim") {
+KKSA.test <- function(x, nsim = 10000, dist = "sim") {
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
@@ -290,18 +297,17 @@ KKSA.test <- function(x, nsim = 10000, distr = "sim") {
       tr <- te
     }
     if (bl < 4) {
-      stop("KKSA needs at least 4 levels of blocking factor")
+      warning("KKSA needs at least 4 levels for a factor")
+      out <- list(pvalue = NA, nsim = nsim, dist = dist, statistic = NA)
     } else {
       cck <- 2^(bl - 1) - 1 - bl
       statistics <- kk_f(x)
-      if (distr != "sim" && distr != "adj") distr <- "sim"
-
-      if (distr == "sim") {
+      if (dist != "sim" & dist != "adj") stop("\"dist\" parameter should be equal to \"sim\" or \"adj\".")
+      if (dist == "sim") {
         simu <- rep(0, 0)
         for (i in 1:nsim) {
           simu[i] <- kk_f(matrix(rnorm(n), nrow = bl))
-          cat(paste(round(i / nsim * 100), "% completed"))
-          # Sys.sleep(.1)
+          cat(paste(round(i / nsim * 100), "% completed"), "\n")
           if (i == nsim) {
             cat(": Done", "\n")
           } else {
@@ -309,17 +315,17 @@ KKSA.test <- function(x, nsim = 10000, distr = "sim") {
           }
         }
         KKSA.p <- mean(statistics > simu)
-      } else if (distr == "adj") {
+      } else if (dist == "adj") {
         KKSA.p <- statistics * cck
         KKSA.p <- min(1, KKSA.p)
       }
       out <- list(
         pvalue = KKSA.p,
-        nsim = nsim, distr = distr,
+        nsim = nsim, dist = dist,
         statistic = statistics
       )
-      return(out)
     }
+    return(out)
   }
 }
 
@@ -378,39 +384,32 @@ Franck.test <- function(x, nsim = 10000, dist = "sim") {
       bl <- tr
       tr <- te
     }
-    if (bl < 3) {
-      stop("hiddenf needs at least 3 levels of blocking factor")
-    } else {
-      cch <- 2^(bl - 1) - 1
-      statistics <- hh_f(x)
-      if (dist != "sim" & dist != "adj")
-        stop("\"dist\" parameter should be equal to \"sim\" or \"adj\".")
-
-      if (dist == "sim") {
-        simu <- rep(0, 0)
-        for (i in 1:nsim) {
-          simu[i] <- hh_f(matrix(rnorm(n)))
-          cat(paste(round(i / nsim * 100), "% completed", "\n"))
-          # Sys.sleep(.1)
-          if (i == nsim) {
-            cat(": Done", "\n")
-          } else {
-            cat("\014", "\n")
-          }
+    cch <- 2^(bl - 1) - 1
+    statistics <- hh_f(x)
+    if (dist != "sim" & dist != "adj") stop("\"dist\" parameter should be equal to \"sim\" or \"adj\".")
+    if (dist == "sim") {
+      simu <- rep(0, 0)
+      for (i in 1:nsim) {
+        simu[i] <- hh_f(matrix(rnorm(n),nrow=bl,ncol=tr))
+        cat(paste(round(i / nsim * 100), "% completed"), "\n")
+        if (i == nsim) {
+          cat(": Done", "\n")
+        } else {
+          cat("\014", "\n")
         }
-        hidden <- mean(statistics < simu)
-      } 
-      if (dist == "adj") {
-        adjpvalue <- (1 - pf(statistics, (tr - 1), (tr - 1) * (bl - 2))) * cch
-        hidden <- min(1, adjpvalue)
       }
-      out <- list(
-        pvalue = hidden,
-        nsim = nsim, dist = dist,
-        statistic = statistics
-      )
-      return(out)
+      hidden <- mean(statistics < simu)
+    } 
+    if (dist == "adj") {
+      adjpvalue <- (1 - pf(statistics, (tr - 1), (tr - 1) * (bl - 2))) * cch
+      hidden <- min(1, adjpvalue)
     }
+    out <- list(
+      pvalue = hidden,
+      nsim = nsim, dist = dist,
+      statistic = statistics
+    )
+    return(out)
   }
 }
 
@@ -463,15 +462,16 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000) {
     y <- c(t(x))
     tr <- ncol(x)
     bl <- nrow(x)
-    if (bl < tr) warning("The input matrix data was transposed")
-    x <- t(x)
-    te <- bl
-    bl <- tr
-    tr <- te
-  }
-  if (bl < 3) {
-    stop("hiddenf needs at least 3 levels of blocking factor")
-  } else {
+    if (bl < tr) {
+      warning("The input matrix data was transposed")
+      x <- t(x)
+      te <- bl
+      bl <- tr
+      tr <- te
+    }
+    if (bl <= 3) {
+      warning("KKSA.test needs at least 4 levels for a factor. For combining pvalues, the pvalue of KKSA method is not considered.")
+    }
     n <- tr * bl
     block <- gl(bl, tr)
     treatment <- gl(tr, 1, bl * tr)
@@ -481,7 +481,7 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000) {
     cch <- 2^(bl - 1) - 1
     kp <- kpr(bl, tr)
     c0 <- mean(replicate(nc0, {
-      median(abs(kp %*% rnorm(n)))
+    median(abs(kp %*% rnorm(n)))
     }))
     sta <- bmp_f(x)
     Bstat <- sta$Boik
@@ -489,12 +489,12 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000) {
     pistat <- sta$piepho
     pstat <- picf(y, kp, c0)
     if (bl == 3) {
-      Hstat <- hh_f(x)
+     Hstat <- hh_f(x)
     } else {
-      Ksimu <- rep(0, 0)
-      kh <- kh_f(x)
-      Kstat <- kh$fmin
-      Hstat <- kh$fmax
+     Ksimu <- rep(0, 0)
+     kh <- kh_f(x)
+     Kstat <- kh$fmin
+     Hstat <- kh$fmax
     }
     Bsimu <- Msimu <- psimu <- pisimu <- Hsimu <- rep(0, 0)
     for (i in 1:nsim) {
@@ -519,29 +519,31 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000) {
       } else {
         cat("\014", "\n")
       }
-      
     }
-      
-    
     Boik.pvalue <- mean(Bstat > Bsimu)
     piepho.pvalue <- mean(pistat < pisimu)
     PIC.pvalue <- mean(pstat < psimu)
     Malik.pvalue <- mean(Mstat < Msimu)
     hiddenf.pvalue <- mean(Hstat < Hsimu)
-    if (bl == 3) {
-      KKSA.pvalue <- NULL
+    if (bl <= 3) {
+      KKSA.pvalue <- NA
     } else {
       KKSA.pvalue <- mean(Kstat > Ksimu)
     }
-    
     pvalues <- c(Boik.pvalue, piepho.pvalue, hiddenf.pvalue, Malik.pvalue, PIC.pvalue, KKSA.pvalue)
+    if(bl <= 3) {
+      pvalues <- pvalues[! is.na(pvalues)]
+    } else {
+      pvalues <- pvalues
+    }
+    #pvalues <- c(Boik.pvalue, piepho.pvalue, hiddenf.pvalue, Malik.pvalue, PIC.pvalue, KKSA.pvalue)
     cp <- comb(pvalues)
     Bonferroni <- cp$Bon
     GC <- cp$GC
     Sidak <- cp$Sidak
     jacobi <- cp$jacobi
-    if (cp$Bon & cp$GC & cp$Sidak & cp$jacobi >= 0.05) cat("No significant interaction type was detected at the 5% level", "\n")
-    if (cp$Bon | cp$Sidak | cp$jacobi < 0.05) {
+    if (cp$Bon >= 0.05 & cp$GC >= 0.05 & cp$Sidak >= 0.05 & cp$jacobi >= 0.05) cat("No significant interaction type was detected at the 5% level", "\n")
+    if ((cp$Bon < 0.05 | cp$Sidak < 0.05 | cp$jacobi < 0.05) & bl >=4) {
       cat("There are significant interaction types at the 5% level", "\n")
       if (min(pvalues) == Boik.pvalue) cat("The multiplicative form of interaction migth exist; see Boik (1993) for more detials.", "\n")
       if (min(pvalues) == piepho.pvalue) cat("The detected significant interaction might due to the Grubbs’ type estimators of variances are heterogeneous across the levels of one factor; see Piepho (1994) for more detials.", "\n")
@@ -549,8 +551,16 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000) {
       if (min(pvalues) == Malik.pvalue) cat("Some cells produce large negative or positive residuals due to the significant interaction; see Malik et al. (2016) for more detials.", "\n")
       if (min(pvalues) == PIC.pvalue) cat("Significant interactions are caused by some cells; see Kharrati-Kopaei and Miller (2016) for more detials.", "\n")
       if (min(pvalues) == KKSA.pvalue) cat("The magnitude of interaction effects is heteroscedastic across the sub-tables of observations; see Kharrati-Kopaei and Sadooghi-Alvandi (2007) for more detials.", "\n")
-      
     }
+    if ((cp$Bon < 0.05 | cp$Sidak < 0.05 | cp$jacobi < 0.05) & bl < 4) {
+      cat("There are significant interaction types at the 5% level", "\n")
+      if (min(pvalues) == Boik.pvalue) cat("The multiplicative form of interaction migth exist; see Boik (1993) for more detials.", "\n")
+      if (min(pvalues) == piepho.pvalue) cat("The detected significant interaction might due to the Grubbs’ type estimators of variances are heterogeneous across the levels of one factor; see Piepho (1994) for more detials.", "\n")
+      if (min(pvalues) == hiddenf.pvalue) cat("A hidden structure of intercation might exist; see Franck et al. (2013) for more detials.", "\n")
+      if (min(pvalues) == Malik.pvalue) cat("Some cells produce large negative or positive residuals due to the significant interaction; see Malik et al. (2016) for more detials.", "\n")
+      if (min(pvalues) == PIC.pvalue) cat("Significant interactions are caused by some cells; see Kharrati-Kopaei and Miller (2016) for more detials.", "\n")
+    }
+    
     list(
       nsim = nsim, piepho.pvalue = piepho.pvalue, Boik.pvalue = Boik.pvalue,
       Malik.pvalue = Malik.pvalue, KKM.pvalue = PIC.pvalue,
