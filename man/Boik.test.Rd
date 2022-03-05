@@ -24,7 +24,7 @@ statistic, the value of test statistic.
 }
 \description{
 This function calculates the LBI test statistic for testing the null hypothesis \eqn{H_0:} there is no interaction.
-It returns an exact Monte Carlo p-value (when \eqn{p>2}) and an asymptotic chi-squared p-value.
+It returns an exact p-value when \eqn{p=2}. It returns an exact Monte Carlo p-value when \eqn{p>2}. It also provides an asymptotic chi-squared p-value. Note that the p-value of the Boik.test is always 1 when \eqn{p=1}.
 }
 \details{
 The LBI test statistic is \eqn{T_B93=(tr(R'R))^2/(p tr((R'R)^2))} where \eqn{p=min{a-1,b-1}} and \eqn{R} is the residual

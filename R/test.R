@@ -1,7 +1,7 @@
 #' Boik's (1993) locally best invariant (LBI) test
 #'
 #' This function calculates the LBI test statistic for testing the null hypothesis \eqn{H_0:} there is no interaction.
-#' It returns an exact Monte Carlo p-value (when \eqn{p>2}) and an asymptotic chi-squared p-value.
+#' It returns an exact p-value when \eqn{p=2}. It returns an exact Monte Carlo p-value when \eqn{p>2}. It also provides an asymptotic chi-squared p-value. Note that the p-value of the Boik.test is always 1 when \eqn{p=1}. 
 #' 
 #' @param x a numeric matrix, \eqn{b \times a} data matrix where the number of row and column are corresponding to the number of block and treatment levels, respectively.
 #' @param nsim a numeric value, the number of Monte Carlo samples for calculating an exact Monte Carlo p-value. The default value is 10000.
@@ -115,10 +115,16 @@ Malik.test <- function(x, nsim = 10000) {
     block <- gl(bl, tr)
     treatment <- gl(tr, 1, bl * tr)
     y <- c(t(x))
+    #statistic <- M.f(x, y, block, treatment)
     statistic <- M_f(x)
+    
     simu <- rep(0, 0)
     for (i in 1:nsim) {
-      simu[i] <- M_f(matrix(rnorm(n), nrow = bl))
+      x0=matrix(rnorm(n), nrow = bl)
+      y0=c(t(x0))          
+      #simu[i] <- M.f(x=x0,y=y0, block, treatment)
+      simu[i] <- M_f(x=x0)
+      
       cat(paste(round(i / nsim * 100), "% completed"), "\n")
       if (i == nsim){
         cat(": Done", "\n")
@@ -425,22 +431,28 @@ Franck.test <- function(x, nsim = 10000, dist = "sim") {
 #' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
 #' @param nc0 a numeric value, the number of Monte Carlo samples for computing the unbiasing constant \eqn{c_0}. The default value is 10000.
 #' 
-#' @details If rows number ,\eqn{b} of data matrix is less than it's columns number, \eqn{a}, 
-#'  the data matrix is transposed. In addition, this test procedure requires that the data matrix has more than two
-#'  rows or columns. This function دeeds "mvtnorm" package.
+#' @details If rows number of data matrix ,\eqn{b}, is less than it's columns number, \eqn{a}, 
+#'  the data matrix is transposed. In addition, this test procedure requires that the data matrix has at least two
+#'  rows or columns. Note that the KKSA.test is not applicable when both \eqn{a} and \eqn{b} are less than 4. This function needs "mvtnorm" package.
 
 #'  
 #' @return A list of consisting of:
 #' @return nsim, the number of Monte Carlo samples that are used to estimate p-value.
-#' @return piepho.pvalue, the p-value of Piepho's (1994) test.
+#' @return Piepho.pvalue, the p-value of Piepho's (1994) test.
+#' @return Piepho.Stat, the value of Piepho's (1994) test statistic.
 #' @return Boik.pvalue, the p-value of Boik's (1993) test.
+#' @return Boik.Stat, the value of Boik's (1993) test statistic.
 #' @return Malik.pvalue, the p-value of Malik's (2016) et al. test.
+#' @return Malik.Stat, the value of Malik's (2016) et al. test statistic.
 #' @return KKM.pvalue, the p-value of Kharrati-Kopaei and Miller's (2016) test.
+#' @return KKM.Stat, the value of Kharrati-Kopaei and Miller's (2016) test statistic.
 #' @return KKSA.pvalue, the p-value of Kharrati-Kopaei and Sadooghi-Alvandi's (2007) test.
+#' @return KKSA.Stat, the value of Kharrati-Kopaei and Sadooghi-Alvandi's (2007) test statistic.
 #' @return Franck.pvalue, the p-value of Franck's (2013) et al. test.
+#' @return Franck.Stat, the value of Franck's (2013) et al. test statistic.
 #' @return Bonferroni, the combined p-value by using the Bonferroni method.
 #' @return Sidak, the combined p-value by using the Sidak method.
-#' @return jacobi, the combined p-value by using the Jacobi method.
+#' @return Jacobi, the combined p-value by using the Jacobi method.
 #' @return GC, the combined p-value by using the Guassian copula.
 #' 
 #' @author Shenavari, Z.; Haghbin, H.; Kharrati-Kopaei, M.; Najibi, S.M.
@@ -520,7 +532,16 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000) {
         cat("\014", "\n")
       }
     }
-    Boik.pvalue <- mean(Bstat > Bsimu)
+    Tb <- (1 / Bstat - 1)
+    if (p == 1) {
+      Boik.pvalue <- 1
+    } 
+    if (p == 2) {
+      Boik.pvalue <- 1 - pbeta(Tb, 1, (q - 1) / 2)
+    } 
+    if (p > 2){
+      Boik.pvalue <- mean(Bstat >= Bsimu)
+    }
     piepho.pvalue <- mean(pistat < pisimu)
     PIC.pvalue <- mean(pstat < psimu)
     Malik.pvalue <- mean(Mstat < Msimu)
@@ -560,14 +581,24 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000) {
       if (min(pvalues) == Malik.pvalue) cat("Some cells produce large negative or positive residuals due to the significant interaction; see Malik et al. (2016) for more detials.", "\n")
       if (min(pvalues) == PIC.pvalue) cat("Significant interactions are caused by some cells; see Kharrati-Kopaei and Miller (2016) for more detials.", "\n")
     }
-    
-    list(
-      nsim = nsim, piepho.pvalue = piepho.pvalue, Boik.pvalue = Boik.pvalue,
-      Malik.pvalue = Malik.pvalue, KKM.pvalue = PIC.pvalue,
-      KKSA.pvalue = KKSA.pvalue, Franck.pvalue = hiddenf.pvalue,
-      Bonferroni = Bonferroni, Sidak = Sidak, jacobi = jacobi, GC = GC
+    if (bl>=4) {
+    out <- list(
+      nsim = nsim, Piepho.pvalue = piepho.pvalue, Piepho.Stat = pistat, Boik.pvalue = Boik.pvalue, Boik.Stat=Bstat, 
+      Malik.pvalue = Malik.pvalue, Malik.Stat = Mstat, KKM.pvalue = PIC.pvalue, KKM.Stat = pstat, 
+      KKSA.pvalue = KKSA.pvalue, KKSA.Stat = Kstat, Franck.pvalue = hiddenf.pvalue, Franck.Stat = Hstat,
+      Bonferroni = Bonferroni, Sidak = Sidak, Jacobi = jacobi, GC = GC
     )
+    }
+    if (bl< 4) {
+      out <- list(
+        nsim = nsim, Piepho.pvalue = piepho.pvalue, Piepho.Stat = pistat, Boik.pvalue = Boik.pvalue, Boik.Stat=Bstat, 
+        Malik.pvalue = Malik.pvalue, Malik.Stat = Mstat, KKM.pvalue = PIC.pvalue, KKM.Stat = pstat, 
+        Franck.pvalue = hiddenf.pvalue, Franck.Stat = Hstat,
+        Bonferroni = Bonferroni, Sidak = Sidak, Jacobi = jacobi, GC = GC
+      )
+    }
   }
+  return(out)
 }
 
 
