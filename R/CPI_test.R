@@ -10,10 +10,9 @@
 #' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
 #' @param nc0 a numeric value, the number of Monte Carlo samples for computing the unbiasing constant \eqn{c_0}. The default value is 10000.
 #'
-#' @details If rows number of data matrix ,\eqn{b}, is less than it's columns number, \eqn{a},
+#' @details If rows number of data matrix, \eqn{b}, is less than it's columns number, \eqn{a},
 #'  the data matrix is transposed. In addition, this test procedure requires that the data matrix has at least two
 #'  rows or columns. Note that the KKSA.test is not applicable when both \eqn{a} and \eqn{b} are less than 4. This function needs "mvtnorm" package.
-
 #'
 #' @return A list of consisting of:
 #' @return nsim, the number of Monte Carlo samples that are used to estimate p-value.
@@ -32,7 +31,7 @@
 #' @return Bonferroni, the combined p-value by using the Bonferroni method.
 #' @return Sidak, the combined p-value by using the Sidak method.
 #' @return Jacobi, the combined p-value by using the Jacobi method.
-#' @return GC, the combined p-value by using the Guassian copula.
+#' @return GC, the combined p-value by using the Gaussian copula.
 #'
 #' @author Shenavari, Z.; Haghbin, H.; Kharrati-Kopaei, M.; Najibi, S.M.
 #'

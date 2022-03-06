@@ -48,7 +48,7 @@ Sidak, the combined p-value by using the Sidak method.
 
 Jacobi, the combined p-value by using the Jacobi method.
 
-GC, the combined p-value by using the Guassian copula.
+GC, the combined p-value by using the Gaussian copula.
 }
 \description{
 This function reports the p-values of the tests for non-additivity developed by Boik (1993), Piepho (1994),
@@ -58,7 +58,7 @@ There are four combination methods:
 Bonferroni, Sidak, Jacobi expansion, and Gaussian Copula. The results of these four combinations are also reported. If there is a significant interaction, the type of interaction is also provided.
 }
 \details{
-If rows number of data matrix ,\eqn{b}, is less than it's columns number, \eqn{a},
+If rows number of data matrix, \eqn{b}, is less than it's columns number, \eqn{a},
  the data matrix is transposed. In addition, this test procedure requires that the data matrix has at least two
  rows or columns. Note that the KKSA.test is not applicable when both \eqn{a} and \eqn{b} are less than 4. This function needs "mvtnorm" package.
 }
