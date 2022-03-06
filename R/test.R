@@ -125,6 +125,12 @@ Malik.test <- function(x, nsim = 10000) {
       #simu[i] <- M.f(x=x0,y=y0, block, treatment)
       simu[i] <- M_f(x=x0)
       
+    statistic <- M.f(x, y, block, treatment)
+    simu <- rep(0, 0)
+    for (i in 1:nsim) {
+      x0=matrix(rnorm(n), nrow = bl)
+      y0=c(t(x))          
+      simu[i] <- M.f(x=x0,y=y0, block, treatment)
       cat(paste(round(i / nsim * 100), "% completed"), "\n")
       if (i == nsim){
         cat(": Done", "\n")
@@ -542,6 +548,7 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000) {
     if (p > 2){
       Boik.pvalue <- mean(Bstat >= Bsimu)
     }
+    Boik.pvalue <- mean(Bstat > Bsimu)
     piepho.pvalue <- mean(pistat < pisimu)
     PIC.pvalue <- mean(pstat < psimu)
     Malik.pvalue <- mean(Mstat < Msimu)
@@ -586,7 +593,13 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000) {
       nsim = nsim, Piepho.pvalue = piepho.pvalue, Piepho.Stat = pistat, Boik.pvalue = Boik.pvalue, Boik.Stat=Bstat, 
       Malik.pvalue = Malik.pvalue, Malik.Stat = Mstat, KKM.pvalue = PIC.pvalue, KKM.Stat = pstat, 
       KKSA.pvalue = KKSA.pvalue, KKSA.Stat = Kstat, Franck.pvalue = hiddenf.pvalue, Franck.Stat = Hstat,
-      Bonferroni = Bonferroni, Sidak = Sidak, Jacobi = jacobi, GC = GC
+      Bonferroni = Bonferroni, Sidak = Sidak, Jacobi = jacobi, GC = GC)
+
+    list(
+      nsim = nsim, piepho.pvalue = piepho.pvalue, Boik.pvalue = Boik.pvalue,
+      Malik.pvalue = Malik.pvalue, KKM.pvalue = PIC.pvalue,
+      KKSA.pvalue = KKSA.pvalue, Franck.pvalue = hiddenf.pvalue,
+      Bonferroni = Bonferroni, Sidak = Sidak, jacobi = jacobi, GC = GC
     )
     }
     if (bl< 4) {
