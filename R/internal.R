@@ -35,7 +35,7 @@ M.f <- function(x, y, block, treatment) {
 #'
 #' @keywords internal
 #'
-#'@importFrom utils combn
+#' @importFrom utils combn
 kpr <- function(bl, tr) {
   wa <- combn(bl, 2)
   wb <- combn(tr, 2)
