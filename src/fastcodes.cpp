@@ -43,7 +43,7 @@ double picf(arma::vec y,arma::mat kp,float c0){
   arma::vec z= kp * y;
   for(unsigned int i=0;i<kp.n_rows;i++)
     z(i)=fabs(z(i));
-    arma::vec s0=median(z,0);
+    arma::vec s0=median(z,0)/c0;
     arma::uvec ids = find(z <= (5*s0(0)) );
     arma::vec PSE=median(z.elem(ids),0);
     arma::vec PIC=max(z,0)/PSE(0);
@@ -132,6 +132,8 @@ double  M_f(arma::mat x) {            // Hossein's Codes....
   int n = bl*tr;
   arma::vec treatment = arma::repelem(arma::regspace(1,  bl), tr, 1);
   arma::vec y = arma::trans(x.as_row());
+  //arma::vec y = x.as_row();
+  
   arma::mat RES(bl,tr);
   arma::vec RowMean = arma::mean(x,1);
   arma::vec ColMean= trans(mean(x,0));
@@ -168,8 +170,12 @@ double  M_f(arma::mat x) {            // Hossein's Codes....
   arma::mat X = arma::join_horiz(a1,K1,K2,Xi);
   arma::vec yhat = X*arma::pinv(arma::trans(X)*X)*arma::trans(X)*y;
   double  SSE = arma::sum(arma::square(y-yhat));
-  double Tc = ((arma::sum(arma::square(arma::vectorise(r)))-SSE)/2)/(SSE/((tr-1)*(bl-1)-2));
+  double  df1=arma::rank(X)-tr-bl+1;
+  double df2=n-arma::rank(X);
+  //double Tc = ((arma::sum(arma::square(arma::vectorise(r)))-SSE)/2)/(SSE/((tr-1)*(bl-1)-2));
+  double Tc = ((arma::sum(arma::square(arma::vectorise(r)))-SSE)/df1)/(SSE/df2);
   return Tc;
+  
 }
 
 
@@ -662,7 +668,11 @@ List bmp_f(arma::mat x) {            // Hossein's Codes....
   arma::mat X = arma::join_horiz(a1,K1,K2,Xi);
   arma::vec yhat = X*arma::pinv(arma::trans(X)*X)*arma::trans(X)*y;
   double  SSE = arma::sum(arma::square(y-yhat));
-  double Tc = ((arma::sum(arma::square(arma::vectorise(r)))-SSE)/2)/(SSE/((tr-1)*(bl-1)-2));
+  double  df1=arma::rank(X)-tr-bl+1;
+  double df2=n-arma::rank(X);
+  //double Tc = ((arma::sum(arma::square(arma::vectorise(r)))-SSE)/2)/(SSE/((tr-1)*(bl-1)-2));
+  double Tc = ((arma::sum(arma::square(arma::vectorise(r)))-SSE)/df1)/(SSE/(df2));
+  
   arma::mat EE1 = RES.t()*RES;
   arma::mat EE2 = EE1*EE1;
   double trace1=arma::trace(EE1);

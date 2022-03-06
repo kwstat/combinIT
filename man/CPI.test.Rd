@@ -18,23 +18,35 @@ A list of consisting of:
 
 nsim, the number of Monte Carlo samples that are used to estimate p-value.
 
-piepho.pvalue, the p-value of Piepho's (1994) test.
+Piepho.pvalue, the p-value of Piepho's (1994) test.
+
+Piepho.Stat, the value of Piepho's (1994) test statistic.
 
 Boik.pvalue, the p-value of Boik's (1993) test.
 
+Boik.Stat, the value of Boik's (1993) test statistic.
+
 Malik.pvalue, the p-value of Malik's (2016) et al. test.
+
+Malik.Stat, the value of Malik's (2016) et al. test statistic.
 
 KKM.pvalue, the p-value of Kharrati-Kopaei and Miller's (2016) test.
 
+KKM.Stat, the value of Kharrati-Kopaei and Miller's (2016) test statistic.
+
 KKSA.pvalue, the p-value of Kharrati-Kopaei and Sadooghi-Alvandi's (2007) test.
 
+KKSA.Stat, the value of Kharrati-Kopaei and Sadooghi-Alvandi's (2007) test statistic.
+
 Franck.pvalue, the p-value of Franck's (2013) et al. test.
+
+Franck.Stat, the value of Franck's (2013) et al. test statistic.
 
 Bonferroni, the combined p-value by using the Bonferroni method.
 
 Sidak, the combined p-value by using the Sidak method.
 
-jacobi, the combined p-value by using the Jacobi method.
+Jacobi, the combined p-value by using the Jacobi method.
 
 GC, the combined p-value by using the Guassian copula.
 }
@@ -46,9 +58,9 @@ There are four combination methods:
 Bonferroni, Sidak, Jacobi expansion, and Gaussian Copula. The results of these four combinations are also reported. If there is a significant interaction, the type of interaction is also provided.
 }
 \details{
-If rows number ,\eqn{b} of data matrix is less than it's columns number, \eqn{a}, 
- the data matrix is transposed. In addition, this test procedure requires that the data matrix has more than two
- rows or columns. This function دeeds "mvtnorm" package.
+If rows number of data matrix ,\eqn{b}, is less than it's columns number, \eqn{a}, 
+ the data matrix is transposed. In addition, this test procedure requires that the data matrix has at least two
+ rows or columns. Note that the KKSA.test is not applicable when both \eqn{a} and \eqn{b} are less than 4. This function needs "mvtnorm" package.
 }
 \examples{
 \dontrun{
