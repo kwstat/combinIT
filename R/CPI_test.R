@@ -32,7 +32,7 @@
 #' @return Bonferroni, the combined p-value by using the Bonferroni method.
 #' @return Sidak, the combined p-value by using the Sidak method.
 #' @return Jacobi, the combined p-value by using the Jacobi method.
-#' @return GC, the combined p-value by using the Guassian copula.
+#' @return GC, the combined p-value by using the Gaussian copula.
 #'
 #' @author Shenavari, Z.; Haghbin, H.; Kharrati-Kopaei, M.; Najibi, S.M.
 #'

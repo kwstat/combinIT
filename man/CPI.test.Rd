@@ -48,7 +48,7 @@ Sidak, the combined p-value by using the Sidak method.
 
 Jacobi, the combined p-value by using the Jacobi method.
 
-GC, the combined p-value by using the Guassian copula.
+GC, the combined p-value by using the Gaussian copula.
 }
 \description{
 This function reports the p-values of the tests for non-additivity developed by Boik (1993), Piepho (1994),
