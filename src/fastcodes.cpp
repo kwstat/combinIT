@@ -173,7 +173,6 @@ double  M_f(arma::mat x) {            // Hossein's Codes....
   //double Tc = ((arma::sum(arma::square(arma::vectorise(r)))-SSE)/2)/(SSE/((tr-1)*(bl-1)-2));
   double Tc = ((arma::sum(arma::square(arma::vectorise(r)))-SSE)/df1)/(SSE/df2);
   return Tc;
-  
 }
 
 
