@@ -12,14 +12,14 @@ float Bfc(arma::mat x,int bl, int tr,int p) {
   double Mean = accu(x)/(tr*bl);
   arma::mat y(bl,tr),yt1(bl,tr),yt2(bl,tr);
   for(int i=0; i<bl;i++)
+  {
+    for(int j=0;j< tr;j++)
     {
-      for(int j=0;j< tr;j++)
-      {
-       y(i,j) = x(i,j)-RowMean(i)-ColMean(j)+Mean; // Zahra: please correct it by yourself
-      }
-   }
- yt1 = y.t() * y;
- yt2 = yt1*yt1;
+      y(i,j) = x(i,j)-RowMean(i)-ColMean(j)+Mean; // Zahra: please correct it by yourself
+    }
+  }
+  yt1 = y.t() * y;
+  yt2 = yt1*yt1;
   float Boik = trace(yt1)*trace(yt1) / (p*trace(yt2));
   return Boik;
 }
@@ -43,11 +43,11 @@ double picf(arma::vec y,arma::mat kp,float c0){
   arma::vec z= kp * y;
   for(unsigned int i=0;i<kp.n_rows;i++)
     z(i)=fabs(z(i));
-    arma::vec s0=median(z,0)/c0;
-    arma::uvec ids = find(z <= (5*s0(0)) );
-    arma::vec PSE=median(z.elem(ids),0);
-    arma::vec PIC=max(z,0)/PSE(0);
-    return PIC(0);
+  arma::vec s0=median(z,0)/c0;
+  arma::uvec ids = find(z <= (5*s0(0)) );
+  arma::vec PSE=median(z.elem(ids),0);
+  arma::vec PIC=max(z,0)/PSE(0);
+  return PIC(0);
 }
 
 //' @importFrom Rcpp sourceCpp
@@ -103,9 +103,9 @@ double piephoC(arma::mat x,int bl, int tr) {
   for(int i=0;i< (bl-1);i++)
     for(int j=i+1; j < bl ; j++)
       h1 += arma::as_scalar(delta(i)*delta(j));
-    double U = arma::as_scalar(2*bl*h1/((bl-1)*pow(sum(delta),2)));
-    double piepho = -(tr-1)*(bl-1)*(bl-2)*log(U)/2;
-    return piepho;
+  double U = arma::as_scalar(2*bl*h1/((bl-1)*pow(sum(delta),2)));
+  double piepho = -(tr-1)*(bl-1)*(bl-2)*log(U)/2;
+  return piepho;
 }
 
 //' @importFrom Rcpp sourceCpp
@@ -200,7 +200,7 @@ double kk_f(NumericMatrix x){// Hossein's Codes....
     Nsplit = ind.ncol();
     nr = ind.nrow();
     if((bl/2.0)==float(i))
-        Nsplit = Nsplit/2;
+      Nsplit = Nsplit/2;
     for(int j=0; j<Nsplit;j++)
     {
       // Computing rss1___________________________________
@@ -232,29 +232,29 @@ double kk_f(NumericMatrix x){// Hossein's Codes....
       indj2= rep(0,bl-nr);
       kk =0;
       for(int m=1; m<=bl;m++)
-        {
+      {
         flag=true;
         for(int k=0; k<nr;k++)
+        {
+          if(m==indj(k))
           {
-            if(m==indj(k))
-              {
-              flag=false;
-              break;
-              }
+            flag=false;
+            break;
           }
+        }
         if(flag)
-          {
+        {
           indj2(kk)=m;
           kk++;
-          }
-        
         }
+        
+      }
       yb2 = NumericMatrix(tr,1 , x(indj2(0)-1,_).begin());
       for(int k=1; k<(bl-nr);k++)
-        {
+      {
         I = NumericMatrix(tr,1, x(indj2(k)-1,_).begin());
         yb2 = cbind(yb2,I);
-        }
+      }
       yb2 = transpose(yb2);
       //_________________
       yb = yb2;
@@ -280,7 +280,7 @@ double kk_f(NumericMatrix x){// Hossein's Codes....
       count++;
     }
   }
-return min(pvalues);
+  return min(pvalues);
 }
 
 
@@ -411,17 +411,17 @@ double hh_f(NumericMatrix x){// Hossein's Codes....
     indj3.erase(i);
     yb3=NumericMatrix(tr,1,xx(indj3(0),_).begin());
     for(j=1; j<(bl-1);j++)
-      {
-        m = NumericMatrix(tr,1,xx(indj3(j),_).begin());
-        yb3=cbind(yb3,m);
-      }
+    {
+      m = NumericMatrix(tr,1,xx(indj3(j),_).begin());
+      yb3=cbind(yb3,m);
+    }
     yb3 = transpose(yb3);
     yb4=clone(yb3);
     myb1=mean(yb3);
     sybj = rep(0,tr);
     for(int jj=0;jj<tr;jj++)
       sybj(jj)=mean(yb3(_,jj));
-
+    
     for(int ii=0;ii<(bl-1);ii++)
     {
       sybi=mean(yb3(ii,_));
@@ -616,7 +616,7 @@ List bmp_f(arma::mat x) {            // Hossein's Codes....
   int p = tr - 1;
   if (bl<tr)
     p = bl - 1;
-
+  
   arma::vec treatment = arma::repelem(arma::regspace(1,  bl), tr, 1);
   arma::vec y = arma::trans(x.as_row());
   arma::mat RES(bl,tr);
@@ -642,7 +642,7 @@ List bmp_f(arma::mat x) {            // Hossein's Codes....
   
   double U = 2 * bl * h1 / ((bl - 1) * pow(sum(delta),2));
   double piepho = -(tr - 1) * (bl - 1) * (bl - 2) * log(U) / 2;
-
+  
   arma::mat r = RES.as_row();  
   arma::mat centers;
   arma::kmeans(centers, r, 3, static_spread, 30, false);
