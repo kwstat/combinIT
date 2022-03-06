@@ -14,21 +14,6 @@ B.f <- function(x, p) {
   return(Boik)
 }
 
-#' internal function for Malik method
-#'
-#' @keywords internal
-#'
-M.f <- function(x, y, block, treatment) {
-  RES <- t(t(x - apply(x, 1, mean) + mean(x)) - apply(x, 2, mean))
-  r <- c(t(RES))
-  kmean <- kmeans(x = r, centers = 3, nstart = 100)
-  af <- kmean$cluster
-  modclus <- lm(y ~ block + treatment + as.factor(af))
-  amodclus <- anova(modclus)
-  Tc <- (amodclus[3, 2] / amodclus[3, 1]) / (amodclus[4, 2] / amodclus[4, 1])
-  return(Tc)
-}
-
 
 
 #' This is an internal function which compute Kronecker product for PIC method
