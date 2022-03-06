@@ -525,7 +525,6 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000) {
         Hsimu[i] <- kh$fmax
       }
       cat(paste(round(i / nsim * 100), "% completed"), "\n")
-      #Sys.sleep(.1)
       if (i == nsim) {
         cat(": Done", "\n")
       } else {

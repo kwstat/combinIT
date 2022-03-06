@@ -132,8 +132,6 @@ double  M_f(arma::mat x) {            // Hossein's Codes....
   int n = bl*tr;
   arma::vec treatment = arma::repelem(arma::regspace(1,  bl), tr, 1);
   arma::vec y = arma::trans(x.as_row());
-  //arma::vec y = x.as_row();
-  
   arma::mat RES(bl,tr);
   arma::vec RowMean = arma::mean(x,1);
   arma::vec ColMean= trans(mean(x,0));
