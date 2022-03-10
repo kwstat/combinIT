@@ -140,38 +140,39 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000) {
     GC <- cp$GC
     Sidak <- cp$Sidak
     jacobi <- cp$jacobi
-    if (cp$Bon >= 0.05 & cp$GC >= 0.05 & cp$Sidak >= 0.05 & cp$jacobi >= 0.05) cat("No significant interaction type was detected at the 5% level", "\n")
+    if (cp$Bon >= 0.05 & cp$GC >= 0.05 & cp$Sidak >= 0.05 & cp$jacobi >= 0.05) cat("No significant interaction type was detected at the 5% level")
     if ((cp$Bon < 0.05 | cp$Sidak < 0.05 | cp$jacobi < 0.05) & bl >= 4) {
-      cat("There are significant interaction types at the 5% level", "\n")
-      if (min(pvalues) == Boik.pvalue) cat("The multiplicative form of interaction migth exist; see Boik (1993) for more detials.", "\n")
-      if (min(pvalues) == piepho.pvalue) cat("The detected significant interaction might due to the Grubbs’ type estimators of variances are heterogeneous across the levels of one factor; see Piepho (1994) for more detials.", "\n")
-      if (min(pvalues) == hiddenf.pvalue) cat("A hidden structure of intercation might exist; see Franck et al. (2013) for more detials.", "\n")
-      if (min(pvalues) == Malik.pvalue) cat("Some cells produce large negative or positive residuals due to the significant interaction; see Malik et al. (2016) for more detials.", "\n")
-      if (min(pvalues) == PIC.pvalue) cat("Significant interactions are caused by some cells; see Kharrati-Kopaei and Miller (2016) for more detials.", "\n")
-      if (min(pvalues) == KKSA.pvalue) cat("The magnitude of interaction effects is heteroscedastic across the sub-tables of observations; see Kharrati-Kopaei and Sadooghi-Alvandi (2007) for more detials.", "\n")
+      cat("There are significant interaction types at the 5% level")
+      if (min(pvalues) == Boik.pvalue) cat("The multiplicative form of interaction migth exist")
+      if (min(pvalues) == piepho.pvalue) cat("The detected significant interaction might due to the Grubbs type estimators of variances are heterogeneous across the levels of one factor")
+      if (min(pvalues) == hiddenf.pvalue) cat("A hidden structure of intercation might exist")
+      if (min(pvalues) == Malik.pvalue) cat("Some cells produce large negative or positive residuals due to the significant interaction")
+      if (min(pvalues) == PIC.pvalue) cat("Significant interactions are caused by some cells")
+      if (min(pvalues) == KKSA.pvalue) cat("The magnitude of interaction effects is heteroscedastic across the sub-tables of observations")
     }
     if ((cp$Bon < 0.05 | cp$Sidak < 0.05 | cp$jacobi < 0.05) & bl < 4) {
-      cat("There are significant interaction types at the 5% level", "\n")
-      if (min(pvalues) == Boik.pvalue) cat("The multiplicative form of interaction migth exist; see Boik (1993) for more detials.", "\n")
-      if (min(pvalues) == piepho.pvalue) cat("The detected significant interaction might due to the Grubbs’ type estimators of variances are heterogeneous across the levels of one factor; see Piepho (1994) for more detials.", "\n")
-      if (min(pvalues) == hiddenf.pvalue) cat("A hidden structure of intercation might exist; see Franck et al. (2013) for more detials.", "\n")
-      if (min(pvalues) == Malik.pvalue) cat("Some cells produce large negative or positive residuals due to the significant interaction; see Malik et al. (2016) for more detials.", "\n")
-      if (min(pvalues) == PIC.pvalue) cat("Significant interactions are caused by some cells; see Kharrati-Kopaei and Miller (2016) for more detials.", "\n")
+      cat("There are significant interaction types at the 5% level")
+      if (min(pvalues) == Boik.pvalue) cat("The multiplicative form of interaction migth exist")
+      if (min(pvalues) == piepho.pvalue) cat("The detected significant interaction might due to the Grubbs type estimators of variances are heterogeneous across the levels of one factor")
+      if (min(pvalues) == hiddenf.pvalue) cat("A hidden structure of intercation might exist")
+      if (min(pvalues) == Malik.pvalue) cat("Some cells produce large negative or positive residuals due to the significant interaction")
+      if (min(pvalues) == PIC.pvalue) cat("Significant interactions are caused by some cells")
     }
     if (bl >= 4) {
       out <- list(
-        nsim = nsim, Piepho.pvalue = piepho.pvalue, Piepho.Stat = pistat, Boik.pvalue = Boik.pvalue, Boik.Stat = Bstat,
-        Malik.pvalue = Malik.pvalue, Malik.Stat = Mstat, KKM.pvalue = PIC.pvalue, KKM.Stat = pstat,
-        KKSA.pvalue = KKSA.pvalue, KKSA.Stat = Kstat, Franck.pvalue = hiddenf.pvalue, Franck.Stat = Hstat,
+        nsim = nsim, Piepho.pvalue = piepho.pvalue, Piepho.Stat = pistat,
+        Boik.pvalue = Boik.pvalue, Boik.Stat = Bstat, Malik.pvalue = Malik.pvalue,
+        Malik.Stat = Mstat, KKM.pvalue = PIC.pvalue, KKM.Stat = pstat, KKSA.pvalue = KKSA.pvalue,
+        KKSA.Stat = Kstat, Franck.pvalue = hiddenf.pvalue,Franck.Stat = Hstat,
         Bonferroni = Bonferroni, Sidak = Sidak, Jacobi = jacobi, GC = GC
       )
-    }
-    if (bl < 4) {
+    } else {
       out <- list(
-        nsim = nsim, Piepho.pvalue = piepho.pvalue, Piepho.Stat = pistat, Boik.pvalue = Boik.pvalue, Boik.Stat = Bstat,
-        Malik.pvalue = Malik.pvalue, Malik.Stat = Mstat, KKM.pvalue = PIC.pvalue, KKM.Stat = pstat,
-        Franck.pvalue = hiddenf.pvalue, Franck.Stat = Hstat,
-        Bonferroni = Bonferroni, Sidak = Sidak, Jacobi = jacobi, GC = GC
+        nsim = nsim, Piepho.pvalue = piepho.pvalue, Piepho.Stat = pistat, 
+        Boik.pvalue = Boik.pvalue, Boik.Stat = Bstat, Malik.pvalue = Malik.pvalue,
+        Malik.Stat = Mstat, KKM.pvalue = PIC.pvalue, KKM.Stat = pstat,
+        Franck.pvalue = hiddenf.pvalue, Franck.Stat = Hstat, Bonferroni = Bonferroni,
+        Sidak = Sidak, Jacobi = jacobi, GC = GC
       )
     }
   }
