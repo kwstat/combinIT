@@ -145,8 +145,7 @@ double  M_f(arma::mat x) {            // Hossein's Codes....
   }
   arma::mat r = RES.as_row();  
   arma::mat centers;
-  arma::kmeans(centers, r, 3, static_spread, 30, false);
-  arma::vec af(n,fill::ones);
+  arma::kmeans(centers, r, 3, static_subset, 100, false);
   arma::mat  Xi(n,3,fill::zeros);
   for(int i=0; i<n;i++)
   {
@@ -170,7 +169,6 @@ double  M_f(arma::mat x) {            // Hossein's Codes....
   double  SSE = arma::sum(arma::square(y-yhat));
   double  df1=arma::rank(X)-tr-bl+1;
   double df2=n-arma::rank(X);
-  //double Tc = ((arma::sum(arma::square(arma::vectorise(r)))-SSE)/2)/(SSE/((tr-1)*(bl-1)-2));
   double Tc = ((arma::sum(arma::square(arma::vectorise(r)))-SSE)/df1)/(SSE/df2);
   return Tc;
 }
