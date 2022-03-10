@@ -1,0 +1,512 @@
+tr2=sum(diag(t(A)%*%A%*%t(A)%*%A))
+tr2
+tr^2/(p*tr2)
+tr^2/(tr2)
+library(combinIT)
+arma::mat Bfsim2(nsim = 10,bl = 6,tr = 2,p)
+combinIT:::Bfsim2(nsim = 10,bl = 6,tr = 2,p)
+combinIT:::Bfsim2(nsim = 10,bl = 6,tr = 2,p)
+combinIT:::Bfsim2(nsim = 10,bl = 6,tr = 2,p)
+combinIT:::Bfsim2(nsim = 10,bl = 6,tr = 2,p)
+combinIT:::Bfsim2(nsim = 10,bl = 6,tr = 2,p)
+combinIT:::Bfsim2(nsim = 10,bl = 6,tr = 2,p)
+combinIT:::Bfc2(CNV,bl,tr,p)
+A =combinIT:::Bfsim(nsim = 10,bl = 6,tr = 2,p)
+A =combinIT:::Bfc2(A,bl,tr,p)
+A =combinIT:::Bfsim(nsim = 10,bl = 6,tr = 2,p)
+A
+A =combinIT:::Bfsim(nsim = 10,bl = 6,tr = 2,p)
+combinIT:::Bfc(A,bl,tr,p)
+A = combinIT:::Bfsim2(nsim = 10,bl = 6,tr = 2,p)
+A
+combinIT:::Bfc(A,bl,tr,p)
+combinIT:::Bfc2(A,bl,tr,p)
+library(combinIT)
+sam = combinIT:::Bfsim2(nsim = 10,bl = 6,tr = 2,p=1)
+combinIT:::Bfc(sam,bl,tr,p=1)
+sam
+combinIT:::Bfc2(sam,bl,tr,p=1)
+combinIT:::Bfc2(CNV,bl,tr,p=1)
+library(combinIT)
+?kmeans
+# a 2-dimensional example
+x <- rbind(matrix(rnorm(100, sd = 0.3), ncol = 2),
+matrix(rnorm(100, mean = 1, sd = 0.3), ncol = 2))
+colnames(x) <- c("x", "y")
+(cl <- kmeans(x, 2))
+(cl <- kmeans(x, 2,algorithm = "Lloyd"))
+(cl <- kmeans(x, 2,algorithm = "MacQueen"))
+(cl <- kmeans(x, 2,algorithm = "Hartigan-Wong"))
+library(combinIT)
+library(combinIT)
+data(GHMD)
+data(MVGH)
+Malik.test(MVGH,nsim=10000)
+data(MVGH)
+Malik.test(MVGH,nsim=100)
+Malik.test(MVGH,nsim=500)
+library(combinIT)
+data(MVGH)
+Malik.test(MVGH,nsim=500)
+x <- MVGH
+tr <- ncol(x)
+bl <- nrow(x)
+treatment <- gl(tr, 1, bl * tr)
+combinIT::M.f(x, y, block, treatment)
+combinIT:::M.f(x, y, block, treatment)
+y <- c(t(x))
+combinIT:::M.f(x, y, block, treatment)
+block <- gl(bl, tr)
+combinIT:::M.f(x, y, block, treatment)
+combinIT:::M_f(x)
+x <- CNV
+tr <- ncol(x)
+bl <- nrow(x)
+treatment <- gl(tr, 1, bl * tr)
+block <- gl(bl, tr)
+y <- c(t(x))
+combinIT:::M.f(x, y, block, treatment)
+combinIT:::M_f(x)
+CNV
+MVGH
+combinIT:::M.f(x, y, block, treatment)
+library(combinIT)
+combinIT:::M.f(x, y, block, treatment)
+combinIT:::M_f(x)
+RES <- t(t(x - apply(x, 1, mean) + mean(x)) - apply(x, 2, mean))
+RES
+library(combinIT)
+combinIT:::M_f(x)
+library(combinIT)
+r <- c(t(RES))
+kmean <- kmeans(x = r, centers = 3, nstart = 100)
+kmean$centers
+combinIT:::M_f(x)
+kmean$cluster
+kmean$centers
+library(combinIT)
+combinIT:::M_f(x)
+library(combinIT)
+combinIT:::M_f(x)
+kmean$centers
+library(combinIT)
+combinIT:::M_f(x)
+kmean$cluster
+x <- MVGH
+tr <- ncol(x)
+bl <- nrow(x)
+treatment <- gl(tr, 1, bl * tr)
+block <- gl(bl, tr)
+y <- c(t(x))
+combinIT:::M_f(x)
+RES <- t(t(x - apply(x, 1, mean) + mean(x)) - apply(x, 2, mean))
+r <- c(t(RES))
+kmean <- kmeans(x = r, centers = 3, nstart = 100)
+kmean$cluster
+kmean$centers
+library(combinIT)
+combinIT:::M_f(x)
+RES <- t(t(x - apply(x, 1, mean) + mean(x)) - apply(x, 2, mean))
+r <- c(t(RES))
+kmean <- kmeans(x = r, centers = 3, nstart = 100)
+af <- kmean$cluster
+modclus <- lm(y ~ block + treatment + as.factor(af))
+amodclus <- anova(modclus)
+library(combinIT)
+amodclus$`Sum Sq`
+amodclus[3, 2]
+amodclus[3, 1]
+combinIT:::M_f(x)
+amodclus[4, 2]
+amodclus[3, 2]
+library(combinIT)
+combinIT:::M_f(x)
+x <- CNV
+tr <- ncol(x)
+bl <- nrow(x)
+treatment <- gl(tr, 1, bl * tr)
+block <- gl(bl, tr)
+y <- c(t(x))
+combinIT:::M_f(x)
+RES <- t(t(x - apply(x, 1, mean) + mean(x)) - apply(x, 2, mean))
+r <- c(t(RES))
+kmean <- kmeans(x = r, centers = 3, nstart = 100)
+af <- kmean$cluster
+modclus <- lm(y ~ block + treatment + as.factor(af))
+amodclus <- anova(modclus)
+amodclus[3, 2]
+amodclus[3, 1]
+af
+amodclus
+library(combinIT)
+Sys.which("make")
+write('PATH="${RTOOLS40_HOME}\\usr\\bin;${PATH}"', file = "~/.Renviron", append = TRUE)
+Sys.which("make")
+install.packages("jsonlite", type = "source")
+Sys.which("make")
+Sys.which("make")
+remove.packages("jsonlite")
+rm(list=ls())
+N<-20
+c0<-1.475226    #a=3,b=4
+#cr<-6.814488   #a3,b=4
+#c0<- 1.417809  #a5b3
+#cr<-4.555821   #a5b3
+#c0<-1.393479   #a5b4
+#cr<-4.772271   #a5b4
+y <- rnorm(18)
+ymtx<-matrix(y,nrow=6,byrow=T)
+#---------------------------------
+T6.pvalue<-function(ymtx,N){
+t <- ncol(ymtx)
+b <- nrow(ymtx)
+block<-gl(b,t)
+trt<-gl(t,1,b*t)
+p<-min(t-1,b-1)
+q<-max(t-1,b-1)
+wa<-combn(b,2)
+wb<-combn(t,2)
+cb<-matrix(0,nrow=choose(b,2),ncol=b)
+ct<-matrix(0,nrow=choose(t,2),ncol=t)
+for(i in 1:choose(b,2)){
+cb[i,wa[1,i]]<-1
+cb[i,wa[2,i]]<--1
+}
+for(i in 1:choose(t,2)){
+ct[i,wb[1,i]]<-1
+ct[i,wb[2,i]]<--1
+}
+C<-kronecker(cb,ct)
+#--------KKSA , Hiddenf------
+if (b < 3) {
+print("KKSA needs at least 3 levels of blocking factor")
+return(list(pvalue = NA))
+}
+if (b < 4) {
+print("KKSA needs at least 4 levels of blocking factor")
+return(list(pvalue = NA))
+}
+ccKK <- 2^(b - 1) - 1 - b
+cc <- 2^(b - 1) - 1
+Nrow<-2:(as.integer(b/2))
+SSR.f<-function(Y){
+tt <- ncol(Y)
+bb <- nrow(Y)
+block1<-gl(bb,tt)
+trt1<-gl(tt,1,bb*tt)
+y<-c(t(Y))
+mod <- lm(y ~ block1 + trt1)
+r1 <- resid(mod)
+sse<-sum(r1^2)
+list(sse=sse,r=r1)
+}
+sse<-SSR.f(ymtx)$sse
+fvalu<-rep(0,cc)
+fvalues<-rep(0,ccKK)
+pvalues<-rep(0,ccKK)
+count<-0
+for(i in Nrow){
+ind<-combn(b,i)
+Nsplit<-ncol(ind)
+if(b/2==i)Nsplit<-Nsplit/2
+for(j in 1:Nsplit){
+count<-count+1
+yb1<-ymtx[ind[,j],]
+yb2<-ymtx[-c(ind[,j]),]
+rss1<-SSR.f(yb1)$sse
+rss2<-SSR.f(yb2)$sse
+sse7<-rss1+rss2
+fvalu[count]<-(sse-sse7)*(b-2)/sse7
+dfn<-(t-1)*(i-1)
+dfd<-(b-i-1)*(t-1)
+fvalues[count]<-(rss1*(b-i-1))/(rss2*(i-1))
+if(fvalues[count]<1)fvalues[count]<-1/fvalues[count]
+pvalues[count]<-1-pf(fvalues[count],dfn,dfd)+pf(1/fvalues[count],dfn,dfd)
+}
+}
+adj.KKSA.pvalue<-min(pvalues)*ccKK
+adj.KKSA.pvalue<- min(1,adj.KKSA.pvalue)
+for(d in 1:b){
+count<-count+1
+yb1<-ymtx[-d,]
+sse7<-SSR.f(yb1)$sse
+fvalu[count]<-(sse-sse7)*(b-2)/sse7
+}
+fmax<-max(fvalu)
+adj.hiddenf.pvalue<-(1-pf(fmax,(t-1),(t-1)*(b-2)))*cc
+adj.hiddenf.pvalue<- min(1,adj.hiddenf.pvalue)
+#============================================
+f4<-function(Y){
+#--------piepho--------
+r<-SSR.f(Y)$r
+RES<-matrix(r,nrow=b,byrow=T)
+W<-apply(RES^2,1,sum)
+delta<-(b*(b-1)*W-sum(W))
+h1<-0
+for(i in 1:(b-1)){
+for(j in (i+1):b){
+h1<-(delta[i]*delta[j])+h1
+}
+}
+U<-2*b*h1/((b-1)*(sum(delta)^2))
+piepho<--(t-1)*(b-1)*(b-2)*log(U)/2
+#--------Boik-----------
+trEE1<-t(RES)%*%RES
+trEE2<-t(RES)%*%RES%*%t(RES)%*%RES
+trace1<-sum(diag(trEE1))
+trace2<-sum(diag(trEE2))
+Boik<-trace1^2/(p*trace2)
+#--------Malik----------
+y<-c(t(Y))
+names(r) <- NULL
+rmat <- matrix(r, nrow = length(r), ncol = 1)
+kmean <- kmeans(x = rmat, centers = 3, nstart = 100)
+assn <- kmean$cluster
+modclus <- lm(y ~ block + trt + as.factor(assn))
+amodclus <- anova(modclus)
+Tc <- (amodclus[3, 2]/amodclus[3, 1])/(amodclus[4, 2]/amodclus[4,1])
+#---------PIC-----------
+z<-abs(C%*%y)
+s0<-median(z)/c0
+PSE<-median(z[z<=2*2.5*s0])
+PIC<-max(z)/PSE
+list(piepho=piepho,Boik=Boik,Tc=Tc,PIC=PIC)
+}
+#=======================
+Y<-list(0)
+for(j in 1:N){
+Y[[j]]<-matrix(rnorm(t*b),nrow=b)
+}
+dis<-lapply(Y,function(x){f4(x)})
+dis<-unlist(dis)
+dim(dis)<-c(4,N)
+obs<-f4(ymtx)
+piepho.pvalue<-mean(obs$piepho<dis[1,])
+Boik.pvalue<-mean(obs$Boik>dis[2,])
+Malik.pvalue<-mean(obs$Tc<dis[3,])
+PIC.pvalue<-mean(obs$PIC<dis[4,])
+#--------------------combination pvalues--------------------------------------------
+P<-c(piepho.pvalue,Boik.pvalue,Malik.pvalue,PIC.pvalue,adj.KKSA.pvalue,adj.hiddenf.pvalue)
+P[P==0]<-10^(-6)
+P[P==1]<-1-10^(-6)
+k<-length(P)
+minp<-min(P)
+q0<-max(1/minp-1,1)
+q<-min(q0,(k-1))
+combined.p.value<-1-(1-minp)^q      #minpv~Betha(1,q)
+list(piepho.pvalue=piepho.pvalue,Boik.pvalue=Boik.pvalue
+,Malik.pvalue=Malik.pvalue,PIC.pvalue=PIC.pvalue
+,adj.KKSA.pvalue=adj.KKSA.pvalue,adj.hiddenf.pvalue=adj.hiddenf.pvalue,combined.p.value=combined.p.value )
+}
+#-------------------------------------------
+T6.pvalue(ymtx,N)
+#' @references Shenavari, Z., Kharrati-Kopaei, M. (2018). A Method for Testing Additivity in
+#'  Unreplicated Two-Way Layouts Based on Combining Multiple Interaction Tests. International Statistical Review
+#'  86(3): 469-487.
+#' @examples
+#' \dontrun{
+#' data(RDWW)
+#' CPI.test(RDWW,nsim=10000,nc0=10000)
+#' }
+#' @importFrom stats pchisq pf qnorm var
+#' @export
+CPI.test <- function(x, nsim = 10000, nc0 = 10000) {
+if (!is.matrix(x)) {
+stop("The input should be a matrix")
+} else {
+y <- c(t(x))
+tr <- ncol(x)
+bl <- nrow(x)
+if (bl < tr) {
+warning("The input matrix data was transposed")
+x <- t(x)
+te <- bl
+bl <- tr
+tr <- te
+}
+if (bl <= 3) {
+warning("KKSA.test needs at least 4 levels for a factor. For combining pvalues, the pvalue of KKSA method is not considered.")
+}
+n <- tr * bl
+block <- gl(bl, tr)
+treatment <- gl(tr, 1, bl * tr)
+p <- min(tr - 1, bl - 1)
+q <- max(tr - 1, bl - 1)
+cck <- 2^(bl - 1) - 1 - bl
+cch <- 2^(bl - 1) - 1
+kp <- kpr(bl, tr)
+c0 <- mean(replicate(nc0, {
+median(abs(kp %*% rnorm(n)))
+}))
+sta <- bmp_f(x)
+Bstat <- sta$Boik
+Mstat <- sta$Tc
+pistat <- sta$piepho
+pstat <- picf(y, kp, c0)
+if (bl == 3) {
+Hstat <- hh_f(x)
+} else {
+Ksimu <- rep(0, 0)
+kh <- kh_f(x)
+Kstat <- kh$fmin
+Hstat <- kh$fmax
+}
+Bsimu <- Msimu <- psimu <- pisimu <- Hsimu <- rep(0, 0)
+for (i in 1:nsim) {
+y <- rnorm(n)
+x <- matrix(y, nrow = bl, byrow = TRUE)
+sta <- bmp_f(x)
+Bsimu[i] <- sta$Boik
+Msimu[i] <- sta$Tc
+pisimu[i] <- sta$piepho
+psimu[i] <- picf(y, kp, c0)
+if (bl == 3) {
+Hsimu[i] <- hh_f(x)
+} else {
+kh <- kh_f(x)
+Ksimu[i] <- kh$fmin
+Hsimu[i] <- kh$fmax
+}
+cat(paste(round(i / nsim * 100), "% completed"), "\n")
+#Sys.sleep(.1)
+if (i == nsim) {
+cat(": Done", "\n")
+} else {
+cat("\014", "\n")
+}
+}
+Tb <- (1 / Bstat - 1)
+if (p == 1) {
+Boik.pvalue <- 1
+}
+if (p == 2) {
+Boik.pvalue <- 1 - pbeta(Tb, 1, (q - 1) / 2)
+}
+if (p > 2){
+Boik.pvalue <- mean(Bstat >= Bsimu)
+}
+Boik.pvalue <- mean(Bstat > Bsimu)
+piepho.pvalue <- mean(pistat < pisimu)
+PIC.pvalue <- mean(pstat < psimu)
+Malik.pvalue <- mean(Mstat < Msimu)
+hiddenf.pvalue <- mean(Hstat < Hsimu)
+if (bl <= 3) {
+KKSA.pvalue <- NA
+} else {
+KKSA.pvalue <- mean(Kstat > Ksimu)
+}
+pvalues <- c(Boik.pvalue, piepho.pvalue, hiddenf.pvalue, Malik.pvalue, PIC.pvalue, KKSA.pvalue)
+if(bl <= 3) {
+pvalues <- pvalues[! is.na(pvalues)]
+} else {
+pvalues <- pvalues
+}
+#pvalues <- c(Boik.pvalue, piepho.pvalue, hiddenf.pvalue, Malik.pvalue, PIC.pvalue, KKSA.pvalue)
+cp <- comb(pvalues)
+Bonferroni <- cp$Bon
+GC <- cp$GC
+Sidak <- cp$Sidak
+jacobi <- cp$jacobi
+if (cp$Bon >= 0.05 & cp$GC >= 0.05 & cp$Sidak >= 0.05 & cp$jacobi >= 0.05) cat("No significant interaction type was detected at the 5% level", "\n")
+if ((cp$Bon < 0.05 | cp$Sidak < 0.05 | cp$jacobi < 0.05) & bl >=4) {
+cat("There are significant interaction types at the 5% level", "\n")
+if (min(pvalues) == Boik.pvalue) cat("The multiplicative form of interaction migth exist; see Boik (1993) for more detials.", "\n")
+if (min(pvalues) == piepho.pvalue) cat("The detected significant interaction might due to the Grubbs’ type estimators of variances are heterogeneous across the levels of one factor; see Piepho (1994) for more detials.", "\n")
+if (min(pvalues) == hiddenf.pvalue) cat("A hidden structure of intercation might exist; see Franck et al. (2013) for more detials.", "\n")
+if (min(pvalues) == Malik.pvalue) cat("Some cells produce large negative or positive residuals due to the significant interaction; see Malik et al. (2016) for more detials.", "\n")
+if (min(pvalues) == PIC.pvalue) cat("Significant interactions are caused by some cells; see Kharrati-Kopaei and Miller (2016) for more detials.", "\n")
+if (min(pvalues) == KKSA.pvalue) cat("The magnitude of interaction effects is heteroscedastic across the sub-tables of observations; see Kharrati-Kopaei and Sadooghi-Alvandi (2007) for more detials.", "\n")
+}
+if ((cp$Bon < 0.05 | cp$Sidak < 0.05 | cp$jacobi < 0.05) & bl < 4) {
+cat("There are significant interaction types at the 5% level", "\n")
+if (min(pvalues) == Boik.pvalue) cat("The multiplicative form of interaction migth exist; see Boik (1993) for more detials.", "\n")
+if (min(pvalues) == piepho.pvalue) cat("The detected significant interaction might due to the Grubbs’ type estimators of variances are heterogeneous across the levels of one factor; see Piepho (1994) for more detials.", "\n")
+if (min(pvalues) == hiddenf.pvalue) cat("A hidden structure of intercation might exist; see Franck et al. (2013) for more detials.", "\n")
+if (min(pvalues) == Malik.pvalue) cat("Some cells produce large negative or positive residuals due to the significant interaction; see Malik et al. (2016) for more detials.", "\n")
+if (min(pvalues) == PIC.pvalue) cat("Significant interactions are caused by some cells; see Kharrati-Kopaei and Miller (2016) for more detials.", "\n")
+}
+if (bl>=4) {
+out <- list(
+nsim = nsim, Piepho.pvalue = piepho.pvalue, Piepho.Stat = pistat, Boik.pvalue = Boik.pvalue, Boik.Stat=Bstat,
+Malik.pvalue = Malik.pvalue, Malik.Stat = Mstat, KKM.pvalue = PIC.pvalue, KKM.Stat = pstat,
+KKSA.pvalue = KKSA.pvalue, KKSA.Stat = Kstat, Franck.pvalue = hiddenf.pvalue, Franck.Stat = Hstat,
+Bonferroni = Bonferroni, Sidak = Sidak, Jacobi = jacobi, GC = GC)
+list(
+nsim = nsim, piepho.pvalue = piepho.pvalue, Boik.pvalue = Boik.pvalue,
+Malik.pvalue = Malik.pvalue, KKM.pvalue = PIC.pvalue,
+KKSA.pvalue = KKSA.pvalue, Franck.pvalue = hiddenf.pvalue,
+Bonferroni = Bonferroni, Sidak = Sidak, jacobi = jacobi, GC = GC
+)
+}
+if (bl< 4) {
+out <- list(
+nsim = nsim, Piepho.pvalue = piepho.pvalue, Piepho.Stat = pistat, Boik.pvalue = Boik.pvalue, Boik.Stat=Bstat,
+Malik.pvalue = Malik.pvalue, Malik.Stat = Mstat, KKM.pvalue = PIC.pvalue, KKM.Stat = pstat,
+Franck.pvalue = hiddenf.pvalue, Franck.Stat = Hstat,
+Bonferroni = Bonferroni, Sidak = Sidak, Jacobi = jacobi, GC = GC
+)
+}
+}
+return(out)
+}
+#'  Shenavari, Z., Kharrati-Kopaei, M. (2018). A Method for Testing Additivity in
+#'  Unreplicated Two-Way Layouts Based on Combining Multiple Interaction Tests. International Statistical Review
+#'  86(3): 469-487.
+#' @examples
+#' \dontrun{
+#' data(MVGH)
+#' Boik.test(MVGH, nsim=10000)
+#' }
+#' @importFrom stats median pbeta rnorm
+#' @export
+Boik.test <- function(x, nsim = 10000) {
+if (!is.matrix(x)) {
+stop("The input should be a matrix")
+} else {
+tr <- ncol(x)
+bl <- nrow(x)
+n <- tr * bl
+p <- min(tr - 1, bl - 1)
+q <- max(tr - 1, bl - 1)
+statistics <- Bfc(x, bl, tr, p)
+Tb <- (1 / statistics - 1)
+T <- p * q * Tb / 2
+df <- (p + 2) * (p - 1) / 2
+if (p == 1) {
+asyboik.p <- 1
+simu <- Bfsim(nsim, bl, tr, p)
+boik.p <- mean(statistics >= simu)
+}
+if (p > 2) {
+simu <- Bfsim(nsim, bl, tr, p)
+boik.p <- mean(statistics >= simu)
+asyboik.p <- 1 - pchisq(T, df)
+}
+if (p == 2) {
+boik.p <- 1 - pbeta(Tb, 1, (q - 1) / 2)
+asyboik.p <- 1 - pchisq(T, df)
+}
+out <- list(
+exact.pvalue = boik.p, asy.pvalue = asyboik.p,
+nsim = nsim,
+statistic = statistics
+)
+}
+return(out)
+}
+#'
+#' Shenavari, Z., Kharrati-Kopaei, M. (2018). A Method for Testing Additivity in
+#' Unreplicated Two-Way Layouts Based on Combining Multiple Interaction Tests. International Statistical Review
+#' 86(3): 469-487.
+#' @examples
+#' \dontrun{
+#' data(IDCP)
+#' Malik.test(IDCP,nsim=10000)
+#' }
+#' @export
+Malik.test <- function(x, nsim = 10000) {
+library(combinIT)
+library(combinIT)
+styler:::style_active_pkg()
+library(combinIT)
+library(combinIT)
