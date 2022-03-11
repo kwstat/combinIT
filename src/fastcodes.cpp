@@ -640,7 +640,7 @@ List bmp_f(arma::mat x) {            // Hossein's Codes....
 
   arma::mat r = RES.as_row();  
   arma::mat centers;
-  arma::kmeans(centers, r, 3, static_spread, 30, false);
+  arma::kmeans(centers, r, 3, static_subset, 100, false);
   arma::vec af(n,fill::ones);
   arma::mat  Xi(n,3,fill::zeros);
   for(int i=0; i<n;i++)
@@ -665,9 +665,7 @@ List bmp_f(arma::mat x) {            // Hossein's Codes....
   double  SSE = arma::sum(arma::square(y-yhat));
   double  df1=arma::rank(X)-tr-bl+1;
   double df2=n-arma::rank(X);
-  //double Tc = ((arma::sum(arma::square(arma::vectorise(r)))-SSE)/2)/(SSE/((tr-1)*(bl-1)-2));
   double Tc = ((arma::sum(arma::square(arma::vectorise(r)))-SSE)/df1)/(SSE/(df2));
-  
   arma::mat EE1 = RES.t()*RES;
   arma::mat EE2 = EE1*EE1;
   double trace1=arma::trace(EE1);
