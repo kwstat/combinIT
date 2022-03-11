@@ -134,7 +134,6 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000) {
     } else {
       pvalues <- pvalues
     }
-    # pvalues <- c(Boik.pvalue, piepho.pvalue, hiddenf.pvalue, Malik.pvalue, PIC.pvalue, KKSA.pvalue)
     cp <- comb(pvalues)
     Bonferroni <- cp$Bon
     GC <- cp$GC
@@ -163,12 +162,12 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000) {
         nsim = nsim, Piepho.pvalue = piepho.pvalue, Piepho.Stat = pistat,
         Boik.pvalue = Boik.pvalue, Boik.Stat = Bstat, Malik.pvalue = Malik.pvalue,
         Malik.Stat = Mstat, KKM.pvalue = PIC.pvalue, KKM.Stat = pstat, KKSA.pvalue = KKSA.pvalue,
-        KKSA.Stat = Kstat, Franck.pvalue = hiddenf.pvalue,Franck.Stat = Hstat,
+        KKSA.Stat = Kstat, Franck.pvalue = hiddenf.pvalue, Franck.Stat = Hstat,
         Bonferroni = Bonferroni, Sidak = Sidak, Jacobi = jacobi, GC = GC
       )
     } else {
       out <- list(
-        nsim = nsim, Piepho.pvalue = piepho.pvalue, Piepho.Stat = pistat, 
+        nsim = nsim, Piepho.pvalue = piepho.pvalue, Piepho.Stat = pistat,
         Boik.pvalue = Boik.pvalue, Boik.Stat = Bstat, Malik.pvalue = Malik.pvalue,
         Malik.Stat = Mstat, KKM.pvalue = PIC.pvalue, KKM.Stat = pstat,
         Franck.pvalue = hiddenf.pvalue, Franck.Stat = Hstat, Bonferroni = Bonferroni,

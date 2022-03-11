@@ -45,7 +45,7 @@ Boik.test <- function(x, nsim = 10000) {
     q <- max(tr - 1, bl - 1)
     statistics <- Bfc(x, bl, tr, p)
     Tb <- (1 / statistics - 1)
-    T <- p * q * Tb / 2
+    T0 <- p * q * Tb / 2
     df <- (p + 2) * (p - 1) / 2
     if (p == 1) {
       asyboik.p <- 1
@@ -55,11 +55,11 @@ Boik.test <- function(x, nsim = 10000) {
     if (p > 2) {
       simu <- Bfsim(nsim, bl, tr, p)
       boik.p <- mean(statistics >= simu)
-      asyboik.p <- 1 - pchisq(T, df)
+      asyboik.p <- 1 - pchisq(T0, df)
     }
     if (p == 2) {
       boik.p <- 1 - pbeta(Tb, 1, (q - 1) / 2)
-      asyboik.p <- 1 - pchisq(T, df)
+      asyboik.p <- 1 - pchisq(T0, df)
     }
     out <- list(
       exact.pvalue = boik.p, asy.pvalue = asyboik.p,
