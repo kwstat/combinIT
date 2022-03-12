@@ -27,7 +27,7 @@ The Malik's (2016) et al. test statistics is calculated and the corresponding ex
 Malik (2016) et al. proposed to partition
  the residuals into three clusters using a suitable clustering method like “k-means clustering”.
  The hypothesis of no interaction can be interpreted as the effect of the three
- clusters are equal.
+ clusters are equal. Therefore, the result of the test may depend on the method of clustering. In this package, clustering is done by 'kmeans' function in 'RcppArmadillo'. The 'speed_mode' parameter on the kmeans clustering was set as 'static_subset'.
  Note that the Malik's et al. test performs well when there are some outliers in the residuals; i.e. some cells produce large negative or positive residuals due to the significant interaction.
  Further, the distribution of the Malik's et al. test statistic is not known under additivity and the corresponding p-value is calculated by a Monte Carlo simulation.
 }
