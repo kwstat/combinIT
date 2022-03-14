@@ -43,11 +43,11 @@ double picf(arma::vec y,arma::mat kp,float c0){
   arma::vec z= kp * y;
   for(unsigned int i=0;i<kp.n_rows;i++)
     z(i)=fabs(z(i));
-    arma::vec s0=median(z,0)/c0;
-    arma::uvec ids = find(z <= (5*s0(0)) );
-    arma::vec PSE=median(z.elem(ids),0);
-    arma::vec PIC=max(z,0)/PSE(0);
-    return PIC(0);
+  arma::vec s0=median(z,0)/c0;
+  arma::uvec ids = find(z <= (5*s0(0)) );
+  arma::vec PSE=median(z.elem(ids),0);
+  arma::vec PIC=max(z,0)/PSE(0);
+  return PIC(0);
 }
 
 //' @importFrom Rcpp sourceCpp
@@ -103,9 +103,9 @@ double piephoC(arma::mat x,int bl, int tr) {
   for(int i=0;i< (bl-1);i++)
     for(int j=i+1; j < bl ; j++)
       h1 += arma::as_scalar(delta(i)*delta(j));
-    double U = arma::as_scalar(2*bl*h1/((bl-1)*pow(sum(delta),2)));
-    double piepho = -(tr-1)*(bl-1)*(bl-2)*log(U)/2;
-    return piepho;
+  double U = arma::as_scalar(2*bl*h1/((bl-1)*pow(sum(delta),2)));
+  double piepho = -(tr-1)*(bl-1)*(bl-2)*log(U)/2;
+  return piepho;
 }
 
 //' @importFrom Rcpp sourceCpp
@@ -604,14 +604,12 @@ using namespace arma;
 
 List bmp_f(arma::mat x) {            // Hossein's Codes....
   arma::vec W,delta;
-  double sum_w;
   int bl = x.n_rows;
   int tr = x.n_cols;
   int n = bl*tr;
   int p = tr - 1;
   if (bl<tr)
     p = bl - 1;
-
   arma::vec treatment = arma::repelem(arma::regspace(1,  bl), tr, 1);
   arma::vec y = arma::trans(x.as_row());
   arma::mat RES(bl,tr);
@@ -627,7 +625,6 @@ List bmp_f(arma::mat x) {            // Hossein's Codes....
   }
   W=zeros(bl);
   delta=zeros(bl);
-  sum_w =  accu(pow(RES,2));
   W = arma::sum(pow(RES,2),1);
   delta = bl * (bl - 1) * W - sum(W);
   double h1=0;
