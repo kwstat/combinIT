@@ -50,3 +50,4 @@ KKM.test <- function(x, nsim = 1000, nc0 = 10000) {
     list(pvalue = PIC, nsim = nsim, statistic = statistics)
   }
 }
+

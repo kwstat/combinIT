@@ -81,3 +81,5 @@ Franck.test <- function(x, nsim = 10000, dist = "sim") {
     return(out)
   }
 }
+
+

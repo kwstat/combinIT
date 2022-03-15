@@ -69,3 +69,4 @@ Boik.test <- function(x, nsim = 10000) {
   }
   return(out)
 }
+

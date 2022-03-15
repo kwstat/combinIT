@@ -29,7 +29,6 @@
 #'  Shenavari, Z., Kharrati-Kopaei, M. (2018). A Method for Testing Additivity in
 #'  Unreplicated Two-Way Layouts Based on Combining Multiple Interaction Tests. International Statistical Review
 #'  86(3): 469-487.
-#'
 #' @examples
 #' \dontrun{
 #' data(IDCP)

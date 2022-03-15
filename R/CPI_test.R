@@ -177,3 +177,5 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000) {
   }
   return(out)
 }
+
+

@@ -60,3 +60,4 @@ Malik.test <- function(x, nsim = 10000) {
     list(pvalue = malik, nsim = nsim, statistic = statistic)
   }
 }
+

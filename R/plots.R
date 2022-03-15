@@ -24,3 +24,7 @@ interactionplot <- function(x, ...) {
     axis(1, at = 1:b, labels = 1:b, cex.axis = 1)
   }
 }
+
+.onUnload <- function(libpath) {
+  library.dynam.unload("combinIT", libpath)
+}
