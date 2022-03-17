@@ -88,4 +88,3 @@ comb <- function(pvalues) {
   Sidak <- 1 - (1 - minp)^k # minpv~Betha(1,k)
   list(Bon = Bon, Sidak = Sidak, jacobi = jacobi, GC = GC) # GC=Goussian Copula=MVNormal
 }
-

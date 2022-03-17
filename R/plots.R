@@ -1,4 +1,4 @@
-#' Interaction plot
+#' Interaction Plot
 #'
 #' @param x numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels, respectively.
 #' @param ... plot parameters

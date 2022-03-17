@@ -2,9 +2,9 @@
 % Please edit documentation in R/CPI_test.R
 \name{CPI.test}
 \alias{CPI.test}
-\title{Combined p-value interaction test}
+\title{Combined P-value Interaction Test}
 \usage{
-CPI.test(x, nsim = 10000, nc0 = 10000)
+CPI.test(x, nsim = 10000, nc0 = 10000, Elapsed.time = TRUE)
 }
 \arguments{
 \item{x}{numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels, respectively.}
@@ -12,43 +12,30 @@ CPI.test(x, nsim = 10000, nc0 = 10000)
 \item{nsim}{a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.}
 
 \item{nc0}{a numeric value, the number of Monte Carlo samples for computing the unbiasing constant \eqn{c_0}. The default value is 10000.}
+
+\item{Elapsed.time}{logical: if \code{TRUE} the progress will be printed in the console.}
 }
 \value{
-A list of consisting of:
-
-nsim, the number of Monte Carlo samples that are used to estimate p-value.
-
-Piepho.pvalue, the p-value of Piepho's (1994) test.
-
-Piepho.Stat, the value of Piepho's (1994) test statistic.
-
-Boik.pvalue, the p-value of Boik's (1993) test.
-
-Boik.Stat, the value of Boik's (1993) test statistic.
-
-Malik.pvalue, the p-value of Malik's (2016) et al. test.
-
-Malik.Stat, the value of Malik's (2016) et al. test statistic.
-
-KKM.pvalue, the p-value of Kharrati-Kopaei and Miller's (2016) test.
-
-KKM.Stat, the value of Kharrati-Kopaei and Miller's (2016) test statistic.
-
-KKSA.pvalue, the p-value of Kharrati-Kopaei and Sadooghi-Alvandi's (2007) test.
-
-KKSA.Stat, the value of Kharrati-Kopaei and Sadooghi-Alvandi's (2007) test statistic.
-
-Franck.pvalue, the p-value of Franck's (2013) et al. test.
-
-Franck.Stat, the value of Franck's (2013) et al. test statistic.
-
-Bonferroni, the combined p-value by using the Bonferroni method.
-
-Sidak, the combined p-value by using the Sidak method.
-
-Jacobi, the combined p-value by using the Jacobi method.
-
-GC, the combined p-value by using the Gaussian copula.
+An object of the class \code{combtest}, which is a list inducing following components::
+\item{nsim}{The number of Monte Carlo samples that are used to estimate p-value.}
+\item{Piepho.pvalue}{The p-value of Piepho's (1994) test.}
+\item{Piepho.Stat}{The value of Piepho's (1994) test statistic.}
+\item{Boik.pvalue}{The p-value of Boik's (1993) test.}
+\item{Boik.Stat}{The value of Boik's (1993) test statistic.}
+\item{Malik.pvalue}{The p-value of Malik's (2016) et al. test.}
+\item{alik.Stat}{The value of Malik's (2016) et al. test statistic.}
+\item{KKM.pvalue}{The p-value of Kharrati-Kopaei and Miller's (2016) test.}
+\item{KKM.Stat}{The value of Kharrati-Kopaei and Miller's (2016) test statistic.}
+\item{KKSA.pvalue}{The p-value of Kharrati-Kopaei and Sadooghi-Alvandi's (2007) test.}
+\item{KKSA.Stat}{The value of Kharrati-Kopaei and Sadooghi-Alvandi's (2007) test statistic.}
+\item{Franck.pvalue}{The p-value of Franck's (2013) et al. test.}
+\item{Franck.Stat}{The value of Franck's (2013) et al. test statistic.}
+\item{Bonferroni}{The combined p-value by using the Bonferroni method.}
+\item{Sidak}{The combined p-value by using the Sidak method.}
+\item{Jacobi}{The combined p-value by using the Jacobi method.}
+\item{GC}{The combined p-value by using the Gaussian copula.}
+\item{data.name}{The name of the input dataset.}
+\item{test}{The name of the test.}
 }
 \description{
 This function reports the p-values of the tests for non-additivity developed by Boik (1993), Piepho (1994),
@@ -63,16 +50,12 @@ If rows number of data matrix, \eqn{b}, is less than it's columns number, \eqn{a
  rows or columns. Note that the KKSA.test is not applicable when both \eqn{a} and \eqn{b} are less than 4. This function needs "mvtnorm" package.
 }
 \examples{
-\dontrun{
 data(RDWW)
-CPI.test(RDWW, nsim = 10000, nc0 = 10000)
-}
+CPI.test(RDWW, nsim = 1000, nc0 = 1000, Elapsed.time = FALSE)
+
 }
 \references{
 Shenavari, Z., Kharrati-Kopaei, M. (2018). A Method for Testing Additivity in
  Unreplicated Two-Way Layouts Based on Combining Multiple Interaction Tests. International Statistical Review
  86(3): 469-487.
-}
-\author{
-Shenavari, Z.; Haghbin, H.; Kharrati-Kopaei, M.; Najibi, S.M.
 }

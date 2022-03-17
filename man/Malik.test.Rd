@@ -2,23 +2,24 @@
 % Please edit documentation in R/Malik_test.R
 \name{Malik.test}
 \alias{Malik.test}
-\title{Malik (2016) et al. test for interaction}
+\title{Malik (2016) et al. Test for Interaction}
 \usage{
-Malik.test(x, nsim = 10000)
+Malik.test(x, nsim = 10000, Elapsed.time = TRUE)
 }
 \arguments{
 \item{x}{numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels, respectively.}
 
 \item{nsim}{a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.}
+
+\item{Elapsed.time}{logical: if \code{TRUE} the progress will be printed in the console.}
 }
 \value{
-A list of consisting of:
-
-pvalue, the calculated exact Monte Carlo p-value.
-
-nsim, the number of Monte Carlo samples that are used to estimate p-value.
-
-statistic, the value of test statistic.
+An object of the class \code{ITtest}, which is a list inducing following components::
+\item{pvalue}{The calculated exact Monte Carlo p-value.}
+\item{nsim}{The number of Monte Carlo samples that are used to estimate p-value.}
+\item{statistic}{The value of test statistic.}
+\item{data.name}{The name of the input dataset.}
+\item{test}{The name of the test.}
 }
 \description{
 The Malik's (2016) et al. test statistics is calculated and the corresponding exact p-value is calculated by a Monte Carlo simulation.
@@ -32,10 +33,9 @@ Malik (2016) et al. proposed to partition
  Further, the distribution of the Malik's et al. test statistic is not known under additivity and the corresponding p-value is calculated by a Monte Carlo simulation.
 }
 \examples{
-\dontrun{
 data(IDCP)
-Malik.test(IDCP, nsim = 10000)
-}
+Malik.test(IDCP, nsim = 1000)
+
 }
 \references{
 Malik, W.A., Mohring, J., Piepho, H.P. (2016). A
@@ -45,7 +45,4 @@ Communications in Statistics-Simulation and Computation 45(2):660-670.
 Shenavari, Z., Kharrati-Kopaei, M. (2018). A Method for Testing Additivity in
 Unreplicated Two-Way Layouts Based on Combining Multiple Interaction Tests. International Statistical Review
 86(3): 469-487.
-}
-\author{
-Shenavari, Z.; Haghbin, H.; Kharrati-Kopaei, M.; Najibi, S.M.
 }

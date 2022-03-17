@@ -27,11 +27,11 @@
 #'  Shenavari, Z., Kharrati-Kopaei, M. (2018). A Method for Testing Additivity in
 #'  Unreplicated Two-Way Layouts Based on Combining Multiple Interaction Tests. International Statistical Review
 #'  86(3): 469-487.
+#'  
 #' @examples
-#' \dontrun{
 #' data(MVGH)
-#' Boik.test(MVGH, nsim = 10000)
-#' }
+#' Boik.test(MVGH, nsim = 1000)
+#' 
 #' @importFrom stats median pbeta rnorm
 #' @export
 Boik.test <- function(x, nsim = 10000) {
@@ -70,4 +70,3 @@ Boik.test <- function(x, nsim = 10000) {
   }
   return(out)
 }
-

@@ -1,4 +1,4 @@
-#' Piepho (1994) test for interaction
+#' Piepho (1994) Test for Interaction
 #'
 #' This function tests the interaction based on a statistic proposed by Piepho (1994).
 #' This function reports Piepho's test statistic, and an asymptotic and Monte Carlo p-values.
@@ -30,10 +30,9 @@
 #' Grubbs, F.E. (1948). On Estimating Precision of Measuring Instruments and Product Variability. Journal of the American Statistical Association 43(242): 243-264.
 #'
 #' @examples
-#' \dontrun{
 #' data(MVGH)
-#' Piepho.test(MVGH, nsim = 10000)
-#' }
+#' Piepho.test(MVGH, nsim = 1000)
+#' 
 #' @export
 Piepho.test <- function(x, nsim = 10000) {
   if (!is.matrix(x)) {

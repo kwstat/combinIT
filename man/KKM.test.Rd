@@ -2,7 +2,7 @@
 % Please edit documentation in R/KKM_test.R
 \name{KKM.test}
 \alias{KKM.test}
-\title{Kharrati-Kopaei and Miller's (2016) test for interaction}
+\title{Kharrati-Kopaei and Miller's (2016) Test for Interaction}
 \usage{
 KKM.test(x, nsim = 1000, nc0 = 10000)
 }
@@ -34,10 +34,9 @@ In addition, the null distribution of the test statistic is calculated by a Mont
 Note that this test procedure is powerful when significant interactions are caused by some data cells.
 }
 \examples{
-\dontrun{
 data(RDWW)
-KKM.test(RDWW, nsim = 10000, nc0 = 10000)
-}
+KKM.test(RDWW, nsim = 1000, nc0 = 1000)
+
 }
 \references{
 Kharrati-Kopaei, M., Miller, A. (2016). A method for testing interaction in

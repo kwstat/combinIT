@@ -2,7 +2,7 @@
 % Please edit documentation in R/plots.R
 \name{interactionplot}
 \alias{interactionplot}
-\title{Interaction plot}
+\title{Interaction Plot}
 \usage{
 interactionplot(x, ...)
 }
@@ -15,7 +15,7 @@ interactionplot(x, ...)
 An interaction plot for input
 }
 \description{
-Interaction plot
+Interaction Plot
 }
 \examples{
 \dontrun{this is an example}

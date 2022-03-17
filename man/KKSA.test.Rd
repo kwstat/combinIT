@@ -4,7 +4,7 @@
 \alias{KKSA.test}
 \title{Kharrati-Kopaei and Sadooghi-Alvandi's (2007) test for interaction}
 \usage{
-KKSA.test(x, nsim = 10000, dist = "sim")
+KKSA.test(x, nsim = 10000, dist = "sim", Elapsed.time = TRUE)
 }
 \arguments{
 \item{x}{numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels
@@ -12,16 +12,17 @@ KKSA.test(x, nsim = 10000, dist = "sim")
 
 \item{nsim}{a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.}
 
-\item{dist}{a character, if dist="sim", a Monte Carlo simulation is used for calculating exact p-value. If dist="adj", the Bonferroni-adjusted p-value is calculated. The default is "sim".}
+\item{dist}{a character, if \code{dist="sim"}, a Monte Carlo simulation is used for calculating exact p-value. If dist="adj", the Bonferroni-adjusted p-value is calculated. The default is "sim".}
+
+\item{Elapsed.time}{logical: if \code{TRUE} the progress will be printed in the console.}
 }
 \value{
-A list of consisting of:
-
-pvalue, an exact Monte Carlo p-value.
-
-nsim, the number of Monte Carlo samples that are used to estimate p-value.
-
-statistic, the value of test statistic.
+An object of the class \code{ITtest}, which is a list inducing following components::
+\item{pvalue}{The calculated exact Monte Carlo p-value.}
+\item{nsim}{The number of Monte Carlo samples that are used to estimate p-value.}
+\item{statistic}{The value of test statistic.}
+\item{data.name}{The name of the input dataset.}
+\item{test}{The name of the test.}
 }
 \description{
 This function calculates Kharrati-Kopaei and Sadooghi-Alvandi's test statistic and corresponding p-value for testing interaction.
@@ -36,10 +37,9 @@ Suppose that \eqn{b>=a} and \eqn{b>=4}. Consider the \eqn{l}-th division of the 
  rows or columns. This test procedure is powerful for detecting interaction when the magnitude of interaction effects is heteroscedastic across the sub-tables of observations.
 }
 \examples{
-\dontrun{
 data(IDCP)
-KKSA.test(IDCP, nsim = 10000, dist = "sim")
-}
+KKSA.test(IDCP, nsim = 1000, dist = "sim")
+
 }
 \references{
 Kharrati-Kopaei, M., Sadooghi-Alvandi, S.M. (2007). A New Method for
@@ -49,7 +49,4 @@ Kharrati-Kopaei, M., Sadooghi-Alvandi, S.M. (2007). A New Method for
  Shenavari, Z., Kharrati-Kopaei, M. (2018). A Method for Testing Additivity in
  Unreplicated Two-Way Layouts Based on Combining Multiple Interaction Tests. International Statistical Review
  86(3): 469-487.
-}
-\author{
-Shenavari, Z.; Haghbin, H.; Kharrati-Kopaei, M.; Najibi, S.M.
 }
