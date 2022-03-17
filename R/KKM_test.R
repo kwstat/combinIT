@@ -3,15 +3,17 @@
 #' This function calculates the test statistic for testing \eqn{H_0:} no interaction and corresponding Monte Carlo p-value
 #' proposed by Kharrati-Kopaei and Miller(2016).
 #'
-#' @param x numerix matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels, respectively.
+#' @param x a numerix matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels, respectively.
 #' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
 #' @param nc0 a numeric value, the number of Monte Carlo samples for computing the unbiasing constant \eqn{c_0}. The default value is 10000.
 #'
-#' @return A list of consisting of:
-#' @return pvalue, the calculated exact Monte Carlo p-value.
-#' @return nsim, the number of Monte Carlo samples that are used to estimate p-value.
-#' @return statistic, the value of test statistic.
-#' @author Shenavari, Z.; Haghbin, H.; Kharrati-Kopaei, M.; Najibi, S.M.
+#' @return An object of the class \code{ITtest}, which is a list inducing following components::
+#' \item{pvalue.exact}{The calculated exact Monte Carlo p-value.}
+#' \item{pvalue.appro}{is not available for \code{KKM.test}.}
+#' \item{Nsim}{The number of Monte Carlo samples that are used to estimate p-value.}
+#' \item{statistic}{The value of the test statistic.}
+#' \item{data.name}{The name of the input dataset.}
+#' \item{test}{The name of the test.}
 #'
 #' @details
 #' Kharrati-Kopaei and Miller(2016) proposed a test statistic for testing interaction
@@ -37,6 +39,7 @@ KKM.test <- function(x, nsim = 1000, nc0 = 10000) {
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
+    DNAME <- deparse1(substitute(x))
     y <- c(t(x))
     tr <- ncol(x)
     bl <- nrow(x)
@@ -46,10 +49,16 @@ KKM.test <- function(x, nsim = 1000, nc0 = 10000) {
     statistics <- picf(y, kp, c0)
     simu <- PICfsim(nsim, kp, c0, n)
     PIC <- mean(statistics < simu)
-    list(
-      pvalue = PIC,
-      nsim = nsim,
-      statistic = statistics
-    )
   }
+  structure(
+    list(
+      pvalue.exact = PIC,
+      pvalue.appro = "NULL",
+      nsim = nsim,
+      statistic = statistics,
+      data.name = DNAME,
+      test = "KKM Test"
+    ),
+    class = "ITtest"
+  )
 }

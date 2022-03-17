@@ -14,10 +14,11 @@ Malik.test(x, nsim = 10000, Elapsed.time = TRUE)
 \item{Elapsed.time}{logical: if \code{TRUE} the progress will be printed in the console.}
 }
 \value{
-An object of the class \code{ITtest}, which is a list inducing following components::
-\item{pvalue}{The calculated exact Monte Carlo p-value.}
-\item{nsim}{The number of Monte Carlo samples that are used to estimate p-value.}
-\item{statistic}{The value of test statistic.}
+An object of the class \code{ITtest}, which is a list inducing following components:
+\item{pvalue.exact}{The calculated exact Monte Carlo p-value.}
+\item{pvalue.appro}{is not available for \code{Malik.test}.}
+\item{statistic}{The value of the test statistic.}
+\item{Nsim}{The number of Monte Carlo samples that are used to estimate p-value.}
 \item{data.name}{The name of the input dataset.}
 \item{test}{The name of the test.}
 }
@@ -34,7 +35,7 @@ Malik (2016) et al. proposed to partition
 }
 \examples{
 data(IDCP)
-Malik.test(IDCP, nsim = 1000)
+Malik.test(IDCP, nsim = 1000, Elapsed.time = FALSE)
 
 }
 \references{

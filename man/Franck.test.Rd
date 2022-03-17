@@ -4,7 +4,7 @@
 \alias{Franck.test}
 \title{Franck's (2013) et al. Test for Interaction}
 \usage{
-Franck.test(x, nsim = 10000, dist = "sim", Elapsed.time = TRUE)
+Franck.test(x, nsim = 10000, Elapsed.time = TRUE)
 }
 \arguments{
 \item{x}{numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels
@@ -12,16 +12,14 @@ Franck.test(x, nsim = 10000, dist = "sim", Elapsed.time = TRUE)
 
 \item{nsim}{a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.}
 
-\item{dist}{a character, if dist="sim", a Monte Carlo simulation is used for calculating exact p-value,
-and if dist="adj", the Bonferroni-adjusted p-value is calculated. The default is "sim".}
-
 \item{Elapsed.time}{logical: if \code{TRUE} the progress will be printed in the console.}
 }
 \value{
 An object of the class \code{ITtest}, which is a list inducing following components::
-\item{pvalue}{The calculated exact Monte Carlo p-value.}
-\item{nsim}{The number of Monte Carlo samples that are used to estimate p-value.}
-\item{statistic}{The value of test statistic.}
+\item{pvalue.exact}{The calculated exact Monte Carlo p-value.}
+\item{pvalue.appro}{The Bonferroni-adjusted p-value is calculated.}
+\item{statistic}{The value of the test statistic.}
+\item{Nsim}{The number of Monte Carlo samples that are used to estimate p-value.}
 \item{data.name}{The name of the input dataset.}
 \item{test}{The name of the test.}
 }
@@ -38,7 +36,7 @@ Franck et al. (2013) derived a test statistic based on the â€œhidden additivityâ
 }
 \examples{
 data(CNV)
-Franck.test(CNV, nsim = 1000, dist = "sim")
+Franck.test(CNV, nsim = 1000, Elapsed.time = FALSE)
 
 }
 \references{

@@ -7,25 +7,22 @@
 Piepho.test(x, nsim = 10000)
 }
 \arguments{
-\item{x}{numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels
-, respectively.}
+\item{x}{numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels, respectively.}
 
 \item{nsim}{a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.}
 }
 \value{
-A list of consisting of:
-
-exact.pvalue, an exact Monte Carlo p-value.
-
-asy.pvalue, an asymptotic p-value.
-
-nsim, the number of Monte Carlo samples that are used to estimate p-value.
-
-statistic, the value of test statistic.
+An object of the class \code{ITtest}, which is a list inducing following components:
+\item{pvalue.exact}{The calculated exact Monte Carlo p-value.}
+\item{pvalue.appro}{The asymptotic p-value.}
+\item{statistic}{The value of the test statistic.}
+\item{Nsim}{The number of Monte Carlo samples that are used to estimate p-value.}
+\item{data.name}{The name of the input dataset.}
+\item{test}{The name of the test.}
 }
 \description{
 This function tests the interaction based on a statistic proposed by Piepho (1994).
-This function reports Piepho's test statistic, and an asymptotic and Monte Carlo p-values.
+This function reports Piepho's test statistic, and the asymptotic and Monte Carlo p-values.
 }
 \details{
 Piepho (1994) proposed three test statistics.The third one is
@@ -47,7 +44,4 @@ Unreplicated Two-Way Layouts Based on Combining Multiple Interaction Tests. Inte
 86(3): 469-487.
 
 Grubbs, F.E. (1948). On Estimating Precision of Measuring Instruments and Product Variability. Journal of the American Statistical Association 43(242): 243-264.
-}
-\author{
-Shenavari, Z.; Haghbin, H.; Kharrati-Kopaei, M.; Najibi, S.M.
 }

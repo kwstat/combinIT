@@ -5,8 +5,6 @@
 #' @param x numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels
 #'   , respectively.
 #' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
-#' @param dist a character, if dist="sim", a Monte Carlo simulation is used for calculating exact p-value,
-#'  and if dist="adj", the Bonferroni-adjusted p-value is calculated. The default is "sim".
 #' @param Elapsed.time logical: if \code{TRUE} the progress will be printed in the console.
 #'
 #' @details Franck et al. (2013) derived a test statistic based on the “hidden additivity” structure.
@@ -16,10 +14,12 @@
 #'  Note that, if rows number, \eqn{b}, of data matrix is less than the columns number, \eqn{a},
 #'  the data matrix is transposed. Note that the this test method is powerful when there is a hidden additivity structure in the data set.
 #'
+#'
 #' @return An object of the class \code{ITtest}, which is a list inducing following components::
-#' \item{pvalue}{The calculated exact Monte Carlo p-value.}
-#' \item{nsim}{The number of Monte Carlo samples that are used to estimate p-value.}
-#' \item{statistic}{The value of test statistic.}
+#' \item{pvalue.exact}{The calculated exact Monte Carlo p-value.}
+#' \item{pvalue.appro}{The Bonferroni-adjusted p-value is calculated.}
+#' \item{statistic}{The value of the test statistic.}
+#' \item{Nsim}{The number of Monte Carlo samples that are used to estimate p-value.}
 #' \item{data.name}{The name of the input dataset.}
 #' \item{test}{The name of the test.}
 #'
@@ -37,11 +37,11 @@
 #'
 #' @examples
 #' data(CNV)
-#' Franck.test(CNV, nsim = 1000, dist = "sim")
+#' Franck.test(CNV, nsim = 1000, Elapsed.time = FALSE)
 #' 
 #' @importFrom stats pchisq pf qnorm var
 #' @export
-Franck.test <- function(x, nsim = 10000, dist = "sim", Elapsed.time = TRUE) {
+Franck.test <- function(x, nsim = 10000, Elapsed.time = TRUE) {
   DNAME <- deparse1(substitute(x))
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
@@ -58,30 +58,25 @@ Franck.test <- function(x, nsim = 10000, dist = "sim", Elapsed.time = TRUE) {
     }
     cch <- 2^(bl - 1) - 1
     statistics <- hh_f(x)
-    if (dist != "sim" & dist != "adj") stop("\"dist\" parameter should be equal to \"sim\" or \"adj\".")
-    if (dist == "sim") {
-      simu <- rep(0, 0)
-      if (Elapsed.time) {
-        pb <- completed(nsim)
-        for (i in 1:nsim) {
-          simu[i] <- hh_f(matrix(rnorm(n), nrow = bl, ncol = tr))
-          if (i == pb$pr[pb$j]) pb <- nextc(pb, i)
-        }
-      } else {
-        for (i in 1:nsim) {
-          simu[i] <- hh_f(matrix(rnorm(n), nrow = bl, ncol = tr))
-        }
+    simu <- rep(0, 0)
+    if (Elapsed.time) {
+      pb <- completed(nsim)
+      for (i in 1:nsim) {
+        simu[i] <- hh_f(matrix(rnorm(n), nrow = bl, ncol = tr))
+        if (i == pb$pr[pb$j]) pb <- nextc(pb, i)
       }
-      hidden <- mean(statistics < simu)
+    } else {
+      for (i in 1:nsim) {
+        simu[i] <- hh_f(matrix(rnorm(n), nrow = bl, ncol = tr))
+      }
     }
-    if (dist == "adj") {
-      adjpvalue <- (1 - pf(statistics, (tr - 1), (tr - 1) * (bl - 2))) * cch
-      hidden <- min(1, adjpvalue)
-    }
+    hidden <- mean(statistics < simu)
+    adjpvalue <- (1 - pf(statistics, (tr - 1), (tr - 1) * (bl - 2))) * cch
+    hidden.apr <- min(1, adjpvalue)
     out <- list(
-      pvalue = hidden,
+      pvalue.exact = hidden,
+      pvalue.appro = hidden.apr,
       nsim = nsim,
-      dist = dist,
       statistic = statistics,
       data.name = DNAME,
       test = "Franck Test"

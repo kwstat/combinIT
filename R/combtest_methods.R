@@ -8,9 +8,9 @@ print.combtest <- function(x, ...) {
   msg6 <- paste("KKM Test: Statistics = ", round(x$KKM.Stat, 5),", Pvalue = ", round(x$KKM.pvalue, 5),"\n")
   msg7 <- paste("KKSA Test: Statistics = ", round(x$KKSA.Stat, 5),", Pvalue = ", round(x$KKSA.pvalue, 5),"\n")
   msg8 <- paste("Malik Test: Statistics = ", round(x$Franck.Stat, 5),", Pvalue = ", round(x$Franck.pvalue, 5),"\n")
-  msg9 <- paste("Bonferroni: Pvalue =", round(x$Bonferroni, 5),"\n")
-  msg10 <- paste("Sidak: Pvalue =", round(x$Sidak, 5),"\n")
-  msg11 <- paste("Jacobi: Pvalue =", round(x$Jacobi, 5),"\n")
-  msg12 <- paste("GC: Pvalue =", round(x$GC, 5),"\n")
+  msg9 <- paste("Bonferroni method: Pvalue =", round(x$Bonferroni, 5),"\n")
+  msg10 <- paste("Sidak method: Pvalue =", round(x$Sidak, 5),"\n")
+  msg11 <- paste("Jacobi method: Pvalue =", round(x$Jacobi, 5),"\n")
+  msg12 <- paste("Gaussian copula: Pvalue =", round(x$GC, 5),"\n")
   cat(msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8, msg9, msg10, msg11, msg12)
 }

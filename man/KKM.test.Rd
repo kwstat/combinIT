@@ -7,20 +7,20 @@
 KKM.test(x, nsim = 1000, nc0 = 10000)
 }
 \arguments{
-\item{x}{numerix matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels, respectively.}
+\item{x}{a numerix matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels, respectively.}
 
 \item{nsim}{a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.}
 
 \item{nc0}{a numeric value, the number of Monte Carlo samples for computing the unbiasing constant \eqn{c_0}. The default value is 10000.}
 }
 \value{
-A list of consisting of:
-
-pvalue, the calculated exact Monte Carlo p-value.
-
-nsim, the number of Monte Carlo samples that are used to estimate p-value.
-
-statistic, the value of test statistic.
+An object of the class \code{ITtest}, which is a list inducing following components::
+\item{pvalue.exact}{The calculated exact Monte Carlo p-value.}
+\item{pvalue.appro}{is not available for \code{KKM.test}.}
+\item{Nsim}{The number of Monte Carlo samples that are used to estimate p-value.}
+\item{statistic}{The value of the test statistic.}
+\item{data.name}{The name of the input dataset.}
+\item{test}{The name of the test.}
 }
 \description{
 This function calculates the test statistic for testing \eqn{H_0:} no interaction and corresponding Monte Carlo p-value
@@ -46,7 +46,4 @@ Kharrati-Kopaei, M., Miller, A. (2016). A method for testing interaction in
  Shenavari, Z., Kharrati-Kopaei, M. (2018). A Method for Testing Additivity in
  Unreplicated Two-Way Layouts Based on Combining Multiple Interaction Tests. International Statistical Review
  86(3): 469-487.
-}
-\author{
-Shenavari, Z.; Haghbin, H.; Kharrati-Kopaei, M.; Najibi, S.M.
 }
