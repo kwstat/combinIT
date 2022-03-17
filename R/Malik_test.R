@@ -6,7 +6,8 @@
 #' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
 #'
 #' @return A list of consisting of:
-#' @return pvalue, the calculated exact Monte Carlo p-value.
+#' @return pvalue.exact, the calculated exact Monte Carlo p-value.
+#' @return pvalue.appro, is not available for Malik.test.
 #' @return nsim, the number of Monte Carlo samples that are used to estimate p-value.
 #' @return statistic, the value of test statistic.
 #'
@@ -28,10 +29,9 @@
 #' Unreplicated Two-Way Layouts Based on Combining Multiple Interaction Tests. International Statistical Review
 #' 86(3): 469-487.
 #' @examples
-#' \dontrun{
 #' data(IDCP)
-#' Malik.test(IDCP, nsim = 10000)
-#' }
+#' Malik.test(IDCP, nsim = 1000)
+#' 
 #' @export
 Malik.test <- function(x, nsim = 10000) {
   if (!is.matrix(x)) {
@@ -54,10 +54,11 @@ Malik.test <- function(x, nsim = 10000) {
     malik <- mean(statistic < simu)
     structure(
       list(
-        pvalue = malik,
+        pvalue.exact = malik,
+        pvalue.appro = "NULL",
         nsim = nsim,
         statistic = statistic,
-        dist = NULL,
+        dist = dist,
         data.name = DNAME,
         test = "Malik Test"
       ),

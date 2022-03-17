@@ -4,20 +4,20 @@
 \alias{KKSA.test}
 \title{Kharrati-Kopaei and Sadooghi-Alvandi's (2007) test for interaction}
 \usage{
-KKSA.test(x, nsim = 10000, dist = "sim")
+KKSA.test(x, nsim = 10000)
 }
 \arguments{
 \item{x}{numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels
 , respectively.}
 
 \item{nsim}{a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.}
-
-\item{dist}{a character, if dist="sim", a Monte Carlo simulation is used for calculating exact p-value. If dist="adj", the Bonferroni-adjusted p-value is calculated. The default is "sim".}
 }
 \value{
 A list of consisting of:
 
-pvalue, an exact Monte Carlo p-value.
+pvalue.exact, an exact Monte Carlo p-value is calculated.
+
+pvalue.appro, the Bonferroni-adjusted p-value is calculated.
 
 nsim, the number of Monte Carlo samples that are used to estimate p-value.
 
@@ -36,10 +36,9 @@ Suppose that \eqn{b>=a} and \eqn{b>=4}. Consider the \eqn{l}-th division of the 
  rows or columns. This test procedure is powerful for detecting interaction when the magnitude of interaction effects is heteroscedastic across the sub-tables of observations.
 }
 \examples{
-\dontrun{
 data(IDCP)
-KKSA.test(IDCP, nsim = 10000, dist = "sim")
-}
+KKSA.test(IDCP, nsim = 1000)
+
 }
 \references{
 Kharrati-Kopaei, M., Sadooghi-Alvandi, S.M. (2007). A New Method for

@@ -15,9 +15,9 @@ Piepho.test(x, nsim = 10000)
 \value{
 A list of consisting of:
 
-exact.pvalue, an exact Monte Carlo p-value.
+pvalue.exact, an exact Monte Carlo p-value.
 
-asy.pvalue, an asymptotic p-value.
+pvalue.appro, an asymptotic p-value.
 
 nsim, the number of Monte Carlo samples that are used to estimate p-value.
 
@@ -25,7 +25,7 @@ statistic, the value of test statistic.
 }
 \description{
 This function tests the interaction based on a statistic proposed by Piepho (1994).
-This function reports Piepho's test statistic, and an asymptotic and Monte Carlo p-values.
+This function reports Piepho's test statistic, and the asymptotic and Monte Carlo p-values.
 }
 \details{
 Piepho (1994) proposed three test statistics.The third one is
@@ -34,10 +34,9 @@ Piepho (1994) proposed three test statistics.The third one is
  Note that Piepho’s test is powerful for detecting interactions when the Grubbs’ type estimators of variances are heterogeneous across the levels of one factor.
 }
 \examples{
-\dontrun{
 data(MVGH)
-Piepho.test(MVGH, nsim = 10000)
-}
+Piepho.test(MVGH, nsim = 1000)
+
 }
 \references{
 Piepho, H. P. (1994). On Tests for Interaction in a Nonreplicated Two-Way Layout. Australian

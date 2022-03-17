@@ -5,7 +5,6 @@
 #' @param x numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels
 #'   , respectively.
 #' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
-#' @param dist a character, if dist="sim", a Monte Carlo simulation is used for calculating exact p-value. If dist="adj", the Bonferroni-adjusted p-value is calculated. The default is "sim".
 #'
 #' @details  Suppose that \eqn{b>=a} and \eqn{b>=4}. Consider the \eqn{l}-th division of the data table into two sub-tables,
 #'  obtained by putting \eqn{b_1} (\eqn{2<U+2264>b_1<U+2264>b-2}) rows in the first sub-table and the remaining \eqn{b_2} rows in the second sub-table (\eqn{b_1+b_2=a}).
@@ -16,7 +15,8 @@
 #'  rows or columns. This test procedure is powerful for detecting interaction when the magnitude of interaction effects is heteroscedastic across the sub-tables of observations.
 #'
 #' @return A list of consisting of:
-#' @return pvalue, an exact Monte Carlo p-value.
+#' @return pvalue.exact, an exact Monte Carlo p-value is calculated.
+#' @return pvalue.appro, the Bonferroni-adjusted p-value is calculated.
 #' @return nsim, the number of Monte Carlo samples that are used to estimate p-value.
 #' @return statistic, the value of test statistic.
 #'
@@ -30,12 +30,11 @@
 #'  Unreplicated Two-Way Layouts Based on Combining Multiple Interaction Tests. International Statistical Review
 #'  86(3): 469-487.
 #' @examples
-#' \dontrun{
 #' data(IDCP)
-#' KKSA.test(IDCP, nsim = 10000, dist = "sim")
-#' }
+#' KKSA.test(IDCP, nsim = 1000)
+#'
 #' @export
-KKSA.test <- function(x, nsim = 10000, dist = "sim") {
+KKSA.test <- function(x, nsim = 10000) {
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
@@ -53,36 +52,40 @@ KKSA.test <- function(x, nsim = 10000, dist = "sim") {
   if (bl < 4) {
     warning("KKSA needs at least 4 levels for a factor")
     out <- list(
-      pvalue = NA,
+      pvalue.exact = NA,
+      pvalue.appro = NA,
       nsim = nsim,
-      dist = dist,
       statistic = NA,
       data.name = DNAME,
       test = "KKSA Test")
   } else {
     cck <- 2^(bl - 1) - 1 - bl
     statistics <- kk_f(x)
-    if (dist != "sim" & dist != "adj") stop("\"dist\" parameter should be equal to \"sim\" or \"adj\".")
-    if (dist == "sim") {
-      simu <- rep(0, 0)
-      for (i in 1:nsim) {
-        simu[i] <- kk_f(matrix(rnorm(n), nrow = bl))
-      }
-      KKSA.p <- mean(statistics > simu)
-    } else if (dist == "adj") {
-      KKSA.p <- statistics * cck
-      KKSA.p <- min(1, KKSA.p)
+    simu <- rep(0, 0)
+    for (i in 1:nsim) {
+      simu[i] <- kk_f(matrix(rnorm(n), nrow = bl))
     }
+    KKSA.p <- mean(statistics > simu)
+    KKSA.p.apr <- statistics * cck
+    KKSA.p.apr <- min(1, KKSA.p.apr)
     out <- list(
-        pvalue = KKSA.p,
+        pvalue.exact = KKSA.p,
+        pvalue.appro = KKSA.p.apr,
         nsim = nsim,
-        dist = dist,
         statistic = statistics,
         data.name = DNAME,
         test = "KKSA Test"
-      )
+    )
+  }
+   #out <- list(
+   #    pvalue.exact = KKSA.p,
+   #    pvalue.appro = KKSA.p,
+   #    nsim = nsim,
+   #    dist = dist,
+   #    statistic = statistics,
+   #    data.name = DNAME,
+   #    test = "KKSA Test"
+   #  )
   }
   structure(out , class = "ITtest" ) 
-  
-}
 }

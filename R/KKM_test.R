@@ -8,9 +8,11 @@
 #' @param nc0 a numeric value, the number of Monte Carlo samples for computing the unbiasing constant \eqn{c_0}. The default value is 10000.
 #'
 #' @return A list of consisting of:
-#' @return pvalue, the calculated exact Monte Carlo p-value.
+#' @return pvalue.exact, the calculated exact Monte Carlo p-value.
+#' @return pvalue.appro, is not available for KKM.test.
 #' @return nsim, the number of Monte Carlo samples that are used to estimate p-value.
 #' @return statistic, the value of test statistic.
+#' 
 #' @author Shenavari, Z.; Haghbin, H.; Kharrati-Kopaei, M.; Najibi, S.M.
 #'
 #' @details
@@ -29,15 +31,15 @@
 #'  86(3): 469-487.
 
 #' @examples
-#' \dontrun{
 #' data(RDWW)
-#' KKM.test(RDWW, nsim = 10000, nc0 = 10000)
-#' }
+#' KKM.test(RDWW, nsim = 1000, nc0 = 10000)
+#' 
 #' @export
 KKM.test <- function(x, nsim = 1000, nc0 = 10000) {
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
+    DNAME <- deparse1(substitute(x))
     y <- c(t(x))
     tr <- ncol(x)
     bl <- nrow(x)
@@ -47,9 +49,21 @@ KKM.test <- function(x, nsim = 1000, nc0 = 10000) {
     statistics <- picf(y, kp, c0)
     simu <- PICfsim(nsim, kp, c0, n)
     PIC <- mean(statistics < simu)
-    list(pvalue = PIC,
-         nsim = nsim,
-         statistic = statistics)
+    #list(pvalue = PIC,
+    #     nsim = nsim,
+    #     statistic = statistics)
+    
   }
+  structure(
+    list(
+      pvalue.exact = PIC,
+      pvalue.appro = "NULL",
+      nsim = nsim,
+      statistic = statistics,
+      data.name = DNAME,
+      test = "KKM Test"
+    ),
+    class = "ITtest"
+  )
 }
 

@@ -7,8 +7,8 @@
 #' @param nsim a numeric value, the number of Monte Carlo samples for calculating an exact Monte Carlo p-value. The default value is 10000.
 #'
 #' @return  A list of consisting of:
-#' @return exact.pvalue, an exact Monte Carlo p-value when \eqn{p>2}. For \eqn{p=2} an exact p-value is calculated.
-#' @return asy.pvalue, a chi-squared asymptotic p-value.
+#' @return pvalue.exact, an exact Monte Carlo p-value when \eqn{p>2}. For \eqn{p=2} an exact p-value is calculated.
+#' @return pvalue.appro, a chi-squared asymptotic p-value.
 #' @return nsim, the number of Monte Carlo samples that are used to estimate p-value.
 #' @return statistic, the value of test statistic.
 #'
@@ -28,16 +28,16 @@
 #'  Unreplicated Two-Way Layouts Based on Combining Multiple Interaction Tests. International Statistical Review
 #'  86(3): 469-487.
 #' @examples
-#' \dontrun{
 #' data(MVGH)
-#' Boik.test(MVGH, nsim = 10000)
-#' }
+#' Boik.test(MVGH, nsim = 1000)
+#'
 #' @importFrom stats median pbeta rnorm
 #' @export
 Boik.test <- function(x, nsim = 10000) {
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
+    DNAME <- deparse1(substitute(x))
     tr <- ncol(x)
     bl <- nrow(x)
     n <- tr * bl
@@ -61,13 +61,17 @@ Boik.test <- function(x, nsim = 10000) {
       boik.p <- 1 - pbeta(Tb, 1, (q - 1) / 2)
       asyboik.p <- 1 - pchisq(T0, df)
     }
-    out <- list(
-      exact.pvalue = boik.p,
-      asy.pvalue = asyboik.p,
+    out<-list(
+      pvalue.exact = boik.p,
+      pvalue.appro = asyboik.p,
       nsim = nsim,
-      statistic = statistics
+      statistic = statistics,
+      data.name = DNAME,
+      test = "Boik Test"
     )
   }
-  return(out)
+  structure(
+    out, class = "ITtest"
+  )
 }
 

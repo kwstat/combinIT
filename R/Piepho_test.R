@@ -1,15 +1,15 @@
 #' Piepho (1994) test for interaction
 #'
 #' This function tests the interaction based on a statistic proposed by Piepho (1994).
-#' This function reports Piepho's test statistic, and an asymptotic and Monte Carlo p-values.
+#' This function reports Piepho's test statistic, and the asymptotic and Monte Carlo p-values.
 #'
 #' @param x numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels
 #'   , respectively.
 #' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
 #'
 #' @return A list of consisting of:
-#' @return exact.pvalue, an exact Monte Carlo p-value.
-#' @return asy.pvalue, an asymptotic p-value.
+#' @return pvalue.exact, an exact Monte Carlo p-value.
+#' @return pvalue.appro, an asymptotic p-value.
 #' @return nsim, the number of Monte Carlo samples that are used to estimate p-value.
 #' @return statistic, the value of test statistic.
 #'
@@ -30,15 +30,15 @@
 #' Grubbs, F.E. (1948). On Estimating Precision of Measuring Instruments and Product Variability. Journal of the American Statistical Association 43(242): 243-264.
 #'
 #' @examples
-#' \dontrun{
 #' data(MVGH)
-#' Piepho.test(MVGH, nsim = 10000)
-#' }
+#' Piepho.test(MVGH, nsim = 1000)
+#' 
 #' @export
 Piepho.test <- function(x, nsim = 10000) {
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
+    DNAME <- deparse1(substitute(x))
     tr <- ncol(x)
     bl <- nrow(x)
     n <- tr * bl
@@ -48,11 +48,16 @@ Piepho.test <- function(x, nsim = 10000) {
     df <- bl - 1
     asypieph <- 1 - pchisq(statistics, df = df)
     out <- list(
-      exact.pvalue = pieph,
-      asy.pvalue = asypieph,
-      nsim = nsim,
-      statistic = statistics
+        pvalue.exact = pieph,
+        pvalue.appro = asypieph,
+        nsim = nsim,
+        statistic = statistics,
+        data.name = DNAME,
+        test = "Piepho Test"
     )
-    return(out)
   }
+  structure(
+    out, class = "ITtest"
+  )
+  
 }

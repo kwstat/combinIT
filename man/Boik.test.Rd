@@ -14,9 +14,9 @@ Boik.test(x, nsim = 10000)
 \value{
 A list of consisting of:
 
-exact.pvalue, an exact Monte Carlo p-value when \eqn{p>2}. For \eqn{p=2} an exact p-value is calculated.
+pvalue.exact, an exact Monte Carlo p-value when \eqn{p>2}. For \eqn{p=2} an exact p-value is calculated.
 
-asy.pvalue, a chi-squared asymptotic p-value.
+pvalue.appro, a chi-squared asymptotic p-value.
 
 nsim, the number of Monte Carlo samples that are used to estimate p-value.
 
@@ -34,10 +34,9 @@ The LBI test statistic is \eqn{T_B93=(tr(R'R))^2/(p tr((R'R)^2))} where \eqn{p=m
   in practice, if the largest eigenvalue of \eqn{RR'} is expected to dominate the remaining eigenvalues.
 }
 \examples{
-\dontrun{
 data(MVGH)
-Boik.test(MVGH, nsim = 10000)
-}
+Boik.test(MVGH, nsim = 1000)
+
 }
 \references{
 Boik, R.J. (1993). Testing additivity in two-way classifications
