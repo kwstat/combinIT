@@ -4,7 +4,7 @@
 \alias{KKSA.test}
 \title{Kharrati-Kopaei and Sadooghi-Alvandi's (2007) test for interaction}
 \usage{
-KKSA.test(x, nsim = 10000, dist = "sim", Elapsed.time = TRUE)
+KKSA.test(x, nsim = 10000, Elapsed.time = TRUE)
 }
 \arguments{
 \item{x}{numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels
@@ -12,15 +12,14 @@ KKSA.test(x, nsim = 10000, dist = "sim", Elapsed.time = TRUE)
 
 \item{nsim}{a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.}
 
-\item{dist}{a character, if \code{dist="sim"}, a Monte Carlo simulation is used for calculating exact p-value. If dist="adj", the Bonferroni-adjusted p-value is calculated. The default is "sim".}
-
 \item{Elapsed.time}{logical: if \code{TRUE} the progress will be printed in the console.}
 }
 \value{
 An object of the class \code{ITtest}, which is a list inducing following components::
-\item{pvalue}{The calculated exact Monte Carlo p-value.}
-\item{nsim}{The number of Monte Carlo samples that are used to estimate p-value.}
-\item{statistic}{The value of test statistic.}
+\item{pvalue.exact}{The calculated exact Monte Carlo p-value.}
+\item{pvalue.appro}{The Bonferroni-adjusted p-value is calculated.}
+\item{statistic}{The value of the test statistic.}
+\item{Nsim}{The number of Monte Carlo samples that are used to estimate p-value.}
 \item{data.name}{The name of the input dataset.}
 \item{test}{The name of the test.}
 }
@@ -38,7 +37,7 @@ Suppose that \eqn{b>=a} and \eqn{b>=4}. Consider the \eqn{l}-th division of the 
 }
 \examples{
 data(IDCP)
-KKSA.test(IDCP, nsim = 1000, dist = "sim")
+KKSA.test(IDCP, nsim = 1000, Elapsed.time = FALSE)
 
 }
 \references{

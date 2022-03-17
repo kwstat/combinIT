@@ -27,6 +27,4 @@ interactionplot <- function(x, ...) {
   }
 }
 
-.onUnload <- function(libpath) {
-  library.dynam.unload("combinIT", libpath)
-}
+

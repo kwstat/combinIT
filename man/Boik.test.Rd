@@ -2,7 +2,7 @@
 % Please edit documentation in R/Boik_test.R
 \name{Boik.test}
 \alias{Boik.test}
-\title{Boik's (1993) locally best invariant (LBI) test}
+\title{Boik's (1993) Locally Best Invariant (LBI) Test}
 \usage{
 Boik.test(x, nsim = 10000)
 }
@@ -12,15 +12,13 @@ Boik.test(x, nsim = 10000)
 \item{nsim}{a numeric value, the number of Monte Carlo samples for calculating an exact Monte Carlo p-value. The default value is 10000.}
 }
 \value{
-A list of consisting of:
-
-exact.pvalue, an exact Monte Carlo p-value when \eqn{p>2}. For \eqn{p=2} an exact p-value is calculated.
-
-asy.pvalue, a chi-squared asymptotic p-value.
-
-nsim, the number of Monte Carlo samples that are used to estimate p-value.
-
-statistic, the value of test statistic.
+An object of the class \code{ITtest}, which is a list inducing following components::
+\item{pvalue.exact}{An exact Monte Carlo p-value when \eqn{p>2}. For \eqn{p=2} an exact p-value is calculated.}
+\item{pvalue.appro}{An chi-squared asymptotic p-value.}
+\item{statistic}{The value of test statistic.}
+\item{Nsim}{The number of Monte Carlo samples that are used to estimate p-value.}
+\item{data.name}{The name of the input dataset.}
+\item{test}{The name of the test.}
 }
 \description{
 This function calculates the LBI test statistic for testing the null hypothesis \eqn{H_0:} there is no interaction.
@@ -36,7 +34,6 @@ The LBI test statistic is \eqn{T_B93=(tr(R'R))^2/(p tr((R'R)^2))} where \eqn{p=m
 \examples{
 data(MVGH)
 Boik.test(MVGH, nsim = 1000)
-
 }
 \references{
 Boik, R.J. (1993). Testing additivity in two-way classifications
@@ -46,7 +43,4 @@ Boik, R.J. (1993). Testing additivity in two-way classifications
  Shenavari, Z., Kharrati-Kopaei, M. (2018). A Method for Testing Additivity in
  Unreplicated Two-Way Layouts Based on Combining Multiple Interaction Tests. International Statistical Review
  86(3): 469-487.
-}
-\author{
-Shenavari, Z.; Haghbin, H.; Kharrati-Kopaei, M.; Najibi, S.M.
 }
