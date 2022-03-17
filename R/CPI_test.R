@@ -176,8 +176,8 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000, Elapsed.time = TRUE) {
       if (min(pvalues) == PIC.pvalue) message("Significant interactions are caused by some cells")
     }
     if (bl < 4) {
-      KKSA.pvalue <- NaN
-      Kstat <- NaN
+      KKSA.pvalue <- NA
+      Kstat <- NA
     } 
     out <- list(
       nsim = nsim,
