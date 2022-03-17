@@ -37,6 +37,7 @@ Malik.test <- function(x, nsim = 10000) {
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
+    DNAME <- deparse1(substitute(x))
     tr <- ncol(x)
     bl <- nrow(x)
     n <- tr * bl
@@ -49,17 +50,20 @@ Malik.test <- function(x, nsim = 10000) {
       x0 <- matrix(rnorm(n), nrow = bl)
       y0 <- c(t(x0))
       simu[i] <- M_f(x = x0)
-      cat(paste(round(i / nsim * 100), "% completed"), "\n")
-      if (i == nsim) {
-        cat(": Done", "\n")
-      } else {
-        cat("\014", "\n")
-      }
     }
     malik <- mean(statistic < simu)
-    list(pvalue = malik,
-         nsim = nsim,
-         statistic = statistic)
+    structure(
+      list(
+        pvalue = malik,
+        nsim = nsim,
+        statistic = statistic,
+        dist = NULL,
+        data.name = DNAME,
+        test = "Malik Test"
+      ),
+      class = "ITtest"
+    )
   }
 }
+
 

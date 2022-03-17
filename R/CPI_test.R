@@ -102,12 +102,6 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000) {
         Ksimu[i] <- kh$fmin
         Hsimu[i] <- kh$fmax
       }
-      cat(paste(round(i / nsim * 100), "% completed"), "\n")
-      if (i == nsim) {
-        cat(": Done", "\n")
-      } else {
-        cat("\014", "\n")
-      }
     }
     Tb <- (1 / Bstat - 1)
     if (p == 1) {
@@ -139,23 +133,23 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000) {
     GC <- cp$GC
     Sidak <- cp$Sidak
     jacobi <- cp$jacobi
-    if (cp$Bon >= 0.05 & cp$GC >= 0.05 & cp$Sidak >= 0.05 & cp$jacobi >= 0.05) cat("No significant interaction type was detected at the 5% level\n")
+    if (cp$Bon >= 0.05 & cp$GC >= 0.05 & cp$Sidak >= 0.05 & cp$jacobi >= 0.05) message("No significant interaction type was detected at the 5% level")
     if ((cp$Bon < 0.05 | cp$Sidak < 0.05 | cp$jacobi < 0.05) & bl >= 4) {
-      cat("There are significant interaction types at the 5% level\n")
-      if (min(pvalues) == Boik.pvalue) cat("The multiplicative form of interaction migth exist\n")
-      if (min(pvalues) == piepho.pvalue) cat("The detected significant interaction might due to the Grubbs type estimators of variances are heterogeneous across the levels of one factor\n")
-      if (min(pvalues) == hiddenf.pvalue) cat("A hidden structure of intercation might exist\n")
-      if (min(pvalues) == Malik.pvalue) cat("Some cells produce large negative or positive residuals due to the significant interaction\n")
-      if (min(pvalues) == PIC.pvalue) cat("Significant interactions are caused by some cells\n")
-      if (min(pvalues) == KKSA.pvalue) cat("The magnitude of interaction effects is heteroscedastic across the sub-tables of observations\n")
+      message("There are significant interaction types at the 5% level\n")
+      if (min(pvalues) == Boik.pvalue) message("The multiplicative form of interaction migth exist")
+      if (min(pvalues) == piepho.pvalue) message("The detected significant interaction might due to the Grubbs type estimators of variances are heterogeneous across the levels of one factor")
+      if (min(pvalues) == hiddenf.pvalue) message("A hidden structure of intercation might exist")
+      if (min(pvalues) == Malik.pvalue) message("Some cells produce large negative or positive residuals due to the significant interaction")
+      if (min(pvalues) == PIC.pvalue) message("Significant interactions are caused by some cells")
+      if (min(pvalues) == KKSA.pvalue) message("The magnitude of interaction effects is heteroscedastic across the sub-tables of observations")
     }
     if ((cp$Bon < 0.05 | cp$Sidak < 0.05 | cp$jacobi < 0.05) & bl < 4) {
-      cat("There are significant interaction types at the 5% level\n")
-      if (min(pvalues) == Boik.pvalue) cat("The multiplicative form of interaction migth exist\n")
-      if (min(pvalues) == piepho.pvalue) cat("The detected significant interaction might due to the Grubbs type estimators of variances are heterogeneous across the levels of one factor\n")
-      if (min(pvalues) == hiddenf.pvalue) cat("A hidden structure of intercation might exist\n")
-      if (min(pvalues) == Malik.pvalue) cat("Some cells produce large negative or positive residuals due to the significant interaction\n")
-      if (min(pvalues) == PIC.pvalue) cat("Significant interactions are caused by some cells\n")
+      message("There are significant interaction types at the 5% level")
+      if (min(pvalues) == Boik.pvalue) message("The multiplicative form of interaction migth exist")
+      if (min(pvalues) == piepho.pvalue) message("The detected significant interaction might due to the Grubbs type estimators of variances are heterogeneous across the levels of one factor")
+      if (min(pvalues) == hiddenf.pvalue) message("A hidden structure of intercation might exist")
+      if (min(pvalues) == Malik.pvalue) message("Some cells produce large negative or positive residuals due to the significant interaction")
+      if (min(pvalues) == PIC.pvalue) message("Significant interactions are caused by some cells")
     }
     if (bl >= 4) {
       out <- list(

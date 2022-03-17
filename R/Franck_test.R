@@ -40,46 +40,43 @@
 #' @importFrom stats pchisq pf qnorm var
 #' @export
 Franck.test <- function(x, nsim = 10000, dist = "sim") {
+  DNAME <- deparse1(substitute(x))
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
-    bl <- nrow(x)
-    tr <- ncol(x)
-    n <- tr * bl
-    if (bl < tr) {
-      warning("The input data matrix is transposed")
-      x <- t(x)
-      te <- bl
-      bl <- tr
-      tr <- te
+  bl <- nrow(x)
+  tr <- ncol(x)
+  n <- tr * bl
+  if (bl < tr) {
+    warning("The input data matrix is transposed")
+    x <- t(x)
+    te <- bl
+    bl <- tr
+    tr <- te
+  }
+  cch <- 2^(bl - 1) - 1
+  statistics <- hh_f(x)
+  if (dist != "sim" & dist != "adj") stop("\"dist\" parameter should be equal to \"sim\" or \"adj\".")
+  if (dist == "sim") {
+    simu <- rep(0, 0)
+    for (i in 1:nsim) {
+      simu[i] <- hh_f(matrix(rnorm(n), nrow = bl, ncol = tr))
     }
-    cch <- 2^(bl - 1) - 1
-    statistics <- hh_f(x)
-    if (dist != "sim" & dist != "adj") stop("\"dist\" parameter should be equal to \"sim\" or \"adj\".")
-    if (dist == "sim") {
-      simu <- rep(0, 0)
-      for (i in 1:nsim) {
-        simu[i] <- hh_f(matrix(rnorm(n), nrow = bl, ncol = tr))
-        cat(paste(round(i / nsim * 100), "% completed"), "\n")
-        if (i == nsim) {
-          cat(": Done", "\n")
-        } else {
-          cat("\014", "\n")
-        }
-      }
-      hidden <- mean(statistics < simu)
-    }
-    if (dist == "adj") {
-      adjpvalue <- (1 - pf(statistics, (tr - 1), (tr - 1) * (bl - 2))) * cch
-      hidden <- min(1, adjpvalue)
-    }
-    out <- list(
-      pvalue = hidden,
-      nsim = nsim,
-      dist = dist,
-      statistic = statistics
-    )
-    return(out)
+    hidden <- mean(statistics < simu)
+  }
+  if (dist == "adj") {
+    adjpvalue <- (1 - pf(statistics, (tr - 1), (tr - 1) * (bl - 2))) * cch
+    hidden <- min(1, adjpvalue)
+  }
+  out <- list(
+    pvalue = hidden,
+    nsim = nsim,
+    dist = dist,
+    statistic = statistics,
+    data.name = DNAME,
+    test = "Franck Test"
+  )
+  structure(out , class = "ITtest" ) 
   }
 }
 
