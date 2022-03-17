@@ -34,32 +34,33 @@
 #' }
 #' @export
 Malik.test <- function(x, nsim = 10000) {
-  if (!is.matrix(x)) {
-    stop("The input should be a matrix")
-  } else {
-    tr <- ncol(x)
-    bl <- nrow(x)
-    n <- tr * bl
-    block <- gl(bl, tr)
-    treatment <- gl(tr, 1, bl * tr)
-    y <- c(t(x))
-    statistic <- M_f(x)
-    simu <- rep(0, 0)
-    for (i in 1:nsim) {
-      x0 <- matrix(rnorm(n), nrow = bl)
-      y0 <- c(t(x0))
-      simu[i] <- M_f(x = x0)
-      cat(paste(round(i / nsim * 100), "% completed"), "\n")
-      if (i == nsim) {
-        cat(": Done", "\n")
-      } else {
-        cat("\014", "\n")
-      }
-    }
-    malik <- mean(statistic < simu)
-    list(pvalue = malik,
-         nsim = nsim,
-         statistic = statistic)
+  stopifnot(is.matrix(x))
+  DNAME <- deparse1(substitute(x))
+  tr <- ncol(x)
+  bl <- nrow(x)
+  n <- tr * bl
+  block <- gl(bl, tr)
+  treatment <- gl(tr, 1, bl * tr)
+  y <- c(t(x))
+  statistic <- M_f(x)
+  simu <- rep(0, 0)
+  for (i in 1:nsim) {
+    x0 <- matrix(rnorm(n), nrow = bl)
+    y0 <- c(t(x0))
+    simu[i] <- M_f(x = x0)
   }
+  malik <- mean(statistic < simu)
+  structure(
+    list(
+      pvalue = malik,
+      nsim = nsim,
+      statistic = statistic,
+      dist = NULL,
+      data.name = DNAME,
+      test = "Malik Test"
+    ),
+    class = "comtest"
+  )
 }
+
 

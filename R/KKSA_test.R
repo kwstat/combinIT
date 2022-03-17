@@ -36,49 +36,49 @@
 #' }
 #' @export
 KKSA.test <- function(x, nsim = 10000, dist = "sim") {
-  if (!is.matrix(x)) {
-    stop("The input should be a matrix")
+  stopifnot(is.matrix(x))
+  DNAME <- deparse1(substitute(x))
+  bl <- nrow(x)
+  tr <- ncol(x)
+  n <- tr * bl
+  if (bl < tr) {
+    warning("The input data matrix is trasposed")
+    x <- t(x)
+    te <- bl
+    bl <- tr
+    tr <- te
+  }
+  if (bl < 4) {
+    warning("KKSA needs at least 4 levels for a factor")
+    out <- list(
+      pvalue = NA,
+      nsim = nsim,
+      dist = dist,
+      statistic = NA,
+      data.name = DNAME,
+      test = "KKSA Test")
   } else {
-    bl <- nrow(x)
-    tr <- ncol(x)
-    n <- tr * bl
-    if (bl < tr) {
-      warning("The input data matrix is trasposed")
-      x <- t(x)
-      te <- bl
-      bl <- tr
-      tr <- te
-    }
-    if (bl < 4) {
-      warning("KKSA needs at least 4 levels for a factor")
-      out <- list(pvalue = NA, nsim = nsim, dist = dist, statistic = NA)
-    } else {
-      cck <- 2^(bl - 1) - 1 - bl
-      statistics <- kk_f(x)
-      if (dist != "sim" & dist != "adj") stop("\"dist\" parameter should be equal to \"sim\" or \"adj\".")
-      if (dist == "sim") {
-        simu <- rep(0, 0)
-        for (i in 1:nsim) {
-          simu[i] <- kk_f(matrix(rnorm(n), nrow = bl))
-          cat(paste(round(i / nsim * 100), "% completed"), "\n")
-          if (i == nsim) {
-            cat(": Done", "\n")
-          } else {
-            cat("\014", "\n")
-          }
-        }
-        KKSA.p <- mean(statistics > simu)
-      } else if (dist == "adj") {
-        KKSA.p <- statistics * cck
-        KKSA.p <- min(1, KKSA.p)
+    cck <- 2^(bl - 1) - 1 - bl
+    statistics <- kk_f(x)
+    if (dist != "sim" & dist != "adj") stop("\"dist\" parameter should be equal to \"sim\" or \"adj\".")
+    if (dist == "sim") {
+      simu <- rep(0, 0)
+      for (i in 1:nsim) {
+        simu[i] <- kk_f(matrix(rnorm(n), nrow = bl))
       }
-      out <- list(
+      KKSA.p <- mean(statistics > simu)
+    } else if (dist == "adj") {
+      KKSA.p <- statistics * cck
+      KKSA.p <- min(1, KKSA.p)
+    }
+    out <- list(
         pvalue = KKSA.p,
         nsim = nsim,
         dist = dist,
-        statistic = statistics
+        statistic = statistics,
+        data.name = DNAME,
+        test = "KKSA Test"
       )
-    }
-    return(out)
   }
+  structure(out , class = "comtest" ) 
 }
