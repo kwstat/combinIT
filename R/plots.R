@@ -13,10 +13,10 @@ interactionplot <- function(x, ...) {
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
-    oldpar <- par(mfcol = c(1, 2))
-    on.exit(par(oldpar))
     t <- ncol(x)
     b <- nrow(x)
+    oldpar <- par(mfcol=c(1,1))
+    on.exit(par(oldpar))
     par(mfcol = c(1, 2))
     matplot(t(x), type = "b", xaxt = "n", ylab = "Observed values", xlab = "Factor1(column)", lty = 1:b, ...)
     axis(1, at = 1:t, labels = 1:t, cex.axis = 1)
