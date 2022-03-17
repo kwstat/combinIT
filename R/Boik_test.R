@@ -62,7 +62,8 @@ Boik.test <- function(x, nsim = 10000) {
       asyboik.p <- 1 - pchisq(T0, df)
     }
     out <- list(
-      exact.pvalue = boik.p, asy.pvalue = asyboik.p,
+      exact.pvalue = boik.p,
+      asy.pvalue = asyboik.p,
       nsim = nsim,
       statistic = statistics
     )

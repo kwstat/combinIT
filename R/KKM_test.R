@@ -47,7 +47,9 @@ KKM.test <- function(x, nsim = 1000, nc0 = 10000) {
     statistics <- picf(y, kp, c0)
     simu <- PICfsim(nsim, kp, c0, n)
     PIC <- mean(statistics < simu)
-    list(pvalue = PIC, nsim = nsim, statistic = statistics)
+    list(pvalue = PIC,
+         nsim = nsim,
+         statistic = statistics)
   }
 }
 

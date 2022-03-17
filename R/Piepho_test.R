@@ -48,7 +48,8 @@ Piepho.test <- function(x, nsim = 10000) {
     df <- bl - 1
     asypieph <- 1 - pchisq(statistics, df = df)
     out <- list(
-      exact.pvalue = pieph, asy.pvalue = asypieph,
+      exact.pvalue = pieph,
+      asy.pvalue = asypieph,
       nsim = nsim,
       statistic = statistics
     )

@@ -75,7 +75,8 @@ Franck.test <- function(x, nsim = 10000, dist = "sim") {
     }
     out <- list(
       pvalue = hidden,
-      nsim = nsim, dist = dist,
+      nsim = nsim,
+      dist = dist,
       statistic = statistics
     )
     return(out)

@@ -57,7 +57,9 @@ Malik.test <- function(x, nsim = 10000) {
       }
     }
     malik <- mean(statistic < simu)
-    list(pvalue = malik, nsim = nsim, statistic = statistic)
+    list(pvalue = malik,
+         nsim = nsim,
+         statistic = statistic)
   }
 }
 

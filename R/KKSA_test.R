@@ -74,7 +74,8 @@ KKSA.test <- function(x, nsim = 10000, dist = "sim") {
       }
       out <- list(
         pvalue = KKSA.p,
-        nsim = nsim, dist = dist,
+        nsim = nsim,
+        dist = dist,
         statistic = statistics
       )
     }
