@@ -51,7 +51,7 @@ If rows number of data matrix, \eqn{b}, is less than it's columns number, \eqn{a
 }
 \examples{
 data(RDWW)
-CPI.test(RDWW, nsim = 1000, nc0 = 1000, Elapsed.time = FALSE)
+CPI.test(RDWW, nsim = 1000, Elapsed.time = FALSE)
 
 }
 \references{

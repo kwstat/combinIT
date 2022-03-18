@@ -43,7 +43,7 @@
 #'  
 #' @examples
 #' data(RDWW)
-#' CPI.test(RDWW, nsim = 1000, nc0 = 1000, Elapsed.time = FALSE)
+#' CPI.test(RDWW, nsim = 1000, Elapsed.time = FALSE)
 #' 
 #' @importFrom stats pchisq pf qnorm var
 #' @export
