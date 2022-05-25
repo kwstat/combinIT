@@ -6,7 +6,7 @@
 #'   , respectively.
 #' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
 #' @param Elapsed.time logical: if \code{TRUE} the progress will be printed in the console.
-#' @details  Suppose that \eqn{a \le b} and \eqn{a \ge 4}. Consider the \eqn{l}-th division of the data table into two sub-tables,
+#' @details  Suppose that \eqn{a \le 3} and \eqn{a \ge 4}. Consider the \eqn{l}-th division of the data table into two sub-tables,
 #'  obtained by putting \eqn{b_1} (\eqn{2<U+2264>b_1<U+2264>b-2}) rows in the first sub-table and the remaining \eqn{b_2} rows in the second sub-table (\eqn{b_1+b_2=a}).
 #'  Let RSS1 and RSS2 denote the residual sum of squares for these two sub-tables, respectively. For a particular division \eqn{l}, let \eqn{F_l=max<U+2061>(F_l,1/F_l }
 #'  where \eqn{F_l=(b_2-1)RSS1/((b_1-1)RSS2)} and let \eqn{P_l} denote the corresponding p-value.
