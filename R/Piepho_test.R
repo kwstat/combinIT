@@ -1,9 +1,9 @@
-#' Piepho (1994) Test for Interaction
+#' Piepho's (1994) Test for Interaction
 #'
 #' This function tests the interaction based on a statistic proposed by Piepho (1994).
-#' This function reports Piepho's test statistic, and the asymptotic and Monte Carlo p-values.
+#' This function reports Piepho's test statistic, an asymptotic p-value, and a Monte Carlo p-value.
 #'
-#' @param x numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels, respectively.
+#' @param x numeric matrix, \eqn{a \times b} data matrix where the number of row and column is corresponding to the number of factor levels.
 #' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
 #'
 #'
@@ -14,10 +14,10 @@
 #' \item{Nsim}{The number of Monte Carlo samples that are used to estimate p-value.}
 #' \item{data.name}{The name of the input dataset.}
 #' \item{test}{The name of the test.}
-#' @details Piepho (1994) proposed three test statistics.The third one is
-#'  based on Grubbs’ (1948) type estimator of variance for each level of block effect.
+#' @details Piepho (1994) proposed three test statistics. The third one is
+#'  based on Grubbs’ (1948) type estimator of variance for the level of the row factor.
 #'  This type of estimator is used in this function. Piepho (1994) proposed an asymptotic distribution of test statistic; however, we use a Monte Carlo method to calculate the p-value.
-#'  Note that Piepho’s test is powerful for detecting interactions when the Grubbs’ type estimators of variances are heterogeneous across the levels of one factor.
+#'  The Piepho test is not applicable when the row number of the data matrix is less than three. Note that Piepho’s test is powerful for detecting interactions when the Grubbs’ type estimators of variances are heterogeneous across the levels of one factor.
 #'
 #' @references Piepho, H. P. (1994). On Tests for Interaction in a Nonreplicated Two-Way Layout. Australian
 #' Journal of Statistics 36:363-369.

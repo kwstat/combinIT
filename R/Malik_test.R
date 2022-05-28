@@ -1,8 +1,8 @@
-#' Malik (2016) et al. Test for Interaction
+#' Malik's (2016) et al. Test for Interaction
 #'
-#' The Malik's (2016) et al. test statistics is calculated and the corresponding exact p-value is calculated by a Monte Carlo simulation.
+#' The Malik's (2016) et al. test statistic is calculated and the corresponding exact p-value is calculated by a Monte Carlo simulation.
 #'
-#' @param x numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels, respectively.
+#' @param x numeric matrix, \eqn{a \times b} data matrix where the number of row and column is corresponding to the number of factor levels.
 #' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
 #' @param Elapsed.time logical: if \code{TRUE} the progress will be printed in the console.
 #' 
@@ -18,7 +18,7 @@
 #'  Malik (2016) et al. proposed to partition
 #'  the residuals into three clusters using a suitable clustering method like “k-means clustering”.
 #'  The hypothesis of no interaction can be interpreted as the effect of the three
-#'  clusters are equal. Therefore, the result of the test may depend on the method of clustering. In this package, clustering is done by 'kmeans' function in 'RcppArmadillo'. The 'speed_mode' parameter on the kmeans clustering was set as 'static_subset'.
+#'  clusters are equal. Therefore, the result of the test may depend on the method of clustering. In this package, clustering is done by \code{kmeans} function in \code{RcppArmadillo}. The \code{speed_mode} parameter on the kmeans clustering was set as \code{static_subset}.
 #'  Note that the Malik's et al. test performs well when there are some outliers in the residuals; i.e. some cells produce large negative or positive residuals due to the significant interaction.
 #'  Further, the distribution of the Malik's et al. test statistic is not known under additivity and the corresponding p-value is calculated by a Monte Carlo simulation.
 

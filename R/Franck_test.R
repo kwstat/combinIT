@@ -1,18 +1,16 @@
 #' Franck's (2013) et al. Test for Interaction
 #'
-#' This function calculates Franck (2013) et al. test statistic,ACMIF, and corresponding p-value.
+#' This function calculates Franck's (2013) et al. test statistic,ACMIF, and corresponding p-value.
 #'
-#' @param x numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels
-#'   , respectively.
+#' @param x numeric matrix, \eqn{a \times b} data matrix where the number of row and column is corresponding to the number of factor levels.
 #' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
 #' @param Elapsed.time logical: if \code{TRUE} the progress will be printed in the console.
 #'
 #' @details Franck et al. (2013) derived a test statistic based on the “hidden additivity” structure.
 #'  They defined this structure as “the levels of one factor belong in two or more groups such that within each group the effects of the two factors are additive but the groups may interact with the ungrouped factor”.
-#'  To detect hidden additivity, Franck et al. (2013) divided the table of data into two sub-tables and an interaction F-test was developed.
+#'  To detect hidden additivity, Franck et al. (2013) divided the table of data into two sub-tables (based on the rows of the data matrix) and an interaction F-test was developed.
 #'  Then, they performed a search over all possible configures of data and used the maximum of the interaction F-test as a test statistic. The hypothesis of no interaction is rejected when the maximum interaction F-test is large.
-#'  Note that, if rows number, \eqn{b}, of data matrix is less than the columns number, \eqn{a},
-#'  the data matrix is transposed. Note that the this test method is powerful when there is a hidden additivity structure in the data set.
+#'  Note that the number of rows should be greater than two. This test is powerful when there is a hidden additivity structure in the data set.
 #'
 #'
 #' @return An object of the class \code{ITtest}, which is a list inducing following components::
@@ -49,13 +47,13 @@ Franck.test <- function(x, nsim = 10000, Elapsed.time = TRUE) {
     bl <- nrow(x)
     tr <- ncol(x)
     n <- tr * bl
-    if (bl < tr) {
-      warning("The input data matrix is transposed")
-      x <- t(x)
-      te <- bl
-      bl <- tr
-      tr <- te
-    }
+    #if (bl < tr) {
+    #  warning("The input data matrix is transposed")
+    #  x <- t(x)
+    #  te <- bl
+    #  bl <- tr
+    #  tr <- te
+    #}
     cch <- 2^(bl - 1) - 1
     statistics <- hh_f(x)
     simu <- rep(0, 0)

@@ -1,9 +1,9 @@
 #' Kharrati-Kopaei and Miller's (2016) Test for Interaction
 #'
-#' This function calculates the test statistic for testing \eqn{H_0:} no interaction and corresponding Monte Carlo p-value
+#' This function calculates the test statistic for testing \eqn{H_0:} There is no interaction, and corresponding Monte Carlo p-value
 #' proposed by Kharrati-Kopaei and Miller(2016).
 #'
-#' @param x a numerix matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels, respectively.
+#' @param x a numeric matrix, \eqn{a \times b} data matrix where the number of row and column is corresponding to the number of factor levels.
 #' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
 #' @param nc0 a numeric value, the number of Monte Carlo samples for computing the unbiasing constant \eqn{c_0}. The default value is 10000.
 #'
@@ -19,7 +19,7 @@
 #' Kharrati-Kopaei and Miller(2016) proposed a test statistic for testing interaction
 #' based on inspecting all pairwise interaction contrasts (PIC).
 #' This test depends on an unbiasing constant \eqn{c_0} that is calculated by a Monte Carlo simulation.
-#' In addition, the null distribution of the test statistic is calculated by a Monte Carlo simulation.
+#' In addition, the null distribution of the test statistic is calculated by a Monte Carlo simulation. This test is not applicable when both \eqn{a} and \eqn{b} are less than three.
 #' Note that this test procedure is powerful when significant interactions are caused by some data cells.
 #'
 #' @references Kharrati-Kopaei, M., Miller, A. (2016). A method for testing interaction in

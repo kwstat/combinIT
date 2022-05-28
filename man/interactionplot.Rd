@@ -7,7 +7,7 @@
 interactionplot(x, ...)
 }
 \arguments{
-\item{x}{numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels, respectively.}
+\item{x}{numeric matrix, \eqn{a \times b} data matrix where the number of row and column is corresponding to the number of factor levels.}
 
 \item{...}{plot parameters}
 }

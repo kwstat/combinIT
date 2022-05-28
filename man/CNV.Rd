@@ -19,7 +19,7 @@ A matrix with six rows (Dogs) and two columns (Tissues):
 \description{
 This data set are about copy number variation (CNV) between normal and tumor tissue samples among six dogs.
 In this data set, the value of CNV was measured as a signal intensity obtained from a comparative genomic hybridization (CGH) array,
-with higher signals corresponding to higher copy number; see Franck et al. (2013) and Franck and Osborne (2016).
+with higher signals corresponding to higher copy numbers; see Franck et al. (2013) and Franck and Osborne (2016).
 The data set was selected from 5899 sets (the full data have been made available as the supplementary material of the paper published by Franck et al. (2013)).
 The test of interaction between the dogs and tisuues is of interest.
 }

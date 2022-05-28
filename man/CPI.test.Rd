@@ -4,14 +4,16 @@
 \alias{CPI.test}
 \title{Combined P-value Interaction Test}
 \usage{
-CPI.test(x, nsim = 10000, nc0 = 10000, Elapsed.time = TRUE)
+CPI.test(x, nsim = 10000, nc0 = 10000, opvalue = NULL, Elapsed.time = TRUE)
 }
 \arguments{
-\item{x}{numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels, respectively.}
+\item{x}{numeric matrix, \eqn{a \times b} data matrix where the number of row and column is corresponding to the number of factor levels.}
 
 \item{nsim}{a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.}
 
-\item{nc0}{a numeric value, the number of Monte Carlo samples for computing the unbiasing constant \eqn{c_0}. The default value is 10000.}
+\item{nc0}{a numeric value, the number of Monte Carlo samples for computing the unbiasing constant \eqn{c_0} in \code{KKM.test}. The default value is 10000.}
+
+\item{opvalue}{a numeric vector, other p-values (in addition to the six considered p-values) that are going to combine.}
 
 \item{Elapsed.time}{logical: if \code{TRUE} the progress will be printed in the console.}
 }
@@ -23,7 +25,7 @@ An object of the class \code{combtest}, which is a list inducing following compo
 \item{Boik.pvalue}{The p-value of Boik's (1993) test.}
 \item{Boik.Stat}{The value of Boik's (1993) test statistic.}
 \item{Malik.pvalue}{The p-value of Malik's (2016) et al. test.}
-\item{alik.Stat}{The value of Malik's (2016) et al. test statistic.}
+\item{Malik.Stat}{The value of Malik's (2016) et al. test statistic.}
 \item{KKM.pvalue}{The p-value of Kharrati-Kopaei and Miller's (2016) test.}
 \item{KKM.Stat}{The value of Kharrati-Kopaei and Miller's (2016) test statistic.}
 \item{KKSA.pvalue}{The p-value of Kharrati-Kopaei and Sadooghi-Alvandi's (2007) test.}
@@ -40,14 +42,12 @@ An object of the class \code{combtest}, which is a list inducing following compo
 \description{
 This function reports the p-values of the tests for non-additivity developed by Boik (1993), Piepho (1994),
 Kharrati-Kopaei and Sadooghi-Alvandi (2007), Franck et al. (2013), Malik et al. (2016)
-and Kharrati-Kopaei and Miller (2016). In addition, it combines the p-values of these six methods into a single p-value as a test statistic for testing interaction.
+and Kharrati-Kopaei and Miller (2016). In addition, it combines the p-values of these six tests (and some other available p-values) into a single p-value as a test statistic for testing interaction.
 There are four combination methods:
-Bonferroni, Sidak, Jacobi expansion, and Gaussian Copula. The results of these four combinations are also reported. If there is a significant interaction, the type of interaction is also provided.
+Bonferroni, Sidak, Jacobi expansion, and Gaussian Copula. The results of these four combined tests are also reported. If there is a significant interaction, the type of interaction is also provided.
 }
 \details{
-If rows number of data matrix, \eqn{b}, is less than it's columns number, \eqn{a},
- the data matrix is transposed. In addition, this test procedure requires that the data matrix has at least two
- rows or columns. Note that the KKSA.test is not applicable when both \eqn{a} and \eqn{b} are less than 4. This function needs "mvtnorm" package.
+The data matrix is divided based on the row of the data matrix for \code{KKSA.test} and \code{Franck.test}. Note that \code{KKSA.test} is not applicable when \eqn{a} is less than four. \code{Franck.test} and \code{Piepho.test} are not applicable when \eqn{a} is less than three. This function needs \code{mvtnorm} package.
 }
 \examples{
 data(RDWW)

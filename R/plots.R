@@ -1,6 +1,6 @@
 #' Interaction Plot
 #'
-#' @param x numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels, respectively.
+#' @param x numeric matrix, \eqn{a \times b} data matrix where the number of row and column is corresponding to the number of factor levels.
 #' @param ... plot parameters
 #' @return  An interaction plot for input
 #' @author Shenavari, Z.; Haghbin, H.; Kharrati-Kopaei, M.; Najibi, S.M.
@@ -17,12 +17,13 @@ interactionplot <- function(x, ...) {
     b <- nrow(x)
     oldpar <- par(mfcol=c(1,1))
     on.exit(par(oldpar))
-    par(mfcol = c(1, 2))
-    matplot(t(x), type = "b", xaxt = "n", ylab = "Observed values", xlab = "Factor1(column)", lty = 1:b, ...)
+    par(mfcol = c(1, 2), mai = c(0.45, 0.38, 0.10, 0.54), tck = 0.01, mgp = c(1, 0, 0), xpd = TRUE)
+    matplot(t(x), type = "b", xaxt = "n", ylab = "Observed values", xlab = "Factor1(column)", col = "black", lty = 1:b, ...)
     axis(1, at = 1:t, labels = 1:t, cex.axis = 1)
-    legend("topright", rep(paste0("row", 1:b)), lty = 1:b, bty = "n", cex = 0.7)
-    matplot(x, type = "b", xaxt = "n", ylab = "", xlab = "Factor2(row)", lty = 1:t, ...)
-    legend("topright", rep(paste0("col", 1:t)), lty = 1:t, bty = "n", cex = 0.7)
+    legend(t+0.02,max(x), rep(paste0("row", 1:b)), lty = 1:b, bty = "n", cex = 0.60)
+    par(mai = c(0.45, 0.25, 0.10, 0.54), tck = 0.01, mgp = c(1, 0, 0), xpd = TRUE)
+    matplot(x, type = "b", xaxt = "n", ylab = "", xlab = "Factor2(row)", col = "black", lty = 1:t, ...)
+    legend(b+0.05,max(x), rep(paste0("col", 1:t)), lty = 1:t, bty = "n", cex = 0.60)
     axis(1, at = 1:b, labels = 1:b, cex.axis = 1)
   }
 }

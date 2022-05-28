@@ -7,8 +7,7 @@
 KKSA.test(x, nsim = 10000, Elapsed.time = TRUE)
 }
 \arguments{
-\item{x}{numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels
-, respectively.}
+\item{x}{numeric matrix, \eqn{a \times b} data matrix where the number of row and column is corresponding to the number of factor levels.}
 
 \item{nsim}{a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.}
 
@@ -27,13 +26,13 @@ An object of the class \code{ITtest}, which is a list inducing following compone
 This function calculates Kharrati-Kopaei and Sadooghi-Alvandi's test statistic and corresponding p-value for testing interaction.
 }
 \details{
-Suppose that \eqn{a \le 7} and \eqn{a \ge 4}. Consider the \eqn{l}-th division of the data table into two sub-tables,
- obtained by putting \eqn{b_1} (\eqn{2< b_1<U+2264>b-2}) rows in the first sub-table and the remaining \eqn{b_2} rows in the second sub-table (\eqn{b_1+b_2=a}).
- Let RSS1 and RSS2 denote the residual sum of squares for these two sub-tables, respectively. For a particular division \eqn{l}, let \eqn{F_l=max<U+2061>(F_l,1/F_l }
- where \eqn{F_l=(b_2-1)RSS1/((b_1-1)RSS2)} and let \eqn{P_l} denote the corresponding p-value.
- Kharrati-Kopaei and Sadooghi-Alvandi (2007) proposed their test statistic as the minimum value of \eqn{P_l} over \eqn{l=1,…,2^(b-1)-b-1} all possible divisions of the table.
- Note that if the rows number, \eqn{b}, of data matrix is less than the columns number, \eqn{a}, the data matrix is transposed. In addition, this method of testing requires that the data matrix has more than three
- rows or columns. This test procedure is powerful for detecting interaction when the magnitude of interaction effects is heteroscedastic across the sub-tables of observations.
+Suppose that \eqn{a \ge b} and \eqn{b \ge 4}. Consider the \eqn{l}-th division of the data table into two sub-tables,
+ obtained by putting \eqn{a_1} (\eqn{2 \le a_1 \le a-2}) rows in the first sub-table and the remaining \eqn{a_2} rows in the second sub-table (\eqn{a_1+a_2=a}).
+ Let RSS1 and RSS2 denote the residual sum of squares for these two sub-tables, respectively. For a particular division \eqn{l}, let \eqn{F_l=max\{F_l,1/F_l\}}
+ where \eqn{F_l=(a_2-1)RSS1/((a_1-1)RSS2)} and let \eqn{P_l} denote the corresponding p-value.
+ Kharrati-Kopaei and Sadooghi-Alvandi (2007) proposed their test statistic as the minimum value of \eqn{P_l} over \eqn{l=1,…,2^{(a-1)}-a-1} all possible divisions of the table.
+ In addition, this method of testing requires that the data matrix has more than three
+ rows. This test procedure is powerful for detecting interaction when the magnitude of interaction effects is heteroscedastic across the sub-tables of observations.
 }
 \examples{
 data(IDCP)

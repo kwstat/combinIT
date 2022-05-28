@@ -2,18 +2,17 @@
 #'
 #' This function reports the p-values of the tests for non-additivity developed by Boik (1993), Piepho (1994),
 #' Kharrati-Kopaei and Sadooghi-Alvandi (2007), Franck et al. (2013), Malik et al. (2016)
-#' and Kharrati-Kopaei and Miller (2016). In addition, it combines the p-values of these six methods into a single p-value as a test statistic for testing interaction.
+#' and Kharrati-Kopaei and Miller (2016). In addition, it combines the p-values of these six tests (and some other available p-values) into a single p-value as a test statistic for testing interaction.
 #' There are four combination methods:
-#' Bonferroni, Sidak, Jacobi expansion, and Gaussian Copula. The results of these four combinations are also reported. If there is a significant interaction, the type of interaction is also provided.
+#' Bonferroni, Sidak, Jacobi expansion, and Gaussian Copula. The results of these four combined tests are also reported. If there is a significant interaction, the type of interaction is also provided.
 #'
-#' @param x numeric matrix, \eqn{b \times a} data matrix where the number of rows and columns are corresponding to the block and treatment levels, respectively.
+#' @param x numeric matrix, \eqn{a \times b} data matrix where the number of row and column is corresponding to the number of factor levels.
 #' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
-#' @param nc0 a numeric value, the number of Monte Carlo samples for computing the unbiasing constant \eqn{c_0}. The default value is 10000.
+#' @param nc0 a numeric value, the number of Monte Carlo samples for computing the unbiasing constant \eqn{c_0} in \code{KKM.test}. The default value is 10000.
+#' @param opvalue a numeric vector, other p-values (in addition to the six considered p-values) that are going to combine.
 #' @param Elapsed.time logical: if \code{TRUE} the progress will be printed in the console.
 #'
-#' @details If rows number of data matrix, \eqn{b}, is less than it's columns number, \eqn{a},
-#'  the data matrix is transposed. In addition, this test procedure requires that the data matrix has at least two
-#'  rows or columns. Note that the KKSA.test is not applicable when both \eqn{a} and \eqn{b} are less than 4. This function needs "mvtnorm" package.
+#' @details The data matrix is divided based on the row of the data matrix for \code{KKSA.test} and \code{Franck.test}. Note that \code{KKSA.test} is not applicable when \eqn{a} is less than four. \code{Franck.test} and \code{Piepho.test} are not applicable when \eqn{a} is less than three. This function needs \code{mvtnorm} package.
 #'
 #' @return An object of the class \code{combtest}, which is a list inducing following components::
 #' \item{nsim}{The number of Monte Carlo samples that are used to estimate p-value.}
@@ -22,7 +21,7 @@
 #' \item{Boik.pvalue}{The p-value of Boik's (1993) test.}
 #' \item{Boik.Stat}{The value of Boik's (1993) test statistic.}
 #' \item{Malik.pvalue}{The p-value of Malik's (2016) et al. test.}
-#' \item{alik.Stat}{The value of Malik's (2016) et al. test statistic.}
+#' \item{Malik.Stat}{The value of Malik's (2016) et al. test statistic.}
 #' \item{KKM.pvalue}{The p-value of Kharrati-Kopaei and Miller's (2016) test.}
 #' \item{KKM.Stat}{The value of Kharrati-Kopaei and Miller's (2016) test statistic.}
 #' \item{KKSA.pvalue}{The p-value of Kharrati-Kopaei and Sadooghi-Alvandi's (2007) test.}
@@ -47,7 +46,7 @@
 #' 
 #' @importFrom stats pchisq pf qnorm var
 #' @export
-CPI.test <- function(x, nsim = 10000, nc0 = 10000, Elapsed.time = TRUE) {
+CPI.test <- function(x, nsim = 10000, nc0 = 10000, opvalue = NULL, Elapsed.time = TRUE) {
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
@@ -55,15 +54,18 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000, Elapsed.time = TRUE) {
     y <- c(t(x))
     tr <- ncol(x)
     bl <- nrow(x)
-    if (bl < tr) {
-      warning("The input matrix data was transposed")
-      x <- t(x)
-      te <- bl
-      bl <- tr
-      tr <- te
-    }
+    #if (bl < tr) {
+    #  warning("The input matrix data was transposed")
+    #  x <- t(x)
+    #  te <- bl
+    #  bl <- tr
+    #  tr <- te
+    #}
     if (bl <= 3) {
-      warning("KKSA.test needs at least 4 levels for a factor. For combining pvalues, the pvalue of KKSA method is not considered.")
+      warning("KKSA.test needs at least 4 levels for the row factor. For combining pvalues, the pvalue of KKSA method is not considered.")
+    }
+    if (bl <= 2) {
+      warning("Franck.test and Piepho.test need at least 3 levels for the row factor. For combining pvalues, the pvalue of Franck and Piepho methods are not considered.")
     }
     n <- tr * bl
     block <- gl(bl, tr)
@@ -83,7 +85,8 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000, Elapsed.time = TRUE) {
     pstat <- picf(y, kp, c0)
     if (bl == 3) {
       Hstat <- hh_f(x)
-    } else {
+    }
+    if (bl >3) {
       Ksimu <- rep(0, 0)
       kh <- kh_f(x)
       Kstat <- kh$fmin
@@ -102,7 +105,8 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000, Elapsed.time = TRUE) {
         psimu[i] <- picf(y, kp, c0)
         if (bl == 3) {
           Hsimu[i] <- hh_f(x)
-        } else {
+        }
+        if (bl > 3) {
           kh <- kh_f(x)
           Ksimu[i] <- kh$fmin
           Hsimu[i] <- kh$fmax
@@ -120,7 +124,8 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000, Elapsed.time = TRUE) {
         psimu[i] <- picf(y, kp, c0)
         if (bl == 3) {
           Hsimu[i] <- hh_f(x)
-        } else {
+        }
+        if (bl > 3) {
           kh <- kh_f(x)
           Ksimu[i] <- kh$fmin
           Hsimu[i] <- kh$fmax
@@ -137,16 +142,23 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000, Elapsed.time = TRUE) {
     if (p > 2) {
       Boik.pvalue <- mean(Bstat >= Bsimu)
     }
-    piepho.pvalue <- mean(pistat < pisimu)
+    #piepho.pvalue <- mean(pistat < pisimu)
     PIC.pvalue <- mean(pstat < psimu)
     Malik.pvalue <- mean(Mstat < Msimu)
-    hiddenf.pvalue <- mean(Hstat < Hsimu)
+    #hiddenf.pvalue <- mean(Hstat < Hsimu)
     if (bl <= 3) {
       KKSA.pvalue <- NA
     } else {
       KKSA.pvalue <- mean(Kstat > Ksimu)
     }
-    pvalues <- c(Boik.pvalue, piepho.pvalue, hiddenf.pvalue, Malik.pvalue, PIC.pvalue, KKSA.pvalue)
+    if (bl <= 2) {
+      hiddenf.pvalue <- NA
+      piepho.pvalue <- NA
+    } else {
+      hiddenf.pvalue <- mean(Hstat < Hsimu)
+      piepho.pvalue <- mean(pistat < pisimu)
+    }
+    pvalues <- c(Boik.pvalue, piepho.pvalue, hiddenf.pvalue, Malik.pvalue, PIC.pvalue, KKSA.pvalue, opvalue)
     if (bl <= 3) {
       pvalues <- pvalues[!is.na(pvalues)]
     } else {
@@ -166,19 +178,37 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000, Elapsed.time = TRUE) {
       if (min(pvalues) == Malik.pvalue) message("Some cells produce large negative or positive residuals due to the significant interaction")
       if (min(pvalues) == PIC.pvalue) message("Significant interactions are caused by some cells")
       if (min(pvalues) == KKSA.pvalue) message("The magnitude of interaction effects is heteroscedastic across the sub-tables of observations")
+      if (any(min(pvalues) == opvalue)) message("Significant interactions may be due to the other tests that their p-values are recently added")
     }
-    if ((cp$Bon < 0.05 | cp$Sidak < 0.05 | cp$jacobi < 0.05) & bl < 4) {
+    if ((cp$Bon < 0.05 | cp$Sidak < 0.05 | cp$jacobi < 0.05) & bl > 2 & bl < 4) {
       message("There are significant interaction types at the 5% level")
       if (min(pvalues) == Boik.pvalue) message("The multiplicative form of interaction migth exist")
       if (min(pvalues) == piepho.pvalue) message("The detected significant interaction might due to the Grubbs type estimators of variances are heterogeneous across the levels of one factor")
       if (min(pvalues) == hiddenf.pvalue) message("A hidden structure of intercation might exist")
       if (min(pvalues) == Malik.pvalue) message("Some cells produce large negative or positive residuals due to the significant interaction")
       if (min(pvalues) == PIC.pvalue) message("Significant interactions are caused by some cells")
+      if (any(min(pvalues) == opvalue)) message("Significant interactions may be due to the other tests that their p-values are recently added")
+    }
+    if ((cp$Bon < 0.05 | cp$Sidak < 0.05 | cp$jacobi < 0.05) & bl < 3) {
+      message("There are significant interaction types at the 5% level")
+      if (min(pvalues) == Boik.pvalue) message("The multiplicative form of interaction migth exist")
+      #if (min(pvalues) == piepho.pvalue) message("The detected significant interaction might due to the Grubbs type estimators of variances are heterogeneous across the levels of one factor")
+      #if (min(pvalues) == hiddenf.pvalue) message("A hidden structure of intercation might exist")
+      if (min(pvalues) == Malik.pvalue) message("Some cells produce large negative or positive residuals due to the significant interaction")
+      if (min(pvalues) == PIC.pvalue) message("Significant interactions are caused by some cells")
+      if (any(min(pvalues) == opvalue)) message("Significant interactions may be due to the other tests that their p-values are recently added")
     }
     if (bl < 4) {
       KKSA.pvalue <- NA
       Kstat <- NA
     } 
+    if (bl < 3) {
+      hiddenf.pvalue <- NA
+      Hstat <- NA
+      piepho.pvalue <- NA
+      pistat <-NA
+    } 
+    
     out <- list(
       nsim = nsim,
       Piepho.pvalue = piepho.pvalue,
