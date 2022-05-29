@@ -23,7 +23,7 @@ An object of the class \code{ITtest}, which is a list inducing following compone
 \item{test}{The name of the test.}
 }
 \description{
-This function calculates Franck's (2013) et al. test statistic,ACMIF, and corresponding p-value.
+This function calculates Franck's (2013) et al. test statistic, ACMIF, and corresponding p-value.
 }
 \details{
 Franck et al. (2013) derived a test statistic based on the “hidden additivity” structure.

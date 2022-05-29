@@ -27,7 +27,7 @@ This function reports Piepho's test statistic, an asymptotic p-value, and a Mont
 \details{
 Piepho (1994) proposed three test statistics. The third one is
  based on Grubbs’ (1948) type estimator of variance for the level of the row factor.
- This type of estimator is used in this function. Piepho (1994) proposed an asymptotic distribution of test statistic; however, we use a Monte Carlo method to calculate the p-value.
+ This type of estimator is used in this function. Piepho (1994) proposed an asymptotic distribution of test statistic; however, a Monte Carlo method is used to calculate the p-value.
  The Piepho test is not applicable when the row number of the data matrix is less than three. Note that Piepho’s test is powerful for detecting interactions when the Grubbs’ type estimators of variances are heterogeneous across the levels of one factor.
 }
 \examples{

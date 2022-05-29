@@ -1,6 +1,6 @@
 #' Franck's (2013) et al. Test for Interaction
 #'
-#' This function calculates Franck's (2013) et al. test statistic,ACMIF, and corresponding p-value.
+#' This function calculates Franck's (2013) et al. test statistic, ACMIF, and corresponding p-value.
 #'
 #' @param x numeric matrix, \eqn{a \times b} data matrix where the number of row and column is corresponding to the number of factor levels.
 #' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
