@@ -5,6 +5,7 @@
 #'
 #' @param x a numeric matrix, \eqn{a \times b} data matrix where the number of row and column is corresponding to the number of factor levels.
 #' @param nsim a numeric value, the number of Monte Carlo samples for calculating an exact Monte Carlo p-value. The default value is 10000.
+#' @param alpha a numeric value, the level of the test. The default value is 0.05.
 #'
 #' @return An object of the class \code{ITtest}, which is a list inducing following components::
 #' \item{pvalue.exact}{An exact Monte Carlo p-value when \eqn{p>2}. For \eqn{p=2} an exact p-value is calculated.}
@@ -13,6 +14,8 @@
 #' \item{Nsim}{The number of Monte Carlo samples that are used to estimate p-value.}
 #' \item{data.name}{The name of the input dataset.}
 #' \item{test}{The name of the test.}
+#' \item{Level}{The level of test.}
+#' \item{Result}{The result of the test at the alpha level with some descriptions on the type of significant interaction.}
 #'
 #'
 #' @details The LBI test statistic is \eqn{T_{B93}=(tr(R'R))^2/(p tr((R'R)^2))} where \eqn{p=min\{a-1,b-1\}} and \eqn{R} is the residual
@@ -35,7 +38,7 @@
 #' Boik.test(MVGH, nsim = 1000)
 #' @importFrom stats median pbeta rnorm
 #' @export
-Boik.test <- function(x, nsim = 10000) {
+Boik.test <- function(x, nsim = 10000, alpha = 0.05) {
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
@@ -63,13 +66,25 @@ Boik.test <- function(x, nsim = 10000) {
       boik.p <- 1 - pbeta(Tb, 1, (q - 1) / 2)
       asyboik.p <- 1 - pchisq(T0, df)
     }
+    R <- x - matrix(rowMeans(x), bl, tr) - matrix(colMeans(x), bl, tr, byrow = TRUE) + mean(x)
+    EV <- round(eigen(R%*%t(R))$values, 4)
+    if (boik.p < alpha) {
+      str1 <- paste("There may exist a significant multiplicative form of intercation.")
+      str2 <- paste("The eigen values of the RR' matrix are:", '\n')
+      str3 <- paste(as.character(EV), collapse = ", ")
+      str <- paste(str1, str2, str3, '\n')
+    } else {
+      str <- paste("The Boik.test could not detect any significant interaction.", '\n')
+    } 
     out <- list(
       pvalue.exact = boik.p,
       pvalue.appro = asyboik.p,
       nsim = nsim,
       statistic = statistics,
       data.name = DNAME,
-      test = "Boik Test"
+      test = "Boik Test",
+      Level = alpha,
+      Result = str
     )
   }
   structure(out, class = "ITtest")

@@ -5,7 +5,7 @@
 #'
 #' @param x numeric matrix, \eqn{a \times b} data matrix where the number of row and column is corresponding to the number of factor levels.
 #' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
-#'
+#' @param alpha a numeric value, the level of the test. The default value is 0.05.
 #'
 #' @return An object of the class \code{ITtest}, which is a list inducing following components:
 #' \item{pvalue.exact}{The calculated exact Monte Carlo p-value.}
@@ -14,6 +14,9 @@
 #' \item{Nsim}{The number of Monte Carlo samples that are used to estimate p-value.}
 #' \item{data.name}{The name of the input dataset.}
 #' \item{test}{The name of the test.}
+#' \item{Level}{The level of test.}
+#' \item{Result}{The result of the test at the alpha level with some descriptions on the type of significant interaction.}
+#' 
 #' @details Piepho (1994) proposed three test statistics. The third one is
 #'  based on Grubbs’ (1948) type estimator of variance for the level of the row factor.
 #'  This type of estimator is used in this function. Piepho (1994) proposed an asymptotic distribution of test statistic; however, a Monte Carlo method is used to calculate the p-value.
@@ -33,7 +36,7 @@
 #' Piepho.test(MVGH, nsim = 1000)
 #' 
 #' @export
-Piepho.test <- function(x, nsim = 10000) {
+Piepho.test <- function(x, nsim = 10000, alpha = 0.05) {
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
@@ -41,19 +44,47 @@ Piepho.test <- function(x, nsim = 10000) {
     tr <- ncol(x)
     bl <- nrow(x)
     n <- tr * bl
-    statistics <- piephoC(x, bl, tr)
-    simu <- Piephosim(nsim, bl, tr)
-    pieph <- mean(statistics < simu)
-    df <- bl - 1
-    asypieph <- 1 - pchisq(statistics, df = df)
-    out <- list(
-      pvalue.exact = pieph,
-      pvalue.appro = asypieph,
-      nsim = nsim,
-      statistic = statistics,
-      data.name = DNAME,
-      test = "Piepho Test"
-    )
+    if (bl < 3) {
+      warning("Piepho.test needs at least 3 levels for the row factor")
+      str <- "This test is not applicable when the row number is less than three. You may use the transpose of the data matrix if the number of column is greater than two."
+      out <- list(
+        pvalue.exact = NA,
+        pvalue.appro = NA,
+        nsim = nsim,
+        statistic = NA,
+        data.name = DNAME,
+        test = "Piepho Test",
+        Level = alpha,
+        Result = str
+      )
+    } else {
+      statistics <- piephoC(x, bl, tr)
+      simu <- Piephosim(nsim, bl, tr)
+      pieph <- mean(statistics < simu)
+      df <- bl - 1
+      asypieph <- 1 - pchisq(statistics, df = df)
+      R <- x - matrix(rowMeans(x), bl, tr) - matrix(colMeans(x), bl, tr, byrow = TRUE) + mean(x)
+      W <- rowSums(R ^ 2)
+      sigmahat <- (bl * (bl - 1) * W - sum(W))/((bl - 1) * (bl - 2) * (tr - 1))
+      if (pieph < alpha) {
+        str1 <- paste("There may exist a significant intercation. The Grubbs' estimtors of the row variances are heterogeneous.")
+        str2 <- paste("The Grubbs' variance estimators are:", '\n')
+        Grubbs <- paste(round(sigmahat, 4), collapse = ", ")
+        str <- paste(str1, str2, Grubbs, '\n')
+      } else {
+        str <- paste("The Piepho.test could not detect any significant interaction.", '\n')
+      } 
+      out <- list(
+         pvalue.exact = pieph,
+         pvalue.appro = asypieph,
+         nsim = nsim,
+         statistic = statistics,
+         data.name = DNAME,
+         test = "Piepho Test",
+         Level = alpha,
+         Result = str
+      )
+    }
   }
   structure(out, class = "ITtest")
 }

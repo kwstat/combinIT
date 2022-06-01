@@ -4,12 +4,14 @@
 \alias{KKM.test}
 \title{Kharrati-Kopaei and Miller's (2016) Test for Interaction}
 \usage{
-KKM.test(x, nsim = 1000, nc0 = 10000)
+KKM.test(x, nsim = 1000, alpha = 0.05, nc0 = 10000)
 }
 \arguments{
 \item{x}{a numeric matrix, \eqn{a \times b} data matrix where the number of row and column is corresponding to the number of factor levels.}
 
 \item{nsim}{a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.}
+
+\item{alpha}{a numeric value, the level of the test. The default value is 0.05.}
 
 \item{nc0}{a numeric value, the number of Monte Carlo samples for computing the unbiasing constant \eqn{c_0}. The default value is 10000.}
 }
@@ -21,6 +23,8 @@ An object of the class \code{ITtest}, which is a list inducing following compone
 \item{statistic}{The value of the test statistic.}
 \item{data.name}{The name of the input dataset.}
 \item{test}{The name of the test.}
+\item{Level}{The level of test.}
+\item{Result}{The result of the test at the alpha level with some descriptions on the type of significant interaction.}
 }
 \description{
 This function calculates the test statistic for testing \eqn{H_0:} There is no interaction, and corresponding Monte Carlo p-value

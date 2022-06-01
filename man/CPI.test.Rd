@@ -4,7 +4,14 @@
 \alias{CPI.test}
 \title{Combined P-value Interaction Test}
 \usage{
-CPI.test(x, nsim = 10000, nc0 = 10000, opvalue = NULL, Elapsed.time = TRUE)
+CPI.test(
+  x,
+  nsim = 10000,
+  nc0 = 10000,
+  opvalue = NULL,
+  alpha = 0.05,
+  Elapsed.time = TRUE
+)
 }
 \arguments{
 \item{x}{numeric matrix, \eqn{a \times b} data matrix where the number of row and column is corresponding to the number of factor levels.}
@@ -14,6 +21,8 @@ CPI.test(x, nsim = 10000, nc0 = 10000, opvalue = NULL, Elapsed.time = TRUE)
 \item{nc0}{a numeric value, the number of Monte Carlo samples for computing the unbiasing constant \eqn{c_0} in \code{KKM.test}. The default value is 10000.}
 
 \item{opvalue}{a numeric vector, other p-values (in addition to the six considered p-values) that are going to combine.}
+
+\item{alpha}{a numeric value, the level of the test. The default value is 0.05.}
 
 \item{Elapsed.time}{logical: if \code{TRUE} the progress will be printed in the console.}
 }
@@ -38,6 +47,8 @@ An object of the class \code{combtest}, which is a list inducing following compo
 \item{GC}{The combined p-value by using the Gaussian copula.}
 \item{data.name}{The name of the input dataset.}
 \item{test}{The name of the test.}
+\item{Level}{The level of test.}
+\item{Result}{The result of the combined test at the alpha level with some descriptions on the type of significant interaction.}
 }
 \description{
 This function reports the p-values of the tests for non-additivity developed by Boik (1993), Piepho (1994),

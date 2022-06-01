@@ -4,12 +4,14 @@
 \alias{Boik.test}
 \title{Boik's (1993) Locally Best Invariant (LBI) Test}
 \usage{
-Boik.test(x, nsim = 10000)
+Boik.test(x, nsim = 10000, alpha = 0.05)
 }
 \arguments{
 \item{x}{a numeric matrix, \eqn{a \times b} data matrix where the number of row and column is corresponding to the number of factor levels.}
 
 \item{nsim}{a numeric value, the number of Monte Carlo samples for calculating an exact Monte Carlo p-value. The default value is 10000.}
+
+\item{alpha}{a numeric value, the level of the test. The default value is 0.05.}
 }
 \value{
 An object of the class \code{ITtest}, which is a list inducing following components::
@@ -19,6 +21,8 @@ An object of the class \code{ITtest}, which is a list inducing following compone
 \item{Nsim}{The number of Monte Carlo samples that are used to estimate p-value.}
 \item{data.name}{The name of the input dataset.}
 \item{test}{The name of the test.}
+\item{Level}{The level of test.}
+\item{Result}{The result of the test at the alpha level with some descriptions on the type of significant interaction.}
 }
 \description{
 This function calculates the LBI test statistic for testing the null hypothesis \eqn{H_0:} There is no interaction.
