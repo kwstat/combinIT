@@ -61,21 +61,27 @@ Boik.test <- function(x, nsim = 10000, alpha = 0.05) {
       simu <- Bfsim(nsim, bl, tr, p)
       boik.p <- mean(statistics >= simu)
       asyboik.p <- 1 - pchisq(T0, df)
+      qBoik <- quantile(simu, prob = alpha, names = FALSE)
     }
     if (p == 2) {
       boik.p <- 1 - pbeta(Tb, 1, (q - 1) / 2)
       asyboik.p <- 1 - pchisq(T0, df)
+      qBoik <- qbeta(1 - alpha, 1, (q - 1) /2)
+      qBoik <- 1/(qBoik + 1)
     }
-    R <- x - matrix(rowMeans(x), bl, tr) - matrix(colMeans(x), bl, tr, byrow = TRUE) + mean(x)
-    EV <- round(eigen(R%*%t(R))$values, 4)
     if (boik.p < alpha) {
-      str1 <- paste("There may exist a significant multiplicative form of intercation.")
-      str2 <- paste("The eigen values of the RR' matrix are:", '\n')
-      str3 <- paste(as.character(EV), collapse = ", ")
-      str <- paste(str1, str2, str3, '\n')
+      str <- Result.Boik(x, nsim = nsim, alpha = alpha, simu = simu)
     } else {
-      str <- paste("The Boik.test could not detect any significant interaction.", '\n')
-    } 
+      if (p == 2) {
+        str <- paste("The Boik.test could not detect any significant interaction.", "The exact critical value of the Boik.test is:", round(qBoik, 4), '\n')
+      }
+      if (p > 2) {
+        str <- paste("The Boik.test could not detect any significant interaction.", "The estimated critical value of the Boik.test with", nsim, "Monte Carlo samples is:", round(qBoik, 4), '\n')
+      }
+      if (p == 1) {
+        str <- paste("The Boik.test could not detect any significant interaction.", "The exact critical value of the Boik.test is:", 1, '\n')
+      }
+    }
     out <- list(
       pvalue.exact = boik.p,
       pvalue.appro = asyboik.p,

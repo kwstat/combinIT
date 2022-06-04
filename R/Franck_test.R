@@ -5,6 +5,7 @@
 #' @param x numeric matrix, \eqn{a \times b} data matrix where the number of row and column is corresponding to the number of factor levels.
 #' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
 #' @param Elapsed.time logical: if \code{TRUE} the progress will be printed in the console.
+#' @param alpha a numeric value, the level of the test. The default value is 0.05.
 #'
 #' @details Franck et al. (2013) derived a test statistic based on the “hidden additivity” structure.
 #'  They defined this structure as “the levels of one factor belong in two or more groups such that within each group the effects of the two factors are additive but the groups may interact with the ungrouped factor”.
@@ -20,7 +21,8 @@
 #' \item{Nsim}{The number of Monte Carlo samples that are used to estimate p-value.}
 #' \item{data.name}{The name of the input dataset.}
 #' \item{test}{The name of the test.}
-#'
+#' \item{Level}{The level of test.}
+#' \item{Result}{The result of the test at the alpha level with some descriptions on the type of significant interaction.}
 #'
 #' @references
 #'  Franck, C., Nielsen, D., Osborne, J.A. (2013). A method for detecting hidden additivity in two-factor unreplicated experiments.
@@ -39,7 +41,7 @@
 #' 
 #' @importFrom stats pchisq pf qnorm var
 #' @export
-Franck.test <- function(x, nsim = 10000, Elapsed.time = TRUE) {
+Franck.test <- function(x, nsim = 10000, alpha = 0.05, Elapsed.time = TRUE) {
   DNAME <- deparse1(substitute(x))
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
@@ -47,38 +49,54 @@ Franck.test <- function(x, nsim = 10000, Elapsed.time = TRUE) {
     bl <- nrow(x)
     tr <- ncol(x)
     n <- tr * bl
-    #if (bl < tr) {
-    #  warning("The input data matrix is transposed")
-    #  x <- t(x)
-    #  te <- bl
-    #  bl <- tr
-    #  tr <- te
-    #}
-    cch <- 2^(bl - 1) - 1
-    statistics <- hh_f(x)
-    simu <- rep(0, 0)
-    if (Elapsed.time) {
-      pb <- completed(nsim)
-      for (i in 1:nsim) {
-        simu[i] <- hh_f(matrix(rnorm(n), nrow = bl, ncol = tr))
-        if (i == pb$pr[pb$j]) pb <- nextc(pb, i)
-      }
+    if (bl < 3) {
+      warning("Frank.test needs at least three levels for the row factor.")
+      str <- Result.Franck(x, nsim = nsim, alpha = alpha, simu = NULL)
+      out <- list(
+        pvalue.exact = NA,
+        pvalue.appro = NA,
+        nsim = nsim,
+        statistic = NA,
+        data.name = DNAME,
+        test = "Franck Test",
+        Level = alpha,
+        Result = str
+      )
     } else {
-      for (i in 1:nsim) {
-        simu[i] <- hh_f(matrix(rnorm(n), nrow = bl, ncol = tr))
+      cch <- 2^(bl - 1) - 1
+      statistics <- hh_f(x)
+      simu <- rep(0, 0)
+      if (Elapsed.time) {
+        pb <- completed(nsim)
+        for (i in 1:nsim) {
+          simu[i] <- hh_f(matrix(rnorm(n), nrow = bl, ncol = tr))
+          if (i == pb$pr[pb$j]) pb <- nextc(pb, i)
+        }
+      } else {
+        for (i in 1:nsim) {
+          simu[i] <- hh_f(matrix(rnorm(n), nrow = bl, ncol = tr))
+        }
       }
+      hidden <- mean(statistics < simu)
+      adjpvalue <- (1 - pf(statistics, (tr - 1), (tr - 1) * (bl - 2))) * cch
+      hidden.apr <- min(1, adjpvalue)
+      qFranck <- quantile(simu, prob = 1 - alpha, names = FALSE)
+      if (hidden < alpha) {
+        str <- Result.Franck(x, nsim = nsim, alpha = alpha, simu = simu)
+      } else {
+        str <- paste("The Franck.test could not detect any significant interaction.", "The estimated critical value of the Franck.test with", nsim, "Monte Carlo samples is:", round(qFranck, 4), '\n')
+      } 
+      out <- list(
+        pvalue.exact = hidden,
+        pvalue.appro = hidden.apr,
+        nsim = nsim,
+        statistic = statistics,
+        data.name = DNAME,
+        test = "Franck Test",
+        Level = alpha,
+        Result = str
+      )
     }
-    hidden <- mean(statistics < simu)
-    adjpvalue <- (1 - pf(statistics, (tr - 1), (tr - 1) * (bl - 2))) * cch
-    hidden.apr <- min(1, adjpvalue)
-    out <- list(
-      pvalue.exact = hidden,
-      pvalue.appro = hidden.apr,
-      nsim = nsim,
-      statistic = statistics,
-      data.name = DNAME,
-      test = "Franck Test"
-    )
     structure(out, class = "ITtest")
   }
 }

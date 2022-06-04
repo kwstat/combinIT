@@ -59,13 +59,6 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000, opvalue = NULL, alpha = 0.05,
     y <- c(t(x))
     tr <- ncol(x)
     bl <- nrow(x)
-    #if (bl < tr) {
-    #  warning("The input matrix data was transposed")
-    #  x <- t(x)
-    #  te <- bl
-    #  bl <- tr
-    #  tr <- te
-    #}
     if (bl == 3) {
       warning("KKSA.test needs at least 4 levels for the row factor. For combining pvalues, the pvalue of the KKSA test is not considered.")
     }
@@ -147,14 +140,15 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000, opvalue = NULL, alpha = 0.05,
     if (p > 2) {
       Boik.pvalue <- mean(Bstat >= Bsimu)
     }
-    #piepho.pvalue <- mean(pistat < pisimu)
     PIC.pvalue <- mean(pstat < psimu)
     Malik.pvalue <- mean(Mstat < Msimu)
-    #hiddenf.pvalue <- mean(Hstat < Hsimu)
+    qMalik <- quantile(Msimu, prob = 1 - alpha, names = FALSE)
+    qBoik <- quantile(Bsimu, prob = alpha, names = FALSE)
     if (bl <= 3) {
       KKSA.pvalue <- NA
     } else {
       KKSA.pvalue <- mean(Kstat > Ksimu)
+      qKKSA <- quantile(Ksimu, prob = alpha, names = FALSE)
     }
     if (bl <= 2) {
       hiddenf.pvalue <- NA
@@ -162,6 +156,8 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000, opvalue = NULL, alpha = 0.05,
     } else {
       hiddenf.pvalue <- mean(Hstat < Hsimu)
       piepho.pvalue <- mean(pistat < pisimu)
+      qPiepho <- quantile(pisimu, prob = 1 - alpha, names = FALSE)
+      qFranck <- quantile(Hsimu, prob = 1 - alpha, names = FALSE)
     }
     pvalues <- c(Boik.pvalue, piepho.pvalue, hiddenf.pvalue, Malik.pvalue, PIC.pvalue, KKSA.pvalue, opvalue)
     if (bl <= 3) {
@@ -174,84 +170,32 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000, opvalue = NULL, alpha = 0.05,
     GC <- cp$GC
     Sidak <- cp$Sidak
     jacobi <- cp$jacobi
-    Result.Boik <- function(x) {
-      R <- x - matrix(rowMeans(x), bl, tr) - matrix(colMeans(x), bl, tr, byrow = TRUE) + mean(x)
-      EV <- round(eigen(R%*%t(R))$values, 4)
-      str1 <- paste("There may exist a significant multiplicative form of intercation.")
-      str2 <- paste("The eigen values of the RR' matrix are:", '\n')
-      str3 <- paste(as.character(EV), collapse = ", ")
-      str <- paste(str1, str2, str3, '\n')
-      str
-    }
-    Result.Piepho <- function(x) {
-      R <- x - matrix(rowMeans(x), bl, tr) - matrix(colMeans(x), bl, tr, byrow = TRUE) + mean(x)
-      W <- rowSums(R ^ 2)
-      sigmahat <- (bl * (bl - 1) * W - sum(W))/((bl - 1) * (bl - 2) * (tr - 1))
-      str1 <- paste("There may exist a significant intercation. The Grubbs' estimtors of the row variances are heterogeneous.")
-      str2 <- paste("The Grubbs' variance estimators are:", '\n')
-      Grubbs <- paste(round(sigmahat, 4), collapse = ", ")
-      str <- paste(str1, str2, Grubbs, '\n')
-    }
-    Result.KKM <- function(x, psimu) {
-      qKKM <- quantile(psimu, prob = 1 - alpha, names = FALSE)
-      y <- c(t(x))
-      Z <- abs(kp %*% y)
-      S0 <- median(Z) / c0
-      PSE <- median(Z[Z <= 5 * S0])
-      SZ <- Z[Z > qKKM * PSE]
-      Index <- (1:nrow(kp))[Z > (qKKM * PSE)]
-      M <- matrix(0, length(Index), 4)
-      count <- 0
-      for(k in Index) {
-        count <- count + 1
-        count2 <- 0
-        for (i in 1:tr) {
-          for (j in 1:bl) {
-            jj <- (i-1) *tr + j
-            if (kp[k, jj] != 0) {
-              count2 <- count2 + 1
-              M[count, count2] <- paste0(j, i)
-            }
-          }
-        }
-      }
-      C1 <- kp[Index, ]
-      sigma2hat <- t(y) %*% (ginv(C1) %*% C1) %*% y / rankMatrix(C1)[1]
-      str1 <- paste("There may exist a significant intercation and it might be caused by some cells.", '\n', "The absolute estimates of the significant pairwise interaction contrasts (PIC) and the corresponding involved cell means are:", '\n')
-      ex1 <- paste("|mu_{", M[1,1], "}-mu_{", M[1,2], "}-mu_{", M[1,3], "}+mu_{", M[1,4], "}|=", round(SZ[1], 4), '\n')
-      for (i in 2:length(Index)) {
-        ex1 <- paste(ex1, "|mu_{", M[i,1], "}-mu_{", M[i,2], "}-mu_{", M[i,3], "}+mu_{", M[i,4], "}|=", round(SZ[i], 4), '\n')
-      }
-      str2 <- ex1
-      str3 <- paste("The variance estimate under the non-additivity assumption is", round(sigma2hat, 4), "on", rankMatrix(C1)[1], "degrees of freedom", '\n')
-      str <- paste(str1, str2, str3, '\n')
-      str
-    }
+    
     if (cp$Bon >= alpha & cp$GC >= alpha & cp$Sidak >= alpha & cp$jacobi >= alpha) {
       str <- paste("No significant interaction was detected at the", paste0(100 * alpha,"%"), "level.", '\n')
     }
     if ((cp$Bon < alpha | cp$Sidak < alpha | cp$jacobi < alpha) & bl >= 4) {
-      if (min(pvalues) == Boik.pvalue) str <- Result.Boik(x)
-      if (min(pvalues) == piepho.pvalue) str <- Result.Piepho(x)
-      if (min(pvalues) == hiddenf.pvalue) str <- ("A hidden structure of intercation might exist")
-      if (min(pvalues) == Malik.pvalue) str<-("Some cells produce large negative or positive residuals due to the significant interaction")
-      if (min(pvalues) == PIC.pvalue) str <- Result.KKM(x, psimu = psimu)
-      if (min(pvalues) == KKSA.pvalue) str<-("The magnitude of interaction effects is heteroscedastic across the sub-tables of observations")
+      if (min(pvalues) == Boik.pvalue) str <- Result.Boik(x, nsim = nsim, alpha = alpha, simu = Bsimu)
+      if (min(pvalues) == piepho.pvalue) str <- Result.Piepho(x, nsim = nsim, alpha = alpha, simu = pisimu)
+      if (min(pvalues) == hiddenf.pvalue) str <- Result.Franck(x, nsim = nsim, alpha = alpha, simu = Hsimu)
+      if (min(pvalues) == Malik.pvalue) str <- Result.Malik(x, simu = Msimu, nsim =  nsim, alpha = alpha)
+      if (min(pvalues) == PIC.pvalue) str <- Result.KKM(x, nsim = nsim, simu = psimu, alpha = alpha, nc0 = nc0)
+      if (min(pvalues) == KKSA.pvalue) str <- Result.KKSA(x, nsim = nsim, alpha = alpha, simu = Ksimu)
       if (any(min(pvalues) == opvalue)) str<-paste("Significant interactions may be due to the other tests that their p-values are recently added", '\n')
     }
     if ((cp$Bon < alpha | cp$Sidak < alpha | cp$jacobi < alpha) & bl == 3) {
-      if (min(pvalues) == Boik.pvalue) str <- Result.Boik(x)
-      if (min(pvalues) == piepho.pvalue) str <- Result.Piepho(x)
-      if (min(pvalues) == hiddenf.pvalue) str<-("A hidden structure of intercation might exist")
-      if (min(pvalues) == Malik.pvalue) str<-paste("Some cells produce large negative or positive residuals due to the significant interaction", '\n')
-      if (min(pvalues) == PIC.pvalue) str <- Result.KKM(x,psimu = psimu)
+      if (min(pvalues) == Boik.pvalue) str <- Result.Boik(x, nsim = nsim, alpha = alpha, simu = Bsimu)
+      if (min(pvalues) == piepho.pvalue) str <- Result.Piepho(x, nsim = nsim, alpha = alpha, simu = pisimu)
+      if (min(pvalues) == hiddenf.pvalue) str <- Result.Franck(x, nsim = nsim, alpha = alpha, simu = Hsimu)
+      if (min(pvalues) == Malik.pvalue) str <- Result.Malik(x, simu = Msimu, nsim =  nsim, alpha = alpha)
+      if (min(pvalues) == PIC.pvalue) str <- Result.KKM(x, simu = psimu, alpha = alpha, nc0 = nc0)
       if (any(min(pvalues) == opvalue)) str<-paste("Significant interactions may be due to the other tests that their p-values are recently added", '\n')
     }
     if ((cp$Bon < alpha | cp$Sidak < alpha | cp$jacobi < alpha) & bl < 3) {
-      if (min(pvalues) == Boik.pvalue) str <- Result.Boik(x)
-      if (min(pvalues) == Malik.pvalue) str<-("Some cells produce large negative or positive residuals due to the significant interaction")
-      if (min(pvalues) == PIC.pvalue) str <- Result.KKM(x, psimu = psimu)
-      if (any(min(pvalues) == opvalue)) str<-("Significant interactions may be due to the other tests that their p-values are recently added")
+      if (min(pvalues) == Boik.pvalue) str <- Result.Boik(x, nsim = nsim, alpha = alpha, simu = Bsimu)
+      if (min(pvalues) == Malik.pvalue) str <- Result.Malik(x, simu = Msimu, nsim =  nsim, alpha = alpha)
+      if (min(pvalues) == PIC.pvalue) str <- Result.KKM(x, simu = psimu, alpha = alpha, nc0 = nc0)
+      if (any(min(pvalues) == opvalue)) str<- paste("Significant interactions may be due to the other tests that their p-values are recently added", '\n')
     }
     if (bl < 4) {
       KKSA.pvalue <- NA

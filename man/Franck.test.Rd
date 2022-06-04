@@ -4,12 +4,14 @@
 \alias{Franck.test}
 \title{Franck's (2013) et al. Test for Interaction}
 \usage{
-Franck.test(x, nsim = 10000, Elapsed.time = TRUE)
+Franck.test(x, nsim = 10000, alpha = 0.05, Elapsed.time = TRUE)
 }
 \arguments{
 \item{x}{numeric matrix, \eqn{a \times b} data matrix where the number of row and column is corresponding to the number of factor levels.}
 
 \item{nsim}{a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.}
+
+\item{alpha}{a numeric value, the level of the test. The default value is 0.05.}
 
 \item{Elapsed.time}{logical: if \code{TRUE} the progress will be printed in the console.}
 }
@@ -21,6 +23,8 @@ An object of the class \code{ITtest}, which is a list inducing following compone
 \item{Nsim}{The number of Monte Carlo samples that are used to estimate p-value.}
 \item{data.name}{The name of the input dataset.}
 \item{test}{The name of the test.}
+\item{Level}{The level of test.}
+\item{Result}{The result of the test at the alpha level with some descriptions on the type of significant interaction.}
 }
 \description{
 This function calculates Franck's (2013) et al. test statistic, ACMIF, and corresponding p-value.

@@ -5,6 +5,7 @@
 #' @param x numeric matrix, \eqn{a \times b} data matrix where the number of row and column is corresponding to the number of factor levels.
 #' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
 #' @param Elapsed.time logical: if \code{TRUE} the progress will be printed in the console.
+#' @param alpha a numeric value, the level of the test. The default value is 0.05.
 #' 
 #' @return An object of the class \code{ITtest}, which is a list inducing following components:
 #' \item{pvalue.exact}{The calculated exact Monte Carlo p-value.}
@@ -13,6 +14,8 @@
 #' \item{Nsim}{The number of Monte Carlo samples that are used to estimate p-value.}
 #' \item{data.name}{The name of the input dataset.}
 #' \item{test}{The name of the test.}
+#' \item{Level}{The level of test.}
+#' \item{Result}{The result of the test at the alpha level with some descriptions on the type of significant interaction.}
 #' 
 #' @details
 #'  Malik (2016) et al. proposed to partition
@@ -35,7 +38,7 @@
 #' Malik.test(IDCP, nsim = 1000, Elapsed.time = FALSE)
 #' 
 #' @export
-Malik.test <- function(x, nsim = 10000, Elapsed.time = TRUE) {
+Malik.test <- function(x, nsim = 10000, alpha = 0.05, Elapsed.time = TRUE) {
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
@@ -64,6 +67,12 @@ Malik.test <- function(x, nsim = 10000, Elapsed.time = TRUE) {
       }
     }
     malik <- mean(statistic < simu)
+    qMalik <- quantile(simu, prob = 1 - alpha, names = FALSE)
+    if (malik < alpha) {
+      str <- Result.Malik(x, simu = simu, alpha = alpha, nsim = nsim)
+    } else {
+      str <- paste("The Malik.test could not detect any significant interaction.", "The estimated critical value of the Malik.test with", nsim, "Monte Carlo samples is:", round(qMalik, 4), '\n')
+    } 
     structure(
       list(
         pvalue.exact = malik,
@@ -71,7 +80,9 @@ Malik.test <- function(x, nsim = 10000, Elapsed.time = TRUE) {
         nsim = nsim,
         statistic = statistic,
         data.name = DNAME,
-        test = "Malik Test"
+        test = "Malik Test",
+        Level = alpha,
+        Result = str
       ),
       class = "ITtest"
     )

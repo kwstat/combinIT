@@ -46,7 +46,7 @@ Piepho.test <- function(x, nsim = 10000, alpha = 0.05) {
     n <- tr * bl
     if (bl < 3) {
       warning("Piepho.test needs at least 3 levels for the row factor")
-      str <- "This test is not applicable when the row number is less than three. You may use the transpose of the data matrix if the number of column is greater than two."
+      str <- Result.Piepho(x, nsim = nsim, alpha = alpha, simu = NULL)
       out <- list(
         pvalue.exact = NA,
         pvalue.appro = NA,
@@ -61,18 +61,16 @@ Piepho.test <- function(x, nsim = 10000, alpha = 0.05) {
       statistics <- piephoC(x, bl, tr)
       simu <- Piephosim(nsim, bl, tr)
       pieph <- mean(statistics < simu)
+      qPiepho <- quantile(simu, prob = 1 - alpha, names = FALSE)
       df <- bl - 1
       asypieph <- 1 - pchisq(statistics, df = df)
       R <- x - matrix(rowMeans(x), bl, tr) - matrix(colMeans(x), bl, tr, byrow = TRUE) + mean(x)
       W <- rowSums(R ^ 2)
       sigmahat <- (bl * (bl - 1) * W - sum(W))/((bl - 1) * (bl - 2) * (tr - 1))
       if (pieph < alpha) {
-        str1 <- paste("There may exist a significant intercation. The Grubbs' estimtors of the row variances are heterogeneous.")
-        str2 <- paste("The Grubbs' variance estimators are:", '\n')
-        Grubbs <- paste(round(sigmahat, 4), collapse = ", ")
-        str <- paste(str1, str2, Grubbs, '\n')
+        str <- Result.Piepho(x, nsim = nsim, alpha = alpha, simu = simu)
       } else {
-        str <- paste("The Piepho.test could not detect any significant interaction.", '\n')
+        str <- paste("The Piepho.test could not detect any significant interaction.", "The estimated critical value of the Piepho.test with", nsim, "Monte Carlo samples is:", round(qPiepho, 4), '\n')
       } 
       out <- list(
          pvalue.exact = pieph,
