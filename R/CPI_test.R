@@ -53,8 +53,6 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000, opvalue = NULL, alpha = 0.05,
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
-    library(Matrix)
-    library(MASS)
     DNAME <- deparse1(substitute(x))
     y <- c(t(x))
     tr <- ncol(x)
