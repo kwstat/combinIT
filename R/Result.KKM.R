@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+=======
+#' @import MASS
+#' @import Matrix
+>>>>>>> 73e11a32303eb884bb2a8a3ef082ec8e474b4c2c
 Result.KKM <- function(x, simu, nsim, alpha, nc0) {
       qKKM <- quantile(simu, prob = 1 - alpha, names = FALSE)
       bl <- nrow(x)
