@@ -36,7 +36,7 @@
 #' @examples
 #' data(MVGH)
 #' Boik.test(MVGH, nsim = 1000)
-#' @importFrom stats median pbeta rnorm
+#' @importFrom stats median pbeta rnorm qbeta
 #' @export
 Boik.test <- function(x, nsim = 10000, alpha = 0.05) {
   if (!is.matrix(x)) {

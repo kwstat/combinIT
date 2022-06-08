@@ -1,5 +1,4 @@
-#' 
-#' @export
+
 Result.Malik <- function(x, simu, alpha, nsim) {
   bl <- nrow(x)
   tr <- ncol(x)

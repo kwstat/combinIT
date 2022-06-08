@@ -1,8 +1,7 @@
 #' This is an internal function which compute Kronecker product for PIC method
 #'
 #' @keywords internal
-#'
-#' @importFrom utils combn
+
 kpr <- function(bl, tr) {
   wa <- combn(bl, 2)
   wb <- combn(tr, 2)

@@ -1,6 +1,4 @@
-#' @export
-#'     
-#'     
+
 Result.Piepho <- function(x, nsim, alpha, simu) {
   bl <- nrow(x)
   tr <- ncol(x)

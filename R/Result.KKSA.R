@@ -1,5 +1,4 @@
-#' @importFrom utils combn
-#' @export
+#' @importFrom utils combn 
 Result.KKSA <- function(x, nsim, alpha, simu) {
   bl <- nrow(x)
   tr <- ncol(x)

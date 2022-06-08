@@ -1,5 +1,4 @@
-#' @importFrom utils combn
-#' @export
+#' @importFrom utils combn 
 Result.Franck <- function(x, nsim, alpha, simu) {
   tr <- ncol(x)
   bl <- nrow(x)

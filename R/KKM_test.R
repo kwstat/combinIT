@@ -38,13 +38,12 @@
 #' data(RDWW)
 #' KKM.test(RDWW, nsim = 1000, nc0 = 1000)
 #' 
+
 #' @export
 KKM.test <- function(x, nsim = 1000, alpha = 0.05, nc0 = 10000) {
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
-    #library(Matrix)
-    #library(MASS)
     DNAME <- deparse1(substitute(x))
     y <- c(t(x))
     tr <- ncol(x)

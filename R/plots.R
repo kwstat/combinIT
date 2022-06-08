@@ -7,7 +7,8 @@
 #' @examples \dontrun{this is an example}
 #' data(CNV)
 #' interactionplot(CNV)
-#' @importFrom graphics axis legend matplot par
+#' @importFrom graphics axis legend matplot par matpoints
+#' @importFrom grDevices topo.colors
 #' @export
 interactionplot <- function(x, ...) {
   if (!is.matrix(x)) {
