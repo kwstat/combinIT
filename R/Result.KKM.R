@@ -1,5 +1,6 @@
-
 Result.KKM <- function(x, simu, nsim, alpha, nc0) {
+  if (requireNamespace("MASS", quietly = TRUE)) {
+    if (requireNamespace("Matrix", quietly = TRUE)) {
       qKKM <- quantile(simu, prob = 1 - alpha, names = FALSE)
       bl <- nrow(x)
       tr <- ncol(x)
@@ -29,8 +30,6 @@ Result.KKM <- function(x, simu, nsim, alpha, nc0) {
           }
         }
         C1 <- kp[Index, ]
-        requireNamespace(MASS)
-        requireNamespace(Matrix)
         sigma2hat <- t(y) %*% (MASS::ginv(C1) %*% C1) %*% y / Matrix::rankMatrix(C1)[1]
         str1 <- paste("There may exist a significant intercation and it might be caused by some cells.", "\n", "The absolute estimates of the significant pairwise interaction contrasts (PIC) and the corresponding involved cell means are:", "\n")
         ex1 <- paste(paste0("|mu_{", M[1, 1], "}-mu_{", M[1, 2], "}-mu_{", M[1, 3], "}+mu_{", M[1, 4], "}|="), round(SZ[1], 4), "\n")
@@ -44,4 +43,4 @@ Result.KKM <- function(x, simu, nsim, alpha, nc0) {
         str <- paste("The KKM.test could not detect any significant interaction.", "The estimated critical value of the KKM.test with", nsim, "Monte Carlo samples is:", round(qKKM, 4), "\n")
       }
       return(str)
-}
+}}}
