@@ -38,7 +38,7 @@
 #' @examples
 #' data(CNV)
 #' Franck.test(CNV, nsim = 1000, Elapsed.time = FALSE)
-#' 
+#'
 #' @importFrom stats pchisq pf qnorm var
 #' @export
 Franck.test <- function(x, nsim = 10000, alpha = 0.05, Elapsed.time = TRUE) {
@@ -84,8 +84,8 @@ Franck.test <- function(x, nsim = 10000, alpha = 0.05, Elapsed.time = TRUE) {
       if (hidden < alpha) {
         str <- Result.Franck(x, nsim = nsim, alpha = alpha, simu = simu)
       } else {
-        str <- paste("The Franck.test could not detect any significant interaction.", "The estimated critical value of the Franck.test with", nsim, "Monte Carlo samples is:", round(qFranck, 4), '\n')
-      } 
+        str <- paste("The Franck.test could not detect any significant interaction.", "The estimated critical value of the Franck.test with", nsim, "Monte Carlo samples is:", round(qFranck, 4), "\n")
+      }
       out <- list(
         pvalue.exact = hidden,
         pvalue.appro = hidden.apr,

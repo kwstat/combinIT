@@ -16,7 +16,7 @@
 #' \item{test}{The name of the test.}
 #' \item{Level}{The level of test.}
 #' \item{Result}{The result of the test at the alpha level with some descriptions on the type of significant interaction.}
-#' 
+#'
 #' @details Piepho (1994) proposed three test statistics. The third one is
 #'  based on Grubbs’ (1948) type estimator of variance for the level of the row factor.
 #'  This type of estimator is used in this function. Piepho (1994) proposed an asymptotic distribution of test statistic; however, a Monte Carlo method is used to calculate the p-value.
@@ -34,7 +34,7 @@
 #' @examples
 #' data(MVGH)
 #' Piepho.test(MVGH, nsim = 1000)
-#' 
+#'
 #' @export
 Piepho.test <- function(x, nsim = 10000, alpha = 0.05) {
   if (!is.matrix(x)) {
@@ -65,22 +65,22 @@ Piepho.test <- function(x, nsim = 10000, alpha = 0.05) {
       df <- bl - 1
       asypieph <- 1 - pchisq(statistics, df = df)
       R <- x - matrix(rowMeans(x), bl, tr) - matrix(colMeans(x), bl, tr, byrow = TRUE) + mean(x)
-      W <- rowSums(R ^ 2)
-      sigmahat <- (bl * (bl - 1) * W - sum(W))/((bl - 1) * (bl - 2) * (tr - 1))
+      W <- rowSums(R^2)
+      sigmahat <- (bl * (bl - 1) * W - sum(W)) / ((bl - 1) * (bl - 2) * (tr - 1))
       if (pieph < alpha) {
         str <- Result.Piepho(x, nsim = nsim, alpha = alpha, simu = simu)
       } else {
-        str <- paste("The Piepho.test could not detect any significant interaction.", "The estimated critical value of the Piepho.test with", nsim, "Monte Carlo samples is:", round(qPiepho, 4), '\n')
-      } 
+        str <- paste("The Piepho.test could not detect any significant interaction.", "The estimated critical value of the Piepho.test with", nsim, "Monte Carlo samples is:", round(qPiepho, 4), "\n")
+      }
       out <- list(
-         pvalue.exact = pieph,
-         pvalue.appro = asypieph,
-         nsim = nsim,
-         statistic = statistics,
-         data.name = DNAME,
-         test = "Piepho Test",
-         Level = alpha,
-         Result = str
+        pvalue.exact = pieph,
+        pvalue.appro = asypieph,
+        nsim = nsim,
+        statistic = statistics,
+        data.name = DNAME,
+        test = "Piepho Test",
+        Level = alpha,
+        Result = str
       )
     }
   }

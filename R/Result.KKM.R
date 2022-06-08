@@ -43,4 +43,6 @@ Result.KKM <- function(x, simu, nsim, alpha, nc0) {
         str <- paste("The KKM.test could not detect any significant interaction.", "The estimated critical value of the KKM.test with", nsim, "Monte Carlo samples is:", round(qKKM, 4), "\n")
       }
       return(str)
-}}}
+    }
+  }
+}

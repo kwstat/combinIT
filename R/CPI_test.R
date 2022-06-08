@@ -37,17 +37,17 @@
 #' \item{test}{The name of the test.}
 #' \item{Level}{The level of test.}
 #' \item{Result}{The result of the combined test at the alpha level with some descriptions on the type of significant interaction.}
-#' 
+#'
 #' @references Shenavari, Z., Kharrati-Kopaei, M. (2018). A Method for Testing Additivity in
 #'  Unreplicated Two-Way Layouts Based on Combining Multiple Interaction Tests. International Statistical Review
 #'  86(3): 469-487.
-#'  
+#'
 #' @examples
 #' data(RDWW)
 #' CPI.test(RDWW, nsim = 1000, Elapsed.time = FALSE)
-#' 
+#'
 #' @importFrom stats pchisq pf qnorm var
-#' 
+#'
 #' @export
 CPI.test <- function(x, nsim = 10000, nc0 = 10000, opvalue = NULL, alpha = 0.05, Elapsed.time = TRUE) {
   if (!is.matrix(x)) {
@@ -82,7 +82,7 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000, opvalue = NULL, alpha = 0.05,
     if (bl == 3) {
       Hstat <- hh_f(x)
     }
-    if (bl >3) {
+    if (bl > 3) {
       Ksimu <- rep(0, 0)
       kh <- kh_f(x)
       Kstat <- kh$fmin
@@ -168,43 +168,43 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000, opvalue = NULL, alpha = 0.05,
     GC <- cp$GC
     Sidak <- cp$Sidak
     jacobi <- cp$jacobi
-    
+
     if (cp$Bon >= alpha & cp$GC >= alpha & cp$Sidak >= alpha & cp$jacobi >= alpha) {
-      str <- paste("No significant interaction was detected at the", paste0(100 * alpha,"%"), "level.", '\n')
+      str <- paste("No significant interaction was detected at the", paste0(100 * alpha, "%"), "level.", "\n")
     }
     if ((cp$Bon < alpha | cp$Sidak < alpha | cp$jacobi < alpha) & bl >= 4) {
       if (min(pvalues) == Boik.pvalue) str <- Result.Boik(x, nsim = nsim, alpha = alpha, simu = Bsimu)
       if (min(pvalues) == piepho.pvalue) str <- Result.Piepho(x, nsim = nsim, alpha = alpha, simu = pisimu)
       if (min(pvalues) == hiddenf.pvalue) str <- Result.Franck(x, nsim = nsim, alpha = alpha, simu = Hsimu)
-      if (min(pvalues) == Malik.pvalue) str <- Result.Malik(x, simu = Msimu, nsim =  nsim, alpha = alpha)
+      if (min(pvalues) == Malik.pvalue) str <- Result.Malik(x, simu = Msimu, nsim = nsim, alpha = alpha)
       if (min(pvalues) == PIC.pvalue) str <- Result.KKM(x, nsim = nsim, simu = psimu, alpha = alpha, nc0 = nc0)
       if (min(pvalues) == KKSA.pvalue) str <- Result.KKSA(x, nsim = nsim, alpha = alpha, simu = Ksimu)
-      if (any(min(pvalues) == opvalue)) str<-paste("Significant interactions may be due to the other tests that their p-values are recently added", '\n')
+      if (any(min(pvalues) == opvalue)) str <- paste("Significant interactions may be due to the other tests that their p-values are recently added", "\n")
     }
     if ((cp$Bon < alpha | cp$Sidak < alpha | cp$jacobi < alpha) & bl == 3) {
       if (min(pvalues) == Boik.pvalue) str <- Result.Boik(x, nsim = nsim, alpha = alpha, simu = Bsimu)
       if (min(pvalues) == piepho.pvalue) str <- Result.Piepho(x, nsim = nsim, alpha = alpha, simu = pisimu)
       if (min(pvalues) == hiddenf.pvalue) str <- Result.Franck(x, nsim = nsim, alpha = alpha, simu = Hsimu)
-      if (min(pvalues) == Malik.pvalue) str <- Result.Malik(x, simu = Msimu, nsim =  nsim, alpha = alpha)
+      if (min(pvalues) == Malik.pvalue) str <- Result.Malik(x, simu = Msimu, nsim = nsim, alpha = alpha)
       if (min(pvalues) == PIC.pvalue) str <- Result.KKM(x, simu = psimu, alpha = alpha, nc0 = nc0)
-      if (any(min(pvalues) == opvalue)) str<-paste("Significant interactions may be due to the other tests that their p-values are recently added", '\n')
+      if (any(min(pvalues) == opvalue)) str <- paste("Significant interactions may be due to the other tests that their p-values are recently added", "\n")
     }
     if ((cp$Bon < alpha | cp$Sidak < alpha | cp$jacobi < alpha) & bl < 3) {
       if (min(pvalues) == Boik.pvalue) str <- Result.Boik(x, nsim = nsim, alpha = alpha, simu = Bsimu)
-      if (min(pvalues) == Malik.pvalue) str <- Result.Malik(x, simu = Msimu, nsim =  nsim, alpha = alpha)
+      if (min(pvalues) == Malik.pvalue) str <- Result.Malik(x, simu = Msimu, nsim = nsim, alpha = alpha)
       if (min(pvalues) == PIC.pvalue) str <- Result.KKM(x, simu = psimu, alpha = alpha, nc0 = nc0)
-      if (any(min(pvalues) == opvalue)) str<- paste("Significant interactions may be due to the other tests that their p-values are recently added", '\n')
+      if (any(min(pvalues) == opvalue)) str <- paste("Significant interactions may be due to the other tests that their p-values are recently added", "\n")
     }
     if (bl < 4) {
       KKSA.pvalue <- NA
       Kstat <- NA
-    } 
+    }
     if (bl < 3) {
       hiddenf.pvalue <- NA
       Hstat <- NA
       piepho.pvalue <- NA
-      pistat <-NA
-    } 
+      pistat <- NA
+    }
     out <- list(
       nsim = nsim,
       Piepho.pvalue = piepho.pvalue,
@@ -231,4 +231,3 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000, opvalue = NULL, alpha = 0.05,
     structure(out, class = "combtest")
   }
 }
-
