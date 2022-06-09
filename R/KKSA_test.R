@@ -6,7 +6,7 @@
 #' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
 #' @param Elapsed.time logical: if \code{TRUE} the progress will be printed in the console.
 #' @param alpha a numeric value, the level of the test. The default value is 0.05.
-#' 
+#'
 #' @details  Suppose that \eqn{a \ge b} and \eqn{b \ge 4}. Consider the \eqn{l}-th division of the data table into two sub-tables,
 #'  obtained by putting \eqn{a_1} (\eqn{2 \le a_1 \le a-2}) rows in the first sub-table and the remaining \eqn{a_2} rows in the second sub-table (\eqn{a_1+a_2=a}).
 #'  Let RSS1 and RSS2 denote the residual sum of squares for these two sub-tables, respectively. For a particular division \eqn{l}, let \eqn{F_l=max\{F_l,1/F_l\}}
@@ -37,7 +37,7 @@
 #' @examples
 #' data(IDCP)
 #' KKSA.test(IDCP, nsim = 1000, Elapsed.time = FALSE)
-#' 
+#'
 #' @export
 KKSA.test <- function(x, nsim = 10000, alpha = 0.05, Elapsed.time = TRUE) {
   if (!is.matrix(x)) {
@@ -82,8 +82,8 @@ KKSA.test <- function(x, nsim = 10000, alpha = 0.05, Elapsed.time = TRUE) {
       if (KKSA.p < alpha) {
         str <- Result.KKSA(x, nsim = nsim, alpha = alpha, simu = simu)
       } else {
-        str <- paste("The KKM.test could not detect any significant interaction.", "The estimated critical value of the KKSA.test with", nsim, "Monte Carlo samples is:", round(qKKSA, 4), '\n')
-      } 
+        str <- paste("The KKM.test could not detect any significant interaction.", "The estimated critical value of the KKSA.test with", nsim, "Monte Carlo samples is:", round(qKKSA, 4), "\n")
+      }
       out <- list(
         pvalue.exact = KKSA.p,
         pvalue.appro = KKSA.p.apr,

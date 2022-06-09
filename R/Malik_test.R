@@ -6,7 +6,7 @@
 #' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
 #' @param Elapsed.time logical: if \code{TRUE} the progress will be printed in the console.
 #' @param alpha a numeric value, the level of the test. The default value is 0.05.
-#' 
+#'
 #' @return An object of the class \code{ITtest}, which is a list inducing following components:
 #' \item{pvalue.exact}{The calculated exact Monte Carlo p-value.}
 #' \item{pvalue.appro}{is not available for \code{Malik.test}.}
@@ -16,7 +16,7 @@
 #' \item{test}{The name of the test.}
 #' \item{Level}{The level of test.}
 #' \item{Result}{The result of the test at the alpha level with some descriptions on the type of significant interaction.}
-#' 
+#'
 #' @details
 #'  Malik (2016) et al. proposed to partition
 #'  the residuals into three clusters using a suitable clustering method like “k-means clustering”.
@@ -32,11 +32,11 @@
 #' Shenavari, Z., Kharrati-Kopaei, M. (2018). A Method for Testing Additivity in
 #' Unreplicated Two-Way Layouts Based on Combining Multiple Interaction Tests. International Statistical Review
 #' 86(3): 469-487.
-#' 
+#'
 #' @examples
 #' data(IDCP)
 #' Malik.test(IDCP, nsim = 1000, Elapsed.time = FALSE)
-#' 
+#'
 #' @export
 Malik.test <- function(x, nsim = 10000, alpha = 0.05, Elapsed.time = TRUE) {
   if (!is.matrix(x)) {
@@ -71,8 +71,8 @@ Malik.test <- function(x, nsim = 10000, alpha = 0.05, Elapsed.time = TRUE) {
     if (malik < alpha) {
       str <- Result.Malik(x, simu = simu, alpha = alpha, nsim = nsim)
     } else {
-      str <- paste("The Malik.test could not detect any significant interaction.", "The estimated critical value of the Malik.test with", nsim, "Monte Carlo samples is:", round(qMalik, 4), '\n')
-    } 
+      str <- paste("The Malik.test could not detect any significant interaction.", "The estimated critical value of the Malik.test with", nsim, "Monte Carlo samples is:", round(qMalik, 4), "\n")
+    }
     structure(
       list(
         pvalue.exact = malik,

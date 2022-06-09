@@ -7,7 +7,7 @@
 #' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
 #' @param nc0 a numeric value, the number of Monte Carlo samples for computing the unbiasing constant \eqn{c_0}. The default value is 10000.
 #' @param alpha a numeric value, the level of the test. The default value is 0.05.
-#' 
+#'
 #'
 #' @return An object of the class \code{ITtest}, which is a list inducing following components::
 #' \item{pvalue.exact}{The calculated exact Monte Carlo p-value.}
@@ -18,7 +18,7 @@
 #' \item{test}{The name of the test.}
 #' \item{Level}{The level of test.}
 #' \item{Result}{The result of the test at the alpha level with some descriptions on the type of significant interaction.}
-#' 
+#'
 #' @details
 #' Kharrati-Kopaei and Miller(2016) proposed a test statistic for testing interaction
 #' based on inspecting all pairwise interaction contrasts (PIC).
@@ -37,8 +37,7 @@
 #' @examples
 #' data(RDWW)
 #' KKM.test(RDWW, nsim = 1000, nc0 = 1000)
-#' 
-
+#'
 #' @export
 KKM.test <- function(x, nsim = 1000, alpha = 0.05, nc0 = 10000) {
   if (!is.matrix(x)) {
@@ -58,8 +57,8 @@ KKM.test <- function(x, nsim = 1000, alpha = 0.05, nc0 = 10000) {
     if (PIC < alpha) {
       str <- Result.KKM(x, simu = simu, nsim = nsim, alpha = alpha, nc0 = nc0)
     } else {
-      str <- paste("The KKM.test could not detect any significant interaction.", "The estimated critical value of the KKM.test with", nsim, "Monte Carlo samples is:", round(qKKM, 4), '\n')
-    } 
+      str <- paste("The KKM.test could not detect any significant interaction.", "The estimated critical value of the KKM.test with", nsim, "Monte Carlo samples is:", round(qKKM, 4), "\n")
+    }
   }
   structure(
     list(

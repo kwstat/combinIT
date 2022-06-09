@@ -1,9 +1,9 @@
-#' @importFrom utils combn 
+#' @importFrom utils combn
 Result.Franck <- function(x, nsim, alpha, simu) {
   tr <- ncol(x)
   bl <- nrow(x)
   if (bl < 3) {
-    str <- paste("This test is not applicable when the row number is less than three. You may use the transpose of the data matrix if the number of column is greater than two.", '\n')
+    str <- paste("This test is not applicable when the row number is less than three. You may use the transpose of the data matrix if the number of column is greater than two.", "\n")
   } else {
     qFranck <- quantile(simu, prob = 1 - alpha, names = FALSE)
     cc <- 2^(bl - 1) - 1
@@ -41,13 +41,13 @@ Result.Franck <- function(x, nsim, alpha, simu) {
       }
     }
     sb2 <- c(1:bl)[-sb1]
-    str1 <- paste("A significant hidden structure of intercation might exist.", '\n')
+    str1 <- paste("A significant hidden structure of intercation might exist.", "\n")
     expre1 <- paste((sb1), collapse = ", ")
     expre2 <- paste((sb2), collapse = ", ")
-    str2 <- paste("The first group includes rows:", expre1, '\n')
-    str3 <- paste("The second group includes rows:", expre2, '\n') 
-    str4 <- paste("The estimated critical value of the Franck.test with", nsim, "Monte Carlo samples is:", round(qFranck, 4), '\n')
-    str <- paste(str1, str2, str3, str4, '\n')
+    str2 <- paste("The first group includes rows:", expre1, "\n")
+    str3 <- paste("The second group includes rows:", expre2, "\n")
+    str4 <- paste("The estimated critical value of the Franck.test with", nsim, "Monte Carlo samples is:", round(qFranck, 4), "\n")
+    str <- paste(str1, str2, str3, str4, "\n")
   }
   str
 }

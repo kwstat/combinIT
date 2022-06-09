@@ -66,20 +66,20 @@ Boik.test <- function(x, nsim = 10000, alpha = 0.05) {
     if (p == 2) {
       boik.p <- 1 - pbeta(Tb, 1, (q - 1) / 2)
       asyboik.p <- 1 - pchisq(T0, df)
-      qBoik <- qbeta(1 - alpha, 1, (q - 1) /2)
-      qBoik <- 1/(qBoik + 1)
+      qBoik <- qbeta(1 - alpha, 1, (q - 1) / 2)
+      qBoik <- 1 / (qBoik + 1)
     }
     if (boik.p < alpha) {
       str <- Result.Boik(x, nsim = nsim, alpha = alpha, simu = simu)
     } else {
       if (p == 2) {
-        str <- paste("The Boik.test could not detect any significant interaction.", "The exact critical value of the Boik.test is:", round(qBoik, 4), '\n')
+        str <- paste("The Boik.test could not detect any significant interaction.", "The exact critical value of the Boik.test is:", round(qBoik, 4), "\n")
       }
       if (p > 2) {
-        str <- paste("The Boik.test could not detect any significant interaction.", "The estimated critical value of the Boik.test with", nsim, "Monte Carlo samples is:", round(qBoik, 4), '\n')
+        str <- paste("The Boik.test could not detect any significant interaction.", "The estimated critical value of the Boik.test with", nsim, "Monte Carlo samples is:", round(qBoik, 4), "\n")
       }
       if (p == 1) {
-        str <- paste("The Boik.test could not detect any significant interaction.", "The exact critical value of the Boik.test is:", 1, '\n')
+        str <- paste("The Boik.test could not detect any significant interaction.", "The exact critical value of the Boik.test is:", 1, "\n")
       }
     }
     out <- list(
