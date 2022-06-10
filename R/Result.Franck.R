@@ -4,6 +4,7 @@ Result.Franck <- function(x, nsim, alpha, simu) {
   bl <- nrow(x)
   if (bl < 3) {
     str <- paste("This test is not applicable when the row number is less than three. You may use the transpose of the data matrix if the number of column is greater than two.", "\n")
+    sb1 <- 1:bl
   } else {
     qFranck <- quantile(simu, prob = 1 - alpha, names = FALSE)
     cc <- 2^(bl - 1) - 1
@@ -19,7 +20,13 @@ Result.Franck <- function(x, nsim, alpha, simu) {
       for (j in 1:Nsplit) {
         count <- count + 1
         x1 <- x[ind[, j], ]
-        x2 <- x[-ind[, j], ]
+        if (length(ind[, j]) == 1){
+          x1 <- matrix(x1, 1, ncol(x))
+        }
+        x2 <- x[(1:bl)[-ind[, j]], ]
+        if (length((1:bl)[-ind[, j]]) == 1) {
+          x2 <- matrix(x2, 1, ncol(x))
+        }
         rss1 <- sum((x1 - matrix(rowMeans(x1), nrow(x1), ncol(x1)) - matrix(colMeans(x1), nrow(x1), ncol(x1), byrow = TRUE) + mean(x1))^2)
         rss2 <- sum((x2 - matrix(rowMeans(x2), nrow(x2), ncol(x2)) - matrix(colMeans(x2), nrow(x2), ncol(x2), byrow = TRUE) + mean(x2))^2)
         sse7 <- rss1 + rss2
@@ -41,13 +48,13 @@ Result.Franck <- function(x, nsim, alpha, simu) {
       }
     }
     sb2 <- c(1:bl)[-sb1]
-    str1 <- paste("A significant hidden structure of intercation might exist.", "\n")
+    str1 <- paste("A significant hidden structure of intercation might exist.")
     expre1 <- paste((sb1), collapse = ", ")
     expre2 <- paste((sb2), collapse = ", ")
-    str2 <- paste("The first group includes rows:", expre1, "\n")
-    str3 <- paste("The second group includes rows:", expre2, "\n")
-    str4 <- paste("The estimated critical value of the Franck.test with", nsim, "Monte Carlo samples is:", round(qFranck, 4), "\n")
-    str <- paste(str1, str2, str3, str4, "\n")
+    str2 <- paste("The first group includes rows:", expre1,".")
+    str3 <- paste("The second group includes rows:", expre2,".")
+    str4 <- paste("The estimated critical value of the Franck.test with", nsim, "Monte Carlo samples is", round(qFranck, 4),".")
+    str <- paste(str1, str2, str3, str4)
   }
-  str
+  list(string = str, index = sb1)
 }

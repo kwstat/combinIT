@@ -6,6 +6,7 @@
 #' @param x numeric matrix, \eqn{a \times b} data matrix where the number of row and column is corresponding to the number of factor levels.
 #' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
 #' @param alpha a numeric value, the level of the test. The default value is 0.05.
+#' @param report logical: if \code{TRUE} the result of the test is reported at the \code{alpha} level.
 #'
 #' @return An object of the class \code{ITtest}, which is a list inducing following components:
 #' \item{pvalue.exact}{The calculated exact Monte Carlo p-value.}
@@ -36,7 +37,7 @@
 #' Piepho.test(MVGH, nsim = 1000)
 #'
 #' @export
-Piepho.test <- function(x, nsim = 10000, alpha = 0.05) {
+Piepho.test <- function(x, nsim = 10000, alpha = 0.05, report = TRUE) {
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
@@ -67,10 +68,14 @@ Piepho.test <- function(x, nsim = 10000, alpha = 0.05) {
       R <- x - matrix(rowMeans(x), bl, tr) - matrix(colMeans(x), bl, tr, byrow = TRUE) + mean(x)
       W <- rowSums(R^2)
       sigmahat <- (bl * (bl - 1) * W - sum(W)) / ((bl - 1) * (bl - 2) * (tr - 1))
-      if (pieph < alpha) {
-        str <- Result.Piepho(x, nsim = nsim, alpha = alpha, simu = simu)
+      if (report) {
+        if (pieph < alpha) {
+          str <- Result.Piepho(x, nsim = nsim, alpha = alpha, simu = simu)
+        } else {
+          str <- paste("The Piepho.test could not detect any significant interaction.", "The estimated critical value of the Piepho.test with", nsim, "Monte Carlo samples is", round(qPiepho, 4),".")
+        }
       } else {
-        str <- paste("The Piepho.test could not detect any significant interaction.", "The estimated critical value of the Piepho.test with", nsim, "Monte Carlo samples is:", round(qPiepho, 4), "\n")
+        str <- paste("A report has not been wanted! To have a report, change argument 'report' to TRUE.")
       }
       out <- list(
         pvalue.exact = pieph,

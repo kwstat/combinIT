@@ -10,6 +10,7 @@ CPI.test(
   nc0 = 10000,
   opvalue = NULL,
   alpha = 0.05,
+  report = TRUE,
   Elapsed.time = TRUE
 )
 }
@@ -20,7 +21,7 @@ CPI.test(
 
 \item{nc0}{a numeric value, the number of Monte Carlo samples for computing the unbiasing constant \eqn{c_0} in \code{KKM.test}. The default value is 10000.}
 
-\item{opvalue}{a numeric vector, other p-values (in addition to the six considered p-values) that are going to combine.}
+\item{opvalue}{a numeric vector, other p-values (in addition to the six considered p-values) that are going to be combined.}
 
 \item{alpha}{a numeric value, the level of the test. The default value is 0.05.}
 

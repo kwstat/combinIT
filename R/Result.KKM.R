@@ -31,16 +31,16 @@ Result.KKM <- function(x, simu, nsim, alpha, nc0) {
         }
         C1 <- kp[Index, ]
         sigma2hat <- t(y) %*% (MASS::ginv(C1) %*% C1) %*% y / Matrix::rankMatrix(C1)[1]
-        str1 <- paste("There may exist a significant intercation and it might be caused by some cells.", "\n", "The absolute estimates of the significant pairwise interaction contrasts (PIC) and the corresponding involved cell means are:", "\n")
+        str1 <- paste("There may exist a significant intercation and it might be caused by some cells.", "The absolute estimates of the significant pairwise interaction contrasts (PIC) and the corresponding involved cell means are:", "\n")
         ex1 <- paste(paste0("|mu_{", M[1, 1], "}-mu_{", M[1, 2], "}-mu_{", M[1, 3], "}+mu_{", M[1, 4], "}|="), round(SZ[1], 4), "\n")
         for (i in 2:length(Index)) {
           ex1 <- paste(ex1, paste0("|mu_{", M[i, 1], "}-mu_{", M[i, 2], "}-mu_{", M[i, 3], "}+mu_{", M[i, 4], "}|="), round(SZ[i], 4), "\n")
         }
         str2 <- ex1
-        str3 <- paste("The variance estimate under the non-additivity assumption is", round(sigma2hat, 4), "on", Matrix::rankMatrix(C1)[1], "degrees of freedom.", "The estimated critical value of the KKM.test with", nsim, "Monte Carlo samples is:", round(qKKM, 4), "\n")
-        str <- paste(str1, str2, str3, "\n")
+        str3 <- paste("The variance estimate under the non-additivity assumption is", round(sigma2hat, 4), "on", Matrix::rankMatrix(C1)[1], "degrees of freedom.", "The estimated critical value of the KKM.test with", nsim, "Monte Carlo samples is", round(qKKM, 4),".")
+        str <- paste(str1, str2, str3)
       } else {
-        str <- paste("The KKM.test could not detect any significant interaction.", "The estimated critical value of the KKM.test with", nsim, "Monte Carlo samples is:", round(qKKM, 4), "\n")
+        str <- paste("The KKM.test could not detect any significant interaction.", "The estimated critical value of the KKM.test with", nsim, "Monte Carlo samples is", round(qKKM, 4),".")
       }
       return(str)
     }

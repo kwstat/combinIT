@@ -4,7 +4,7 @@
 \alias{KKM.test}
 \title{Kharrati-Kopaei and Miller's (2016) Test for Interaction}
 \usage{
-KKM.test(x, nsim = 1000, alpha = 0.05, nc0 = 10000)
+KKM.test(x, nsim = 1000, alpha = 0.05, report = TRUE, nc0 = 10000)
 }
 \arguments{
 \item{x}{a numeric matrix, \eqn{a \times b} data matrix where the number of row and column is corresponding to the number of factor levels.}
@@ -12,6 +12,8 @@ KKM.test(x, nsim = 1000, alpha = 0.05, nc0 = 10000)
 \item{nsim}{a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.}
 
 \item{alpha}{a numeric value, the level of the test. The default value is 0.05.}
+
+\item{report}{logical: if \code{TRUE} the result of the test is reported at the \code{alpha} level.}
 
 \item{nc0}{a numeric value, the number of Monte Carlo samples for computing the unbiasing constant \eqn{c_0}. The default value is 10000.}
 }

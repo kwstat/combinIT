@@ -9,7 +9,7 @@
 #' @param x numeric matrix, \eqn{a \times b} data matrix where the number of row and column is corresponding to the number of factor levels.
 #' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
 #' @param nc0 a numeric value, the number of Monte Carlo samples for computing the unbiasing constant \eqn{c_0} in \code{KKM.test}. The default value is 10000.
-#' @param opvalue a numeric vector, other p-values (in addition to the six considered p-values) that are going to combine.
+#' @param opvalue a numeric vector, other p-values (in addition to the six considered p-values) that are going to be combined.
 #' @param alpha a numeric value, the level of the test. The default value is 0.05.
 #' @param Elapsed.time logical: if \code{TRUE} the progress will be printed in the console.
 #'
@@ -49,7 +49,7 @@
 #' @importFrom stats pchisq pf qnorm var
 #'
 #' @export
-CPI.test <- function(x, nsim = 10000, nc0 = 10000, opvalue = NULL, alpha = 0.05, Elapsed.time = TRUE) {
+CPI.test <- function(x, nsim = 10000, nc0 = 10000, opvalue = NULL, alpha = 0.05, report = TRUE, Elapsed.time = TRUE) {
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
@@ -158,42 +158,81 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000, opvalue = NULL, alpha = 0.05,
       qFranck <- quantile(Hsimu, prob = 1 - alpha, names = FALSE)
     }
     pvalues <- c(Boik.pvalue, piepho.pvalue, hiddenf.pvalue, Malik.pvalue, PIC.pvalue, KKSA.pvalue, opvalue)
+    if (is.null(opvalue)) {
+      names(pvalues) <- c("Boik.test", "Piepho.test", "Franck.test", "Malik.test", "KKM.test", "KKSA.test")
+    } else {
+      names(pvalues) <- c("Boik.test", "Piepho.test", "Franck.test", "Malik.test", "KKM.test", "KKSA.test", paste0("Added test", 1:length(opvalue)))
+    }
     if (bl <= 3) {
       pvalues <- pvalues[!is.na(pvalues)]
     } else {
       pvalues <- pvalues
     }
+    spvalues <- sort(pvalues)
     cp <- comb(pvalues)
     Bonferroni <- cp$Bon
     GC <- cp$GC
     Sidak <- cp$Sidak
     jacobi <- cp$jacobi
-
-    if (cp$Bon >= alpha & cp$GC >= alpha & cp$Sidak >= alpha & cp$jacobi >= alpha) {
-      str <- paste("No significant interaction was detected at the", paste0(100 * alpha, "%"), "level.", "\n")
-    }
-    if ((cp$Bon < alpha | cp$Sidak < alpha | cp$jacobi < alpha) & bl >= 4) {
-      if (min(pvalues) == Boik.pvalue) str <- Result.Boik(x, nsim = nsim, alpha = alpha, simu = Bsimu)
-      if (min(pvalues) == piepho.pvalue) str <- Result.Piepho(x, nsim = nsim, alpha = alpha, simu = pisimu)
-      if (min(pvalues) == hiddenf.pvalue) str <- Result.Franck(x, nsim = nsim, alpha = alpha, simu = Hsimu)
-      if (min(pvalues) == Malik.pvalue) str <- Result.Malik(x, simu = Msimu, nsim = nsim, alpha = alpha)
-      if (min(pvalues) == PIC.pvalue) str <- Result.KKM(x, nsim = nsim, simu = psimu, alpha = alpha, nc0 = nc0)
-      if (min(pvalues) == KKSA.pvalue) str <- Result.KKSA(x, nsim = nsim, alpha = alpha, simu = Ksimu)
-      if (any(min(pvalues) == opvalue)) str <- paste("Significant interactions may be due to the other tests that their p-values are recently added", "\n")
-    }
-    if ((cp$Bon < alpha | cp$Sidak < alpha | cp$jacobi < alpha) & bl == 3) {
-      if (min(pvalues) == Boik.pvalue) str <- Result.Boik(x, nsim = nsim, alpha = alpha, simu = Bsimu)
-      if (min(pvalues) == piepho.pvalue) str <- Result.Piepho(x, nsim = nsim, alpha = alpha, simu = pisimu)
-      if (min(pvalues) == hiddenf.pvalue) str <- Result.Franck(x, nsim = nsim, alpha = alpha, simu = Hsimu)
-      if (min(pvalues) == Malik.pvalue) str <- Result.Malik(x, simu = Msimu, nsim = nsim, alpha = alpha)
-      if (min(pvalues) == PIC.pvalue) str <- Result.KKM(x, simu = psimu, alpha = alpha, nc0 = nc0)
-      if (any(min(pvalues) == opvalue)) str <- paste("Significant interactions may be due to the other tests that their p-values are recently added", "\n")
-    }
-    if ((cp$Bon < alpha | cp$Sidak < alpha | cp$jacobi < alpha) & bl < 3) {
-      if (min(pvalues) == Boik.pvalue) str <- Result.Boik(x, nsim = nsim, alpha = alpha, simu = Bsimu)
-      if (min(pvalues) == Malik.pvalue) str <- Result.Malik(x, simu = Msimu, nsim = nsim, alpha = alpha)
-      if (min(pvalues) == PIC.pvalue) str <- Result.KKM(x, simu = psimu, alpha = alpha, nc0 = nc0)
-      if (any(min(pvalues) == opvalue)) str <- paste("Significant interactions may be due to the other tests that their p-values are recently added", "\n")
+    if (report) {
+      if (cp$Bon >= alpha & cp$GC >= alpha & cp$Sidak >= alpha & cp$jacobi >= alpha) {
+        str <- paste("No significant interaction was detected at the", paste0(100 * alpha, "%"), "level.", "\n")
+      }
+      if ((cp$Bon < alpha | cp$Sidak < alpha | cp$jacobi < alpha) & bl >= 4) {
+        if (min(pvalues) == Boik.pvalue) str <- Result.Boik(x, nsim = nsim, alpha = alpha, simu = Bsimu)
+        if (min(pvalues) == piepho.pvalue) str <- Result.Piepho(x, nsim = nsim, alpha = alpha, simu = pisimu)
+        if (min(pvalues) == hiddenf.pvalue) str <- Result.Franck(x, nsim = nsim, alpha = alpha, simu = Hsimu)$string
+        if (min(pvalues) == Malik.pvalue) str <- Result.Malik(x, simu = Msimu, nsim = nsim, alpha = alpha)
+        if (min(pvalues) == PIC.pvalue) str <- Result.KKM(x, nsim = nsim, simu = psimu, alpha = alpha, nc0 = nc0)
+        if (min(pvalues) == KKSA.pvalue) str <- Result.KKSA(x, nsim = nsim, alpha = alpha, simu = Ksimu)$string
+        if (any(min(pvalues) == opvalue)) str <- paste("Significant interactions may be due to the", paste0(names(spvalues[1])), "that its p-value is recently added.")
+      }
+      if ((cp$Bon < alpha | cp$Sidak < alpha | cp$jacobi < alpha) & bl == 3) {
+        if (min(pvalues) == Boik.pvalue) str <- Result.Boik(x, nsim = nsim, alpha = alpha, simu = Bsimu)
+        if (min(pvalues) == piepho.pvalue) str <- Result.Piepho(x, nsim = nsim, alpha = alpha, simu = pisimu)
+        if (min(pvalues) == hiddenf.pvalue) str <- Result.Franck(x, nsim = nsim, alpha = alpha, simu = Hsimu)$string
+        if (min(pvalues) == Malik.pvalue) str <- Result.Malik(x, simu = Msimu, nsim = nsim, alpha = alpha)
+        if (min(pvalues) == PIC.pvalue) str <- Result.KKM(x, simu = psimu, alpha = alpha, nc0 = nc0)
+        if (any(min(pvalues) == opvalue)) str <- paste("Significant interactions may be due to the", paste0(names(spvalues[1])), "that its p-value is recently added.")
+      }
+      if ((cp$Bon < alpha | cp$Sidak < alpha | cp$jacobi < alpha) & bl < 3) {
+        if (min(pvalues) == Boik.pvalue) str <- Result.Boik(x, nsim = nsim, alpha = alpha, simu = Bsimu)
+        if (min(pvalues) == Malik.pvalue) str <- Result.Malik(x, simu = Msimu, nsim = nsim, alpha = alpha)
+        if (min(pvalues) == PIC.pvalue) str <- Result.KKM(x, simu = psimu, alpha = alpha, nc0 = nc0)
+        if (any(min(pvalues) == opvalue)) str <- paste("Significant interactions may be due to the", paste0(names(spvalues[1])), "that its p-value is recently added.")
+      }
+      if (cp$Bon < alpha) {
+        for (i in 2:length(spvalues)) {
+          if (spvalues[i] < alpha / (length(spvalues)-i+1)) {
+            str <- paste(str, "\n", "In addition to the", paste0(names(spvalues[i-1]), ", the"), names(spvalues[i]), "is significant", "by using the Holm-Bonferroni method:")
+            if (bl >= 4) {
+              if (spvalues[i] == Boik.pvalue) str <- paste(str, Result.Boik(x, nsim = nsim, alpha = alpha, simu = Bsimu))
+              if (spvalues[i] == piepho.pvalue) str <- paste(str, Result.Piepho(x, nsim = nsim, alpha = alpha, simu = pisimu))
+              if (spvalues[i] == hiddenf.pvalue) str <- paste(str, Result.Franck(x, nsim = nsim, alpha = alpha, simu = Hsimu)$string)
+              if (spvalues[i] == Malik.pvalue) str <- paste(str, Result.Malik(x, simu = Msimu, nsim = nsim, alpha = alpha))
+              if (spvalues[i] == PIC.pvalue) str <- paste(str, Result.KKM(x, nsim = nsim, simu = psimu, alpha = alpha, nc0 = nc0))
+              if (spvalues[i] == KKSA.pvalue) str <- paste(str, Result.KKSA(x, nsim = nsim, alpha = alpha, simu = Ksimu)$string)
+              if (any(spvalues[i] == opvalue)) str <- paste(str, paste("Significant interactions may be due to the", paste0(names(spvalues[i])), "that its p-value is recently added."))
+            }
+            if (bl == 3) {
+              if (spvalues[i] == Boik.pvalue) str <- paste(str, Result.Boik(x, nsim = nsim, alpha = alpha, simu = Bsimu))
+              if (spvalues[i] == piepho.pvalue) str <- paste(str, Result.Piepho(x, nsim = nsim, alpha = alpha, simu = pisimu))
+              if (spvalues[i] == hiddenf.pvalue) str <- paste(str, Result.Franck(x, nsim = nsim, alpha = alpha, simu = Hsimu)$string)
+              if (spvalues[i] == Malik.pvalue) str <- paste(str, Result.Malik(x, simu = Msimu, nsim = nsim, alpha = alpha))
+              if (spvalues[i] == PIC.pvalue) str <- paste(str, Result.KKM(x, simu = psimu, alpha = alpha, nc0 = nc0))
+              if (any(spvalues[i] == opvalue)) str <- paste(str, paste("Significant interactions may be due to the", paste0(names(spvalues[i])), "that its p-value is recently added."))
+            }
+            if (bl < 3) {
+              if (spvalues[i] == Boik.pvalue) str <- paste(str, Result.Boik(x, nsim = nsim, alpha = alpha, simu = Bsimu))
+              if (spvalues[i] == Malik.pvalue) str <- paste(str, Result.Malik(x, simu = Msimu, nsim = nsim, alpha = alpha))
+              if (spvalues[i] == PIC.pvalue) str <- paste(str, Result.KKM(x, simu = psimu, alpha = alpha, nc0 = nc0))
+              if (any(spvalues[i] == opvalue)) str <- paste(str, paste("Significant interactions may be due to the", paste0(names(spvalues[i])), "that its p-value is recently added."))
+            }
+          }
+        }
+      }
+    } else {
+      str <- paste("A report has not been wanted! To have a report, change argument 'report' to TRUE.")
     }
     if (bl < 4) {
       KKSA.pvalue <- NA

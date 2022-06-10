@@ -7,7 +7,7 @@
 #' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
 #' @param nc0 a numeric value, the number of Monte Carlo samples for computing the unbiasing constant \eqn{c_0}. The default value is 10000.
 #' @param alpha a numeric value, the level of the test. The default value is 0.05.
-#'
+#' @param report logical: if \code{TRUE} the result of the test is reported at the \code{alpha} level.
 #'
 #' @return An object of the class \code{ITtest}, which is a list inducing following components::
 #' \item{pvalue.exact}{The calculated exact Monte Carlo p-value.}
@@ -39,7 +39,7 @@
 #' KKM.test(RDWW, nsim = 1000, nc0 = 1000)
 #'
 #' @export
-KKM.test <- function(x, nsim = 1000, alpha = 0.05, nc0 = 10000) {
+KKM.test <- function(x, nsim = 1000, alpha = 0.05, report = TRUE, nc0 = 10000) {
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
@@ -54,10 +54,14 @@ KKM.test <- function(x, nsim = 1000, alpha = 0.05, nc0 = 10000) {
     simu <- PICfsim(nsim, kp, c0, n)
     PIC <- mean(statistics < simu)
     qKKM <- quantile(simu, prob = 1 - alpha, names = FALSE)
-    if (PIC < alpha) {
-      str <- Result.KKM(x, simu = simu, nsim = nsim, alpha = alpha, nc0 = nc0)
+    if (report) {
+      if (PIC < alpha) {
+        str <- Result.KKM(x, simu = simu, nsim = nsim, alpha = alpha, nc0 = nc0)
+      } else {
+        str <- paste("The KKM.test could not detect any significant interaction.", "The estimated critical value of the KKM.test with", nsim, "Monte Carlo samples is", round(qKKM, 4), ".")
+      }
     } else {
-      str <- paste("The KKM.test could not detect any significant interaction.", "The estimated critical value of the KKM.test with", nsim, "Monte Carlo samples is:", round(qKKM, 4), "\n")
+      str <- paste("A report has not been wanted! To have a report, change argument 'report' to TRUE.")
     }
   }
   structure(

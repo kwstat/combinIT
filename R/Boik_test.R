@@ -6,6 +6,7 @@
 #' @param x a numeric matrix, \eqn{a \times b} data matrix where the number of row and column is corresponding to the number of factor levels.
 #' @param nsim a numeric value, the number of Monte Carlo samples for calculating an exact Monte Carlo p-value. The default value is 10000.
 #' @param alpha a numeric value, the level of the test. The default value is 0.05.
+#' @param report logical: if \code{TRUE} the result of the test is reported at the \code{alpha} level.
 #'
 #' @return An object of the class \code{ITtest}, which is a list inducing following components::
 #' \item{pvalue.exact}{An exact Monte Carlo p-value when \eqn{p>2}. For \eqn{p=2} an exact p-value is calculated.}
@@ -38,7 +39,7 @@
 #' Boik.test(MVGH, nsim = 1000)
 #' @importFrom stats median pbeta rnorm qbeta
 #' @export
-Boik.test <- function(x, nsim = 10000, alpha = 0.05) {
+Boik.test <- function(x, nsim = 10000, alpha = 0.05, report = TRUE) {
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
@@ -69,18 +70,22 @@ Boik.test <- function(x, nsim = 10000, alpha = 0.05) {
       qBoik <- qbeta(1 - alpha, 1, (q - 1) / 2)
       qBoik <- 1 / (qBoik + 1)
     }
-    if (boik.p < alpha) {
-      str <- Result.Boik(x, nsim = nsim, alpha = alpha, simu = simu)
+    if (report) {
+      if (boik.p < alpha) {
+        str <- Result.Boik(x, nsim = nsim, alpha = alpha, simu = simu)
+      } else {
+        if (p == 2) {
+          str <- paste("The Boik.test could not detect any significant interaction.", "The exact critical value of the Boik.test is", round(qBoik, 4),".")
+        }
+        if (p > 2) {
+          str <- paste("The Boik.test could not detect any significant interaction.", "The estimated critical value of the Boik.test with", nsim, "Monte Carlo samples is", round(qBoik, 4),".")
+        }
+        if (p == 1) {
+          str <- paste("The Boik.test could not detect any significant interaction.", "The exact critical value of the Boik.test is", 1,".")
+        }
+      }
     } else {
-      if (p == 2) {
-        str <- paste("The Boik.test could not detect any significant interaction.", "The exact critical value of the Boik.test is:", round(qBoik, 4), "\n")
-      }
-      if (p > 2) {
-        str <- paste("The Boik.test could not detect any significant interaction.", "The estimated critical value of the Boik.test with", nsim, "Monte Carlo samples is:", round(qBoik, 4), "\n")
-      }
-      if (p == 1) {
-        str <- paste("The Boik.test could not detect any significant interaction.", "The exact critical value of the Boik.test is:", 1, "\n")
-      }
+      str <- paste("A report has not been wanted! To have a report, change argument 'report' to TRUE.")
     }
     out <- list(
       pvalue.exact = boik.p,

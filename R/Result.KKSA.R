@@ -4,6 +4,7 @@ Result.KKSA <- function(x, nsim, alpha, simu) {
   tr <- ncol(x)
   if (bl < 4) {
     str <- paste("This test is not applicable when the row number is less than four. You may use the transpose of the data matrix if the number of column is greater than three.", "\n")
+    index <- 1:bl
   } else {
     qKKSA <- quantile(simu, prob = alpha, names = FALSE)
     Nrow <- 2:(as.integer(bl / 2))
@@ -36,13 +37,13 @@ Result.KKSA <- function(x, nsim, alpha, simu) {
         }
       }
     }
-    str1 <- paste("There may exist a significant intercation. The magnitude of interaction effects is heteroscedastic across the sub-tables of observations.", "\n")
+    str1 <- paste("There may exist a significant intercation. The magnitude of interaction effects is heteroscedastic across the sub-tables of observations.")
     expre1 <- paste(index, collapse = ", ")
     expre2 <- paste((1:bl)[-index], collapse = ", ")
-    str2 <- paste("The first sub-table consists of rows", expre1, "with RSS=", round(RSS1, 4), "on", df1, "degrees of freedoms.", "\n")
-    str3 <- paste("The second sub-table consists of rows", expre2, "with RSS=", round(RSS2, 4), "on", df2, "degrees of freedoms.", "\n")
-    str4 <- paste("The estimated critical value of the KKSA.test with", nsim, "Monte Carlo samples is:", round(qKKSA, 4), "\n")
-    str <- paste(str1, str2, str3, str4, "\n")
+    str2 <- paste("The first sub-table consists of rows", expre1, "with RSS=", round(RSS1, 4), "on", df1, "degrees of freedoms.")
+    str3 <- paste("The second sub-table consists of rows", expre2, "with RSS=", round(RSS2, 4), "on", df2, "degrees of freedoms.")
+    str4 <- paste("The estimated critical value of the KKSA.test with", nsim, "Monte Carlo samples is", round(qKKSA, 4),".")
+    str <- paste(str1, str2, str3, str4)
   }
-  str
+  list(string = str, index = index)
 }

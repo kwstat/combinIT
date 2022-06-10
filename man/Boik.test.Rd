@@ -4,7 +4,7 @@
 \alias{Boik.test}
 \title{Boik's (1993) Locally Best Invariant (LBI) Test}
 \usage{
-Boik.test(x, nsim = 10000, alpha = 0.05)
+Boik.test(x, nsim = 10000, alpha = 0.05, report = TRUE)
 }
 \arguments{
 \item{x}{a numeric matrix, \eqn{a \times b} data matrix where the number of row and column is corresponding to the number of factor levels.}
@@ -12,6 +12,8 @@ Boik.test(x, nsim = 10000, alpha = 0.05)
 \item{nsim}{a numeric value, the number of Monte Carlo samples for calculating an exact Monte Carlo p-value. The default value is 10000.}
 
 \item{alpha}{a numeric value, the level of the test. The default value is 0.05.}
+
+\item{report}{logical: if \code{TRUE} the result of the test is reported at the \code{alpha} level.}
 }
 \value{
 An object of the class \code{ITtest}, which is a list inducing following components::

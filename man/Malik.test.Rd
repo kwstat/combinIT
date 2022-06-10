@@ -4,7 +4,7 @@
 \alias{Malik.test}
 \title{Malik's (2016) et al. Test for Interaction}
 \usage{
-Malik.test(x, nsim = 10000, alpha = 0.05, Elapsed.time = TRUE)
+Malik.test(x, nsim = 10000, alpha = 0.05, report = TRUE, Elapsed.time = TRUE)
 }
 \arguments{
 \item{x}{numeric matrix, \eqn{a \times b} data matrix where the number of row and column is corresponding to the number of factor levels.}
@@ -12,6 +12,8 @@ Malik.test(x, nsim = 10000, alpha = 0.05, Elapsed.time = TRUE)
 \item{nsim}{a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.}
 
 \item{alpha}{a numeric value, the level of the test. The default value is 0.05.}
+
+\item{report}{logical: if \code{TRUE} the result of the test is reported at the \code{alpha} level.}
 
 \item{Elapsed.time}{logical: if \code{TRUE} the progress will be printed in the console.}
 }

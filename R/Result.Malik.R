@@ -42,7 +42,7 @@ Result.Malik <- function(x, simu, alpha, nsim) {
       str3 <- paste(str3, "The cell with row=", cellmax[i, 1], "and column=", cellmax[i, 2], "produces a large positive residual.", "\n")
     }
   }
-  str4 <- paste("The estimated critical value of the Malik.test with", nsim, "Monte Carlo samples is:", round(qMalik, 4), "\n")
-  str <- paste(str1, str2, str3, str4, "\n")
+  str4 <- paste("The estimated critical value of the Malik.test with", nsim, "Monte Carlo samples is", round(qMalik, 4),".")
+  str <- paste(str1, str2, str3, str4)
   str
 }

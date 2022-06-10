@@ -6,6 +6,7 @@
 #' @param nsim a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.
 #' @param Elapsed.time logical: if \code{TRUE} the progress will be printed in the console.
 #' @param alpha a numeric value, the level of the test. The default value is 0.05.
+#' @param report logical: if \code{TRUE} the result of the test is reported at the \code{alpha} level.
 #'
 #' @return An object of the class \code{ITtest}, which is a list inducing following components:
 #' \item{pvalue.exact}{The calculated exact Monte Carlo p-value.}
@@ -38,7 +39,7 @@
 #' Malik.test(IDCP, nsim = 1000, Elapsed.time = FALSE)
 #'
 #' @export
-Malik.test <- function(x, nsim = 10000, alpha = 0.05, Elapsed.time = TRUE) {
+Malik.test <- function(x, nsim = 10000, alpha = 0.05, report = TRUE, Elapsed.time = TRUE) {
   if (!is.matrix(x)) {
     stop("The input should be a matrix")
   } else {
@@ -68,10 +69,14 @@ Malik.test <- function(x, nsim = 10000, alpha = 0.05, Elapsed.time = TRUE) {
     }
     malik <- mean(statistic < simu)
     qMalik <- quantile(simu, prob = 1 - alpha, names = FALSE)
-    if (malik < alpha) {
-      str <- Result.Malik(x, simu = simu, alpha = alpha, nsim = nsim)
+    if (report) {
+      if (malik < alpha) {
+        str <- Result.Malik(x, simu = simu, alpha = alpha, nsim = nsim)
+      } else {
+        str <- paste("The Malik.test could not detect any significant interaction.", "The estimated critical value of the Malik.test with", nsim, "Monte Carlo samples is", round(qMalik, 4),".")
+      }
     } else {
-      str <- paste("The Malik.test could not detect any significant interaction.", "The estimated critical value of the Malik.test with", nsim, "Monte Carlo samples is:", round(qMalik, 4), "\n")
+      str <- paste("A report has not been wanted! To have a report, change argument 'report' to TRUE.")
     }
     structure(
       list(

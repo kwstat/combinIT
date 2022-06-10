@@ -12,7 +12,8 @@ print.combtest <- function(x, ...) {
   msg10 <- paste("Sidak method: Pvalue =", round(x$Sidak, 5), "\n")
   msg11 <- paste("Jacobi method: Pvalue =", round(x$Jacobi, 5), "\n")
   msg12 <- paste("Gaussian copula: Pvalue =", round(x$GC, 5), "\n")
+  msg15 <- paste("------------------------------------------------",'\n')
   msg13 <- paste("The result of the combined test at the", paste0(100 * (x$Level), "%"), "level:", "\n")
-  msg14 <- paste(x$Result)
-  cat(msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8, msg9, msg10, msg11, msg12, msg13, msg14)
+  msg14 <- paste(x$Result, '\n')
+  cat(msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8, msg9, msg10, msg11, msg12, msg15, msg13, msg14)
 }

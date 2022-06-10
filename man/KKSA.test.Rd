@@ -4,7 +4,16 @@
 \alias{KKSA.test}
 \title{Kharrati-Kopaei and Sadooghi-Alvandi's (2007) test for interaction}
 \usage{
-KKSA.test(x, nsim = 10000, alpha = 0.05, Elapsed.time = TRUE)
+KKSA.test(
+  x,
+  nsim = 10000,
+  alpha = 0.05,
+  report = TRUE,
+  plot = FALSE,
+  vecolor = c("blue", "red"),
+  linetype = c(1, 2),
+  Elapsed.time = TRUE
+)
 }
 \arguments{
 \item{x}{numeric matrix, \eqn{a \times b} data matrix where the number of row and column is corresponding to the number of factor levels.}
@@ -12,6 +21,14 @@ KKSA.test(x, nsim = 10000, alpha = 0.05, Elapsed.time = TRUE)
 \item{nsim}{a numeric value, the number of Monte Carlo samples for computing an exact Monte Carlo p-value. The default value is 10000.}
 
 \item{alpha}{a numeric value, the level of the test. The default value is 0.05.}
+
+\item{report}{logical: if \code{TRUE} the result of the test is reported at the \code{alpha} level.}
+
+\item{plot}{logical: if \code{TRUE} an interaction plot will be plotted.}
+
+\item{vecolor}{character vector with length two, for visualizing the colors of lines in interaction plot. The default value is blue and red.}
+
+\item{linetype}{numeric vector with length two, for visualizing the line types in interaction plot. The default value is one and two.}
 
 \item{Elapsed.time}{logical: if \code{TRUE} the progress will be printed in the console.}
 }
@@ -35,7 +52,13 @@ Suppose that \eqn{a \ge b} and \eqn{b \ge 4}. Consider the \eqn{l}-th division o
  Let RSS1 and RSS2 denote the residual sum of squares for these two sub-tables, respectively. For a particular division \eqn{l}, let \eqn{F_l=max\{F_l,1/F_l\}}
  where \eqn{F_l=(a_2-1)RSS1/((a_1-1)RSS2)} and let \eqn{P_l} denote the corresponding p-value.
  Kharrati-Kopaei and Sadooghi-Alvandi (2007) proposed their test statistic as the minimum value of \eqn{P_l} over \eqn{l=1,…,2^{(a-1)}-a-1} all possible divisions of the table.
- In addition, this method of testing requires that the data matrix has more than three
+ If \code{plot} is \code{TRUE} an interaction plot will be plotted by displaying levels of column factor on the horizontal axis,
+ levels of row factor using lines that are visually distinguished by line type and color, and the
+ observed values on the vertical axis. Color and line type are used to display which levels of row factor are assigned to which
+ sub-tables based on the minimum p-values among all possible configurations. Note
+ that the grouping colors and line types appear whether or not the KKSA.test detects
+ a significant non-additivity. The default colors are blue and red, and the default line types are one and two for the two sub-tables. They can be customized by supplying arguments called \code{vecolor} and \code{linetype}.
+ Note that this method of testing requires that the data matrix has more than three
  rows. This test procedure is powerful for detecting interaction when the magnitude of interaction effects is heteroscedastic across the sub-tables of observations.
 }
 \examples{
