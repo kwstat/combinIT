@@ -11,6 +11,7 @@
 #' @param nc0 a numeric value, the number of Monte Carlo samples for computing the unbiasing constant \eqn{c_0} in \code{KKM.test}. The default value is 10000.
 #' @param opvalue a numeric vector, other p-values (in addition to the six considered p-values) that are going to be combined.
 #' @param alpha a numeric value, the level of the test. The default value is 0.05.
+#' @param report logical: if \code{TRUE} the result of the test is reported at the \code{alpha} level.
 #' @param Elapsed.time logical: if \code{TRUE} the progress will be printed in the console.
 #'
 #' @details The data matrix is divided based on the row of the data matrix for \code{KKSA.test} and \code{Franck.test}. Note that \code{KKSA.test} is not applicable when \eqn{a} is less than four. \code{Franck.test} and \code{Piepho.test} are not applicable when \eqn{a} is less than three. This function needs \code{mvtnorm} package.

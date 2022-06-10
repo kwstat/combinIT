@@ -90,7 +90,7 @@ KKSA.test <- function(x, nsim = 10000, alpha = 0.05, report = TRUE, plot = FALSE
       KKSA.p.apr <- min(1, KKSA.p.apr)
       qKKSA <- quantile(simu, prob = alpha, names = FALSE)
       if (plot) {
-        index <- Result.KKSA(x, nsim = nsim, alpha = alpha, report= TRUE, simu = simu)$index
+        index <- Result.KKSA(x, nsim = nsim, alpha = alpha, simu = simu)$index
         color <- 1:bl
         color[index] <- vecolor[1]
         color[-index] <- vecolor[2]

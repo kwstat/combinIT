@@ -48,3 +48,277 @@ comb <- function(pvalues) {
   Sidak <- 1 - (1 - minp)^k # minpv~Betha(1,k)
   list(Bon = Bon, Sidak = Sidak, jacobi = jacobi, GC = GC) # GC=Goussian Copula=MVNormal
 }
+
+
+
+#' @importFrom utils combn
+Result.KKSA <- function(x, nsim, alpha, simu) {
+  bl <- nrow(x)
+  tr <- ncol(x)
+  if (bl < 4) {
+    str <- paste("This test is not applicable when the row number is less than four. You may use the transpose of the data matrix if the number of column is greater than three.", "\n")
+    index <- 1:bl
+  } else {
+    qKKSA <- quantile(simu, prob = alpha, names = FALSE)
+    Nrow <- 2:(as.integer(bl / 2))
+    R <- x - matrix(rowMeans(x), bl, tr) - matrix(colMeans(x), bl, tr, byrow = TRUE) + mean(x)
+    sse <- sum(R^2)
+    count <- 0
+    Minpvalue <- 2
+    f2 <- rep(0, 0)
+    for (i in Nrow) {
+      ind <- combn(bl, i)
+      Nsplit <- ncol(ind)
+      if ((bl / 2) == i) Nsplit <- Nsplit / 2
+      for (j in 1:Nsplit) {
+        count <- count + 1
+        x1 <- x[ind[, j], ]
+        x2 <- x[-ind[, j], ]
+        rss1 <- sum((x1 - matrix(rowMeans(x1), nrow(x1), ncol(x1)) - matrix(colMeans(x1), nrow(x1), ncol(x1), byrow = TRUE) + mean(x1))^2)
+        rss2 <- sum((x2 - matrix(rowMeans(x2), nrow(x2), ncol(x2)) - matrix(colMeans(x2), nrow(x2), ncol(x2), byrow = TRUE) + mean(x2))^2)
+        f2[count] <- (rss1 * (bl - i - 1)) / (rss2 * (i - 1))
+        if (f2[count] < 1) f2[count] <- 1 / f2[count]
+        ex1 <- 1 - pf(f2[count], (tr - 1) * (i - 1), (bl - i - 1) * (tr - 1)) + pf(1 / f2[count], (tr - 1) * (i - 1), (bl - i - 1) * (tr - 1))
+        if (ex1 < Minpvalue) {
+          Minpvalue <- ex1
+          index <- ind[, j]
+          RSS1 <- rss1
+          RSS2 <- rss2
+          df1 <- (tr - 1) * (i - 1)
+          df2 <- (tr - 1) * (bl - i - 1)
+          fvalue <- f2[count]
+        }
+      }
+    }
+    str1 <- paste("There may exist a significant intercation. The magnitude of interaction effects is heteroscedastic across the sub-tables of observations.")
+    expre1 <- paste(index, collapse = ", ")
+    expre2 <- paste((1:bl)[-index], collapse = ", ")
+    str2 <- paste("The first sub-table consists of rows", expre1, "with RSS=", round(RSS1, 4), "on", df1, "degrees of freedoms.")
+    str3 <- paste("The second sub-table consists of rows", expre2, "with RSS=", round(RSS2, 4), "on", df2, "degrees of freedoms.")
+    str4 <- paste("The estimated critical value of the KKSA.test with", nsim, "Monte Carlo samples is", round(qKKSA, 4),".")
+    str <- paste(str1, str2, str3, str4)
+  }
+  list(string = str, index = index)
+}
+
+
+
+Result.Piepho <- function(x, nsim, alpha, simu) {
+  bl <- nrow(x)
+  tr <- ncol(x)
+  if (bl < 3) {
+    str <- paste("This test is not applicable when the row number is less than three. You may use the transpose of the data matrix if the number of column is greater than two.","\n")
+  } else {
+    qPiepho <- quantile(simu, prob = 1 - alpha, names = FALSE)
+    R <- x - matrix(rowMeans(x), bl, tr) - matrix(colMeans(x), bl, tr, byrow = TRUE) + mean(x)
+    W <- rowSums(R^2)
+    sigmahat <- (bl * (bl - 1) * W - sum(W)) / ((bl - 1) * (bl - 2) * (tr - 1))
+    str1 <- paste("There may exist a significant intercation.")
+    str2 <- paste("The Grubbs' estimtors of the row variances are heterogeneous.")
+    Grubbs <- paste(round(sigmahat, 4), collapse = ", ")
+    str3 <- paste("The Grubbs' variance estimators are:", Grubbs, ".")
+    str4 <- paste("The estimated critical value of the Piepho.test with", nsim, "Monte Carlo samples is", round(qPiepho, 4),".")
+    str <- paste(str1, str2, str3, str4)
+  }
+  str
+}
+
+
+
+Result.Malik <- function(x, simu, alpha, nsim) {
+  bl <- nrow(x)
+  tr <- ncol(x)
+  qMalik <- quantile(simu, prob = 1 - alpha, names = FALSE)
+  R <- x - matrix(rowMeans(x), bl, tr) - matrix(colMeans(x), bl, tr, byrow = TRUE) + mean(x)
+  R <- round(R, 5)
+  Min <- min(R)
+  Max <- max(R)
+  Index.Min <- which(R == Min)
+  Index.Max <- which(R == Max)
+  pmax <- Index.Max %/% bl
+  rmax <- Index.Max %% bl
+  pmin <- Index.Min %/% bl
+  rmin <- Index.Min %% bl
+  cellmax <- matrix(0, nrow = length(pmax), ncol = 2)
+  cellmin <- matrix(0, nrow = length(pmin), ncol = 2)
+  for (i in 1:length(pmax)) {
+    if (rmax[i] == 0) {
+      cellmax[i, ] <- c(bl, pmax[i])
+    } else {
+      cellmax[i, ] <- c(rmax[i], pmax[i] + 1)
+    }
+  }
+  for (i in 1:length(pmin)) {
+    if (rmin[i] == 0) {
+      cellmin[i, ] <- c(bl, pmin[i])
+    } else {
+      cellmin[i, ] <- c(rmin[i], pmin[i] + 1)
+    }
+  }
+  str1 <- paste("There may exist a significant intercation.", "The significant interaction might due to the some outliers in residuals; some cells produce large negative or positive residuals.", "\n")
+  str2 <- paste("The cell with row=", cellmin[1, 1], "and column=", cellmin[1, 2], "produces a large negative residual.", "\n")
+  if (length(pmin) > 2) {
+    for (i in 2:length(pmin)) {
+      str2 <- paste(str2, "The cell with row=", cellmin[i, 1], "and column=", cellmin[i, 2], "produces a large negative residual.", "\n")
+    }
+  }
+  str3 <- paste("The cell with row=", cellmax[1, 1], "and column=", cellmax[1, 2], "produces a large positive residual.", "\n")
+  if (length(pmax) > 2) {
+    for (i in 2:length(pmax)) {
+      str3 <- paste(str3, "The cell with row=", cellmax[i, 1], "and column=", cellmax[i, 2], "produces a large positive residual.", "\n")
+    }
+  }
+  str4 <- paste("The estimated critical value of the Malik.test with", nsim, "Monte Carlo samples is", round(qMalik, 4),".")
+  str <- paste(str1, str2, str3, str4)
+  return(str)
+}
+
+Result.KKM <- function(x, simu, nsim, alpha, nc0) {
+  if (requireNamespace("MASS", quietly = TRUE)) {
+    if (requireNamespace("Matrix", quietly = TRUE)) {
+      qKKM <- quantile(simu, prob = 1 - alpha, names = FALSE)
+      bl <- nrow(x)
+      tr <- ncol(x)
+      n <- bl * tr
+      kp <- kpr(bl, tr)
+      c0 <- C0(kp, n, nc0)
+      y <- c(t(x))
+      Z <- abs(kp %*% y)
+      S0 <- median(Z) / c0
+      PSE <- median(Z[Z <= 5 * S0])
+      SZ <- Z[Z > qKKM * PSE]
+      Index <- (1:nrow(kp))[Z > (qKKM * PSE)]
+      if (length(Index) != 0) {
+        M <- matrix(0, length(Index), 4)
+        count <- 0
+        for (k in Index) {
+          count <- count + 1
+          count2 <- 0
+          for (i in 1:tr) {
+            for (j in 1:bl) {
+              jj <- (i - 1) * bl + j
+              if (kp[k, jj] != 0) {
+                count2 <- count2 + 1
+                M[count, count2] <- paste0(j, i)
+              }
+            }
+          }
+        }
+        C1 <- kp[Index, ]
+        sigma2hat <- t(y) %*% (MASS::ginv(C1) %*% C1) %*% y / Matrix::rankMatrix(C1)[1]
+        str1 <- paste("There may exist a significant intercation and it might be caused by some cells.", "The absolute estimates of the significant pairwise interaction contrasts (PIC) and the corresponding involved cell means are:", "\n")
+        ex1 <- paste(paste0("|mu_{", M[1, 1], "}-mu_{", M[1, 2], "}-mu_{", M[1, 3], "}+mu_{", M[1, 4], "}|="), round(SZ[1], 4), "\n")
+        for (i in 2:length(Index)) {
+          ex1 <- paste(ex1, paste0("|mu_{", M[i, 1], "}-mu_{", M[i, 2], "}-mu_{", M[i, 3], "}+mu_{", M[i, 4], "}|="), round(SZ[i], 4), "\n")
+        }
+        str2 <- ex1
+        str3 <- paste("The variance estimate under the non-additivity assumption is", round(sigma2hat, 4), "on", Matrix::rankMatrix(C1)[1], "degrees of freedom.", "The estimated critical value of the KKM.test with", nsim, "Monte Carlo samples is", round(qKKM, 4),".")
+        str <- paste(str1, str2, str3)
+      } else {
+        str <- paste("The KKM.test could not detect any significant interaction.", "The estimated critical value of the KKM.test with", nsim, "Monte Carlo samples is", round(qKKM, 4),".")
+      }
+      return(str)
+    }
+  }
+}
+
+
+
+
+
+#' @importFrom stats qbeta
+Result.Boik <- function(x, nsim, alpha, simu) {
+  bl <- nrow(x)
+  tr <- ncol(x)
+  n <- tr * bl
+  p <- min(tr - 1, bl - 1)
+  q <- max(tr - 1, bl - 1)
+  df <- (p + 2) * (p - 1) / 2
+  if (p == 1) {
+    boik.p <- 1
+    qBoik <- 1
+    str3 <- paste("The exact critical value of the Boik.test is:", 1,".")
+  }
+  if (p > 2) {
+    qBoik <- quantile(simu, prob = alpha, names = FALSE)
+    str3 <- paste("The estimated critical value of the Boik.test with", nsim, "Monte Carlo samples is", round(qBoik, 4),".")
+  }
+  if (p == 2) {
+    qBoik <- qbeta(1 - alpha, 1, (q - 1) / 2)
+    qBoik <- 1 / (qBoik + 1)
+    str3 <- paste("The exact critical value of the Boik.test is", round(qBoik, 4),".")
+  }
+  R <- x - matrix(rowMeans(x), bl, tr) - matrix(colMeans(x), bl, tr, byrow = TRUE) + mean(x)
+  EV <- round(eigen(R %*% t(R))$values, 4)
+  str1 <- paste("There may exist a significant multiplicative form of intercation.")
+  expre <- paste(as.character(EV), collapse = ", ")
+  str2 <- paste("The eigen values of the RR' matrix are:", expre,".")
+  str3 <- str3
+  str <- paste(str1, str2, str3)
+  return(str)
+}
+
+
+
+
+#' @importFrom utils combn
+Result.Franck <- function(x, nsim, alpha, simu) {
+  tr <- ncol(x)
+  bl <- nrow(x)
+  if (bl < 3) {
+    str <- paste("This test is not applicable when the row number is less than three. You may use the transpose of the data matrix if the number of column is greater than two.", "\n")
+    sb1 <- 1:bl
+  } else {
+    qFranck <- quantile(simu, prob = 1 - alpha, names = FALSE)
+    cc <- 2^(bl - 1) - 1
+    Nrow <- 2:(as.integer(bl / 2))
+    sse <- sum((x - matrix(rowMeans(x), bl, tr) - matrix(colMeans(x), bl, tr, byrow = TRUE) + mean(x))^2)
+    fvalues <- rep(0, cc)
+    count <- 0
+    maxfv <- 0
+    for (i in Nrow) {
+      ind <- combn(bl, i)
+      Nsplit <- ncol(ind)
+      if (bl / 2 == i) Nsplit <- Nsplit / 2
+      for (j in 1:Nsplit) {
+        count <- count + 1
+        x1 <- x[ind[, j], ]
+        if (length(ind[, j]) == 1){
+          x1 <- matrix(x1, 1, ncol(x))
+        }
+        x2 <- x[(1:bl)[-ind[, j]], ]
+        if (length((1:bl)[-ind[, j]]) == 1) {
+          x2 <- matrix(x2, 1, ncol(x))
+        }
+        rss1 <- sum((x1 - matrix(rowMeans(x1), nrow(x1), ncol(x1)) - matrix(colMeans(x1), nrow(x1), ncol(x1), byrow = TRUE) + mean(x1))^2)
+        rss2 <- sum((x2 - matrix(rowMeans(x2), nrow(x2), ncol(x2)) - matrix(colMeans(x2), nrow(x2), ncol(x2), byrow = TRUE) + mean(x2))^2)
+        sse7 <- rss1 + rss2
+        fvalues[count] <- (sse - sse7) * (bl - 2) / sse7
+        if (fvalues[count] > maxfv) {
+          maxfv <- fvalues[count]
+          sb1 <- ind[, j]
+        }
+      }
+    }
+    for (d in 1:bl) {
+      count <- count + 1
+      x3 <- x[-d, ]
+      sse7 <- sum((x3 - matrix(rowMeans(x3), nrow(x3), ncol(x3)) - matrix(colMeans(x3), nrow(x3), ncol(x3), byrow = TRUE) + mean(x3))^2)
+      fvalues[count] <- (sse - sse7) * (bl - 2) / sse7
+      if (fvalues[count] > maxfv) {
+        maxfv <- fvalues[count]
+        sb1 <- c(1:bl)[-d]
+      }
+    }
+    sb2 <- c(1:bl)[-sb1]
+    str1 <- paste("A significant hidden structure of intercation might exist.")
+    expre1 <- paste((sb1), collapse = ", ")
+    expre2 <- paste((sb2), collapse = ", ")
+    str2 <- paste("The first group includes rows:", expre1,".")
+    str3 <- paste("The second group includes rows:", expre2,".")
+    str4 <- paste("The estimated critical value of the Franck.test with", nsim, "Monte Carlo samples is", round(qFranck, 4),".")
+    str <- paste(str1, str2, str3, str4)
+  }
+  return(list(string = str, index = sb1))
+}
+
