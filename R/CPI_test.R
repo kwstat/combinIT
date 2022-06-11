@@ -154,23 +154,26 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000, opvalue = NULL, alpha = 0.05,
       piepho.pvalue <- NA
     } else {
       hiddenf.pvalue <- mean(Hstat < Hsimu)
-      piepho.pvalue <- mean(pistat < pisimu)
-      qPiepho <- quantile(pisimu, prob = 1 - alpha, names = FALSE)
+      piepho.pvalue <- mean(pistat < pisimu, na.rm = TRUE)
+      qPiepho <- quantile(pisimu, prob = 1 - alpha, names = FALSE, na.rm = TRUE)
       qFranck <- quantile(Hsimu, prob = 1 - alpha, names = FALSE)
     }
     pvalues <- c(Boik.pvalue, piepho.pvalue, hiddenf.pvalue, Malik.pvalue, PIC.pvalue, KKSA.pvalue, opvalue)
     if (is.null(opvalue)) {
       names(pvalues) <- c("Boik.test", "Piepho.test", "Franck.test", "Malik.test", "KKM.test", "KKSA.test")
     } else {
-      names(pvalues) <- c("Boik.test", "Piepho.test", "Franck.test", "Malik.test", "KKM.test", "KKSA.test", paste0("Added test", 1:length(opvalue)))
+      names(pvalues) <- c("Boik.test", "Piepho.test", "Franck.test", "Malik.test", "KKM.test", "KKSA.test", paste0("added test", 1:length(opvalue)))
     }
     if (bl <= 3) {
-      pvalues <- pvalues[!is.na(pvalues)]
+      pvalues1 <- pvalues[!is.na(pvalues)]
     } else {
-      pvalues <- pvalues
+      pvalues1 <- pvalues
     }
-    spvalues <- sort(pvalues)
-    cp <- comb(pvalues)
+    spvalues <- sort(pvalues1, index.return = TRUE)
+    sindex <- spvalues$ix
+    spvalues <- spvalues$x
+    
+    cp <- comb(pvalues1)
     Bonferroni <- cp$Bon
     GC <- cp$GC
     Sidak <- cp$Sidak
@@ -179,56 +182,31 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000, opvalue = NULL, alpha = 0.05,
       if (cp$Bon >= alpha & cp$GC >= alpha & cp$Sidak >= alpha & cp$jacobi >= alpha) {
         str <- paste("No significant interaction was detected at the", paste0(100 * alpha, "%"), "level.", "\n")
       }
-      if ((cp$Bon < alpha | cp$Sidak < alpha | cp$jacobi < alpha) & bl >= 4) {
-        if (min(pvalues) == Boik.pvalue) str <- Result.Boik(x, nsim = nsim, alpha = alpha, simu = Bsimu)
-        if (min(pvalues) == piepho.pvalue) str <- Result.Piepho(x, nsim = nsim, alpha = alpha, simu = pisimu)
-        if (min(pvalues) == hiddenf.pvalue) str <- Result.Franck(x, nsim = nsim, alpha = alpha, simu = Hsimu)$string
-        if (min(pvalues) == Malik.pvalue) str <- Result.Malik(x, simu = Msimu, nsim = nsim, alpha = alpha)
-        if (min(pvalues) == PIC.pvalue) str <- Result.KKM(x, nsim = nsim, simu = psimu, alpha = alpha, nc0 = nc0)
-        if (min(pvalues) == KKSA.pvalue) str <- Result.KKSA(x, nsim = nsim, alpha = alpha, simu = Ksimu)$string
-        if (any(min(pvalues) == opvalue)) str <- paste("Significant interactions may be due to the", paste0(names(spvalues[1])), "that its p-value is recently added.")
+      str1 <- Result.Boik(x, nsim = nsim, alpha = alpha, simu = Bsimu)
+      str2 <- Result.Piepho(x, nsim = nsim, alpha = alpha, simu = pisimu)
+      str3 <- Result.Franck(x, nsim = nsim, alpha = alpha, simu = Hsimu)$string
+      str4 <- Result.Malik(x, simu = Msimu, nsim = nsim, alpha = alpha)
+      str5 <- Result.KKM(x, nsim = nsim, simu = psimu, alpha = alpha, nc0 = nc0)
+      str6 <- Result.KKSA(x, nsim = nsim, alpha = alpha, simu = Ksimu)$string
+      if (!is.null(opvalue)) {
+        str7 <- rep(0, length(opvalue))
+        for (j in 1:length(opvalue)) {
+          str7[j] <- paste("Significant interactions may be due to the", paste0("added test", j), "that its p-value is recently added.")
+        }
+        allstr <- c(str1, str2, str3, str4, str5, str6, str7)
+      } else {
+        allstr <- c(str1, str2, str3, str4, str5, str6)
       }
-      if ((cp$Bon < alpha | cp$Sidak < alpha | cp$jacobi < alpha) & bl == 3) {
-        if (min(pvalues) == Boik.pvalue) str <- Result.Boik(x, nsim = nsim, alpha = alpha, simu = Bsimu)
-        if (min(pvalues) == piepho.pvalue) str <- Result.Piepho(x, nsim = nsim, alpha = alpha, simu = pisimu)
-        if (min(pvalues) == hiddenf.pvalue) str <- Result.Franck(x, nsim = nsim, alpha = alpha, simu = Hsimu)$string
-        if (min(pvalues) == Malik.pvalue) str <- Result.Malik(x, simu = Msimu, nsim = nsim, alpha = alpha)
-        if (min(pvalues) == PIC.pvalue) str <- Result.KKM(x, simu = psimu, alpha = alpha, nc0 = nc0)
-        if (any(min(pvalues) == opvalue)) str <- paste("Significant interactions may be due to the", paste0(names(spvalues[1])), "that its p-value is recently added.")
-      }
-      if ((cp$Bon < alpha | cp$Sidak < alpha | cp$jacobi < alpha) & bl < 3) {
-        if (min(pvalues) == Boik.pvalue) str <- Result.Boik(x, nsim = nsim, alpha = alpha, simu = Bsimu)
-        if (min(pvalues) == Malik.pvalue) str <- Result.Malik(x, simu = Msimu, nsim = nsim, alpha = alpha)
-        if (min(pvalues) == PIC.pvalue) str <- Result.KKM(x, simu = psimu, alpha = alpha, nc0 = nc0)
-        if (any(min(pvalues) == opvalue)) str <- paste("Significant interactions may be due to the", paste0(names(spvalues[1])), "that its p-value is recently added.")
+      allstr <- allstr[!is.na(pvalues)]
+      sstr <- allstr[sindex]
+      if ((cp$Bon < alpha | cp$Sidak < alpha | cp$jacobi < alpha)) {
+         str <- sstr[1]
       }
       if (cp$Bon < alpha) {
         for (i in 2:length(spvalues)) {
           if (spvalues[i] < alpha / (length(spvalues)-i+1)) {
-            str <- paste(str, "\n", "In addition to the", paste0(names(spvalues[i-1]), ", the"), names(spvalues[i]), "is significant", "by using the Holm-Bonferroni method:")
-            if (bl >= 4) {
-              if (spvalues[i] == Boik.pvalue) str <- paste(str, Result.Boik(x, nsim = nsim, alpha = alpha, simu = Bsimu))
-              if (spvalues[i] == piepho.pvalue) str <- paste(str, Result.Piepho(x, nsim = nsim, alpha = alpha, simu = pisimu))
-              if (spvalues[i] == hiddenf.pvalue) str <- paste(str, Result.Franck(x, nsim = nsim, alpha = alpha, simu = Hsimu)$string)
-              if (spvalues[i] == Malik.pvalue) str <- paste(str, Result.Malik(x, simu = Msimu, nsim = nsim, alpha = alpha))
-              if (spvalues[i] == PIC.pvalue) str <- paste(str, Result.KKM(x, nsim = nsim, simu = psimu, alpha = alpha, nc0 = nc0))
-              if (spvalues[i] == KKSA.pvalue) str <- paste(str, Result.KKSA(x, nsim = nsim, alpha = alpha, simu = Ksimu)$string)
-              if (any(spvalues[i] == opvalue)) str <- paste(str, paste("Significant interactions may be due to the", paste0(names(spvalues[i])), "that its p-value is recently added."))
-            }
-            if (bl == 3) {
-              if (spvalues[i] == Boik.pvalue) str <- paste(str, Result.Boik(x, nsim = nsim, alpha = alpha, simu = Bsimu))
-              if (spvalues[i] == piepho.pvalue) str <- paste(str, Result.Piepho(x, nsim = nsim, alpha = alpha, simu = pisimu))
-              if (spvalues[i] == hiddenf.pvalue) str <- paste(str, Result.Franck(x, nsim = nsim, alpha = alpha, simu = Hsimu)$string)
-              if (spvalues[i] == Malik.pvalue) str <- paste(str, Result.Malik(x, simu = Msimu, nsim = nsim, alpha = alpha))
-              if (spvalues[i] == PIC.pvalue) str <- paste(str, Result.KKM(x, simu = psimu, alpha = alpha, nc0 = nc0))
-              if (any(spvalues[i] == opvalue)) str <- paste(str, paste("Significant interactions may be due to the", paste0(names(spvalues[i])), "that its p-value is recently added."))
-            }
-            if (bl < 3) {
-              if (spvalues[i] == Boik.pvalue) str <- paste(str, Result.Boik(x, nsim = nsim, alpha = alpha, simu = Bsimu))
-              if (spvalues[i] == Malik.pvalue) str <- paste(str, Result.Malik(x, simu = Msimu, nsim = nsim, alpha = alpha))
-              if (spvalues[i] == PIC.pvalue) str <- paste(str, Result.KKM(x, simu = psimu, alpha = alpha, nc0 = nc0))
-              if (any(spvalues[i] == opvalue)) str <- paste(str, paste("Significant interactions may be due to the", paste0(names(spvalues[i])), "that its p-value is recently added."))
-            }
+            str <- paste(str, "\n", "\n", paste0("Part ", i, " of the report:"), "In addition to the", paste0(names(spvalues[i-1]), ", the"), names(spvalues[i]), "is significant", "by using the Holm-Bonferroni method.")
+            str <- paste(str, sstr[i])
           }
         }
       }

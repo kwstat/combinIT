@@ -51,7 +51,7 @@
 #'
 #' @importFrom stats pchisq pf qnorm var
 #' @export
-Franck.test <- function(x, nsim = 10000, alpha = 0.05, report = TRUE, plot = FALSE, vecolor = c("blue", "red"), linetype = c(1, 2),Elapsed.time = TRUE) {
+Franck.test <- function(x, nsim = 10000, alpha = 0.05, report = TRUE, plot = FALSE, vecolor = c("blue", "red"), linetype = c(1, 2), Elapsed.time = TRUE) {
   DNAME <- deparse1(substitute(x))
   if (!is.matrix(x)) {
     stop("The input should be a matrix")

@@ -109,7 +109,7 @@ Result.Piepho <- function(x, nsim, alpha, simu) {
   if (bl < 3) {
     str <- paste("This test is not applicable when the row number is less than three. You may use the transpose of the data matrix if the number of column is greater than two.","\n")
   } else {
-    qPiepho <- quantile(simu, prob = 1 - alpha, names = FALSE)
+    qPiepho <- quantile(simu, prob = 1 - alpha, na.rm = TRUE, names = FALSE)
     R <- x - matrix(rowMeans(x), bl, tr) - matrix(colMeans(x), bl, tr, byrow = TRUE) + mean(x)
     W <- rowSums(R^2)
     sigmahat <- (bl * (bl - 1) * W - sum(W)) / ((bl - 1) * (bl - 2) * (tr - 1))
@@ -155,17 +155,17 @@ Result.Malik <- function(x, simu, alpha, nsim) {
       cellmin[i, ] <- c(rmin[i], pmin[i] + 1)
     }
   }
-  str1 <- paste("There may exist a significant intercation.", "The significant interaction might due to the some outliers in residuals; some cells produce large negative or positive residuals.", "\n")
-  str2 <- paste("The cell with row=", cellmin[1, 1], "and column=", cellmin[1, 2], "produces a large negative residual.", "\n")
+  str1 <- paste("There may exist a significant intercation.", "The significant interaction might due to the some outliers in residuals; some cells produce large negative or positive residuals:", "\n")
+  str2 <- paste("The cell with row=", cellmin[1, 1], "and column=", cellmin[1, 2], "produces a large negative residual,", "\n")
   if (length(pmin) > 2) {
     for (i in 2:length(pmin)) {
-      str2 <- paste(str2, "The cell with row=", cellmin[i, 1], "and column=", cellmin[i, 2], "produces a large negative residual.", "\n")
+      str2 <- paste(str2, "The cell with row=", cellmin[i, 1], "and column=", cellmin[i, 2], "produces a large negative residual,", "\n")
     }
   }
-  str3 <- paste("The cell with row=", cellmax[1, 1], "and column=", cellmax[1, 2], "produces a large positive residual.", "\n")
+  str3 <- paste("The cell with row=", cellmax[1, 1], "and column=", cellmax[1, 2], "produces a large positive residual,", "\n")
   if (length(pmax) > 2) {
     for (i in 2:length(pmax)) {
-      str3 <- paste(str3, "The cell with row=", cellmax[i, 1], "and column=", cellmax[i, 2], "produces a large positive residual.", "\n")
+      str3 <- paste(str3, "The cell with row=", cellmax[i, 1], "and column=", cellmax[i, 2], "produces a large positive residual,", "\n")
     }
   }
   str4 <- paste("The estimated critical value of the Malik.test with", nsim, "Monte Carlo samples is", round(qMalik, 4),".")

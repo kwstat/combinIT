@@ -61,8 +61,8 @@ Piepho.test <- function(x, nsim = 10000, alpha = 0.05, report = TRUE) {
     } else {
       statistics <- piephoC(x, bl, tr)
       simu <- Piephosim(nsim, bl, tr)
-      pieph <- mean(statistics < simu)
-      qPiepho <- quantile(simu, prob = 1 - alpha, names = FALSE)
+      pieph <- mean(statistics < simu, na.rm = TRUE)
+      qPiepho <- quantile(simu, prob = 1 - alpha, names = FALSE, na.rm = TRUE)
       df <- bl - 1
       asypieph <- 1 - pchisq(statistics, df = df)
       R <- x - matrix(rowMeans(x), bl, tr) - matrix(colMeans(x), bl, tr, byrow = TRUE) + mean(x)
