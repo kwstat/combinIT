@@ -7,10 +7,10 @@
 #' @param Elapsed.time logical: if \code{TRUE} the progress will be printed in the console.
 #' @param alpha a numeric value, the level of the test. The default value is 0.05.
 #' @param plot logical: if \code{TRUE} an interaction plot will be plotted.
-#' @param vecolor character vector of length two, for visualizing the colors of lines in interaction plot. The default value is blue and red. 
+#' @param vecolor character vector of length two, for visualizing the colors of lines in interaction plot. The default value is blue and red.
 #' @param linetype numeric vector of length two, for visualizing the line types in interaction plot. The default value is one and two.
 #' @param report logical: if \code{TRUE} the result of the test is reported at the \code{alpha} level.
-#' 
+#'
 #' @details Franck et al. (2013) derived a test statistic based on the “hidden additivity” structure.
 #'  They defined this structure as “the levels of one factor belong in two or more groups such that within each group the effects of the two factors are additive but the groups may interact with the ungrouped factor”.
 #'  To detect hidden additivity, Franck et al. (2013) divided the table of data into two sub-tables (based on the rows of the data matrix) and an interaction F-test was developed.
@@ -111,7 +111,7 @@ Franck.test <- function(x, nsim = 10000, alpha = 0.05, report = TRUE, plot = FAL
         if (hidden < alpha) {
           str <- Result.Franck(x, nsim = nsim, alpha = alpha, simu = simu)$string
         } else {
-          str <- paste("The Franck.test could not detect any significant interaction.", "The estimated critical value of the Franck.test with", nsim, "Monte Carlo samples is", round(qFranck, 4),".")
+          str <- paste("The Franck.test could not detect any significant interaction.", "The estimated critical value of the Franck.test with", nsim, "Monte Carlo samples is", round(qFranck, 4), ".")
         }
       } else {
         str <- paste("A report has not been wanted! To have a report, change argument 'report' to TRUE.")
