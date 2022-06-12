@@ -141,8 +141,8 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000, opvalue = NULL, alpha = 0.05,
     }
     PIC.pvalue <- mean(pstat < psimu)
     Malik.pvalue <- mean(Mstat < Msimu)
-    qMalik <- quantile(Msimu, prob = 1 - alpha, names = FALSE)
-    qBoik <- quantile(Bsimu, prob = alpha, names = FALSE)
+    qMalik <- quantile(Msimu, prob = 1 - alpha, names = FALSE, na.rm = TRUE)
+    qBoik <- quantile(Bsimu, prob = alpha, names = FALSE, na.rm = TRUE)
     if (bl <= 3) {
       KKSA.pvalue <- NA
     } else {
@@ -156,7 +156,7 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000, opvalue = NULL, alpha = 0.05,
       hiddenf.pvalue <- mean(Hstat < Hsimu)
       piepho.pvalue <- mean(pistat < pisimu, na.rm = TRUE)
       qPiepho <- quantile(pisimu, prob = 1 - alpha, names = FALSE, na.rm = TRUE)
-      qFranck <- quantile(Hsimu, prob = 1 - alpha, names = FALSE)
+      qFranck <- quantile(Hsimu, prob = 1 - alpha, names = FALSE, na.rm = TRUE)
     }
     pvalues <- c(Boik.pvalue, piepho.pvalue, hiddenf.pvalue, Malik.pvalue, PIC.pvalue, KKSA.pvalue, opvalue)
     if (is.null(opvalue)) {
