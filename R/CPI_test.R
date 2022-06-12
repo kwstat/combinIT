@@ -172,7 +172,7 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000, opvalue = NULL, alpha = 0.05,
     spvalues <- sort(pvalues1, index.return = TRUE)
     sindex <- spvalues$ix
     spvalues <- spvalues$x
-    
+
     cp <- comb(pvalues1)
     Bonferroni <- cp$Bon
     GC <- cp$GC
@@ -200,12 +200,12 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000, opvalue = NULL, alpha = 0.05,
       allstr <- allstr[!is.na(pvalues)]
       sstr <- allstr[sindex]
       if ((cp$Bon < alpha | cp$Sidak < alpha | cp$jacobi < alpha)) {
-         str <- sstr[1]
+        str <- sstr[1]
       }
       if (cp$Bon < alpha) {
         for (i in 2:length(spvalues)) {
-          if (spvalues[i] < alpha / (length(spvalues)-i+1)) {
-            str <- paste(str, "\n", "\n", paste0("Part ", i, " of the report:"), "In addition to the", paste0(names(spvalues[i-1]), ", the"), names(spvalues[i]), "is significant", "by using the Holm-Bonferroni method.")
+          if (spvalues[i] < alpha / (length(spvalues) - i + 1)) {
+            str <- paste(str, "\n", "\n", paste0("Part ", i, " of the report:"), "In addition to the", paste0(names(spvalues[i - 1]), ", the"), names(spvalues[i]), "is significant", "by using the Holm-Bonferroni method.")
             str <- paste(str, sstr[i])
           }
         }

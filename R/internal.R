@@ -95,7 +95,7 @@ Result.KKSA <- function(x, nsim, alpha, simu) {
     expre2 <- paste((1:bl)[-index], collapse = ", ")
     str2 <- paste("The first sub-table consists of rows", expre1, "with RSS=", round(RSS1, 4), "on", df1, "degrees of freedoms.")
     str3 <- paste("The second sub-table consists of rows", expre2, "with RSS=", round(RSS2, 4), "on", df2, "degrees of freedoms.")
-    str4 <- paste("The estimated critical value of the KKSA.test with", nsim, "Monte Carlo samples is", round(qKKSA, 4),".")
+    str4 <- paste("The estimated critical value of the KKSA.test with", nsim, "Monte Carlo samples is", round(qKKSA, 4), ".")
     str <- paste(str1, str2, str3, str4)
   }
   list(string = str, index = index)
@@ -107,7 +107,7 @@ Result.Piepho <- function(x, nsim, alpha, simu) {
   bl <- nrow(x)
   tr <- ncol(x)
   if (bl < 3) {
-    str <- paste("This test is not applicable when the row number is less than three. You may use the transpose of the data matrix if the number of column is greater than two.","\n")
+    str <- paste("This test is not applicable when the row number is less than three. You may use the transpose of the data matrix if the number of column is greater than two.", "\n")
   } else {
     qPiepho <- quantile(simu, prob = 1 - alpha, na.rm = TRUE, names = FALSE)
     R <- x - matrix(rowMeans(x), bl, tr) - matrix(colMeans(x), bl, tr, byrow = TRUE) + mean(x)
@@ -117,7 +117,7 @@ Result.Piepho <- function(x, nsim, alpha, simu) {
     str2 <- paste("The Grubbs' estimtors of the row variances are heterogeneous.")
     Grubbs <- paste(round(sigmahat, 4), collapse = ", ")
     str3 <- paste("The Grubbs' variance estimators are:", Grubbs, ".")
-    str4 <- paste("The estimated critical value of the Piepho.test with", nsim, "Monte Carlo samples is", round(qPiepho, 4),".")
+    str4 <- paste("The estimated critical value of the Piepho.test with", nsim, "Monte Carlo samples is", round(qPiepho, 4), ".")
     str <- paste(str1, str2, str3, str4)
   }
   str
@@ -168,7 +168,7 @@ Result.Malik <- function(x, simu, alpha, nsim) {
       str3 <- paste(str3, "The cell with row=", cellmax[i, 1], "and column=", cellmax[i, 2], "produces a large positive residual,", "\n")
     }
   }
-  str4 <- paste("The estimated critical value of the Malik.test with", nsim, "Monte Carlo samples is", round(qMalik, 4),".")
+  str4 <- paste("The estimated critical value of the Malik.test with", nsim, "Monte Carlo samples is", round(qMalik, 4), ".")
   str <- paste(str1, str2, str3, str4)
   return(str)
 }
@@ -212,10 +212,10 @@ Result.KKM <- function(x, simu, nsim, alpha, nc0) {
           ex1 <- paste(ex1, paste0("|mu_{", M[i, 1], "}-mu_{", M[i, 2], "}-mu_{", M[i, 3], "}+mu_{", M[i, 4], "}|="), round(SZ[i], 4), "\n")
         }
         str2 <- ex1
-        str3 <- paste("The variance estimate under the non-additivity assumption is", round(sigma2hat, 4), "on", Matrix::rankMatrix(C1)[1], "degrees of freedom.", "The estimated critical value of the KKM.test with", nsim, "Monte Carlo samples is", round(qKKM, 4),".")
+        str3 <- paste("The variance estimate under the non-additivity assumption is", round(sigma2hat, 4), "on", Matrix::rankMatrix(C1)[1], "degrees of freedom.", "The estimated critical value of the KKM.test with", nsim, "Monte Carlo samples is", round(qKKM, 4), ".")
         str <- paste(str1, str2, str3)
       } else {
-        str <- paste("The KKM.test could not detect any significant interaction.", "The estimated critical value of the KKM.test with", nsim, "Monte Carlo samples is", round(qKKM, 4),".")
+        str <- paste("The KKM.test could not detect any significant interaction.", "The estimated critical value of the KKM.test with", nsim, "Monte Carlo samples is", round(qKKM, 4), ".")
       }
       return(str)
     }
@@ -237,22 +237,22 @@ Result.Boik <- function(x, nsim, alpha, simu) {
   if (p == 1) {
     boik.p <- 1
     qBoik <- 1
-    str3 <- paste("The exact critical value of the Boik.test is:", 1,".")
+    str3 <- paste("The exact critical value of the Boik.test is:", 1, ".")
   }
   if (p > 2) {
     qBoik <- quantile(simu, prob = alpha, names = FALSE)
-    str3 <- paste("The estimated critical value of the Boik.test with", nsim, "Monte Carlo samples is", round(qBoik, 4),".")
+    str3 <- paste("The estimated critical value of the Boik.test with", nsim, "Monte Carlo samples is", round(qBoik, 4), ".")
   }
   if (p == 2) {
     qBoik <- qbeta(1 - alpha, 1, (q - 1) / 2)
     qBoik <- 1 / (qBoik + 1)
-    str3 <- paste("The exact critical value of the Boik.test is", round(qBoik, 4),".")
+    str3 <- paste("The exact critical value of the Boik.test is", round(qBoik, 4), ".")
   }
   R <- x - matrix(rowMeans(x), bl, tr) - matrix(colMeans(x), bl, tr, byrow = TRUE) + mean(x)
   EV <- round(eigen(R %*% t(R))$values, 4)
   str1 <- paste("There may exist a significant multiplicative form of intercation.")
   expre <- paste(as.character(EV), collapse = ", ")
-  str2 <- paste("The eigen values of the RR' matrix are:", expre,".")
+  str2 <- paste("The eigen values of the RR' matrix are:", expre, ".")
   str3 <- str3
   str <- paste(str1, str2, str3)
   return(str)
@@ -283,7 +283,7 @@ Result.Franck <- function(x, nsim, alpha, simu) {
       for (j in 1:Nsplit) {
         count <- count + 1
         x1 <- x[ind[, j], ]
-        if (length(ind[, j]) == 1){
+        if (length(ind[, j]) == 1) {
           x1 <- matrix(x1, 1, ncol(x))
         }
         x2 <- x[(1:bl)[-ind[, j]], ]
@@ -314,11 +314,10 @@ Result.Franck <- function(x, nsim, alpha, simu) {
     str1 <- paste("A significant hidden structure of intercation might exist.")
     expre1 <- paste((sb1), collapse = ", ")
     expre2 <- paste((sb2), collapse = ", ")
-    str2 <- paste("The first group includes rows:", expre1,".")
-    str3 <- paste("The second group includes rows:", expre2,".")
-    str4 <- paste("The estimated critical value of the Franck.test with", nsim, "Monte Carlo samples is", round(qFranck, 4),".")
+    str2 <- paste("The first group includes rows:", expre1, ".")
+    str3 <- paste("The second group includes rows:", expre2, ".")
+    str4 <- paste("The estimated critical value of the Franck.test with", nsim, "Monte Carlo samples is", round(qFranck, 4), ".")
     str <- paste(str1, str2, str3, str4)
   }
   return(list(string = str, index = sb1))
 }
-

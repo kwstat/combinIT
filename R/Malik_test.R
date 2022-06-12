@@ -73,7 +73,7 @@ Malik.test <- function(x, nsim = 10000, alpha = 0.05, report = TRUE, Elapsed.tim
       if (malik < alpha) {
         str <- Result.Malik(x, simu = simu, alpha = alpha, nsim = nsim)
       } else {
-        str <- paste("The Malik.test could not detect any significant interaction.", "The estimated critical value of the Malik.test with", nsim, "Monte Carlo samples is", round(qMalik, 4),".")
+        str <- paste("The Malik.test could not detect any significant interaction.", "The estimated critical value of the Malik.test with", nsim, "Monte Carlo samples is", round(qMalik, 4), ".")
       }
     } else {
       str <- paste("A report has not been wanted! To have a report, change argument 'report' to TRUE.")

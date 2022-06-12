@@ -75,13 +75,13 @@ Boik.test <- function(x, nsim = 10000, alpha = 0.05, report = TRUE) {
         str <- Result.Boik(x, nsim = nsim, alpha = alpha, simu = simu)
       } else {
         if (p == 2) {
-          str <- paste("The Boik.test could not detect any significant interaction.", "The exact critical value of the Boik.test is", round(qBoik, 4),".")
+          str <- paste("The Boik.test could not detect any significant interaction.", "The exact critical value of the Boik.test is", round(qBoik, 4), ".")
         }
         if (p > 2) {
-          str <- paste("The Boik.test could not detect any significant interaction.", "The estimated critical value of the Boik.test with", nsim, "Monte Carlo samples is", round(qBoik, 4),".")
+          str <- paste("The Boik.test could not detect any significant interaction.", "The estimated critical value of the Boik.test with", nsim, "Monte Carlo samples is", round(qBoik, 4), ".")
         }
         if (p == 1) {
-          str <- paste("The Boik.test could not detect any significant interaction.", "The exact critical value of the Boik.test is", 1,".")
+          str <- paste("The Boik.test could not detect any significant interaction.", "The exact critical value of the Boik.test is", 1, ".")
         }
       }
     } else {

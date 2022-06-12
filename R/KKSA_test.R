@@ -7,10 +7,10 @@
 #' @param Elapsed.time logical: if \code{TRUE} the progress will be printed in the console.
 #' @param alpha a numeric value, the level of the test. The default value is 0.05.
 #' @param plot logical: if \code{TRUE} an interaction plot will be plotted.
-#' @param vecolor character vector with length two, for visualizing the colors of lines in interaction plot. The default value is blue and red. 
+#' @param vecolor character vector with length two, for visualizing the colors of lines in interaction plot. The default value is blue and red.
 #' @param linetype numeric vector with length two, for visualizing the line types in interaction plot. The default value is one and two.
 #' @param report logical: if \code{TRUE} the result of the test is reported at the \code{alpha} level.
-#' 
+#'
 #' @details  Suppose that \eqn{a \ge b} and \eqn{b \ge 4}. Consider the \eqn{l}-th division of the data table into two sub-tables,
 #'  obtained by putting \eqn{a_1} (\eqn{2 \le a_1 \le a-2}) rows in the first sub-table and the remaining \eqn{a_2} rows in the second sub-table (\eqn{a_1+a_2=a}).
 #'  Let RSS1 and RSS2 denote the residual sum of squares for these two sub-tables, respectively. For a particular division \eqn{l}, let \eqn{F_l=max\{F_l,1/F_l\}}
@@ -24,7 +24,7 @@
 #'  a significant non-additivity. The default colors are blue and red, and the default line types are one and two for the two sub-tables. They can be customized by supplying arguments called \code{vecolor} and \code{linetype}.
 #'  Note that this method of testing requires that the data matrix has more than three
 #'  rows. This test procedure is powerful for detecting interaction when the magnitude of interaction effects is heteroscedastic across the sub-tables of observations.
-#'  
+#'
 #' @return An object of the class \code{ITtest}, which is a list inducing following components::
 #' \item{pvalue.exact}{The calculated exact Monte Carlo p-value.}
 #' \item{pvalue.appro}{The Bonferroni-adjusted p-value is calculated.}
@@ -105,7 +105,7 @@ KKSA.test <- function(x, nsim = 10000, alpha = 0.05, report = TRUE, plot = FALSE
         axis(1, at = 1:tr, labels = 1:tr, cex.axis = 1)
         legend(tr + 0.03, max(x), rep(paste0("row", 1:bl)), lty = ltype, bty = "n", cex = 0.60, col = color, lwd = 2)
       }
-      if(report) {
+      if (report) {
         if (KKSA.p < alpha) {
           str <- Result.KKSA(x, nsim = nsim, alpha = alpha, simu = simu)$string
         } else {
