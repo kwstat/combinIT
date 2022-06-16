@@ -439,7 +439,7 @@ using namespace Rcpp;
 //' @importFrom Rcpp sourceCpp
 //' 
 // [[Rcpp::export]]
-List kh_f(NumericMatrix x){// Hossein's Codes....
+List kh_f(NumericMatrix x){
   IntegerVector Nrow;
   double mx,sxbi,sse,rss1,rss2,sse7,myb1,sybi,fmin,fmax;
   int count = 0,i,j,Nsplit,nr,kk,dfn,dfd;
