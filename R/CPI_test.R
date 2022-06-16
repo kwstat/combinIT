@@ -164,8 +164,8 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000, opvalue = NULL, alpha = 0.05,
     } else {
       names(pvalues) <- c("Boik.test", "Piepho.test", "Franck.test", "Malik.test", "KKM.test", "KKSA.test", paste0("added test", 1:length(opvalue)))
     }
-    if (bl <= 3) {
-      pvalues1 <- pvalues[!is.na(pvalues)]
+    if (bl <= 3 | any(is.na(pvalues)) | any(is.nan(pvalues))) {
+      pvalues1 <- pvalues[!is.na(pvalues) & !is.nan(pvalues)]
     } else {
       pvalues1 <- pvalues
     }
@@ -197,7 +197,7 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000, opvalue = NULL, alpha = 0.05,
       } else {
         allstr <- c(str1, str2, str3, str4, str5, str6)
       }
-      allstr <- allstr[!is.na(pvalues)]
+      allstr <- allstr[!is.na(pvalues) & !is.nan(pvalues)]
       sstr <- allstr[sindex]
       if ((cp$Bon < alpha | cp$Sidak < alpha | cp$jacobi < alpha)) {
         str <- sstr[1]
