@@ -108,8 +108,12 @@ Result.Piepho <- function(x, nsim, alpha, simu) {
   tr <- ncol(x)
   if (bl < 3) {
     str <- paste("This test is not applicable when the row number is less than three. You may use the transpose of the data matrix if the number of column is greater than two.", "\n")
-  } else {
-    qPiepho <- quantile(simu, prob = 1 - alpha, na.rm = TRUE, names = FALSE)
+  }
+  if (any(is.nan(simu))) {
+    str <- paste("This test is not applicable", "\n")
+  }
+  if (bl >= 3 & !any(is.nan(simu))) {
+    qPiepho <- quantile(simu, prob = 1 - alpha, names = FALSE)
     R <- x - matrix(rowMeans(x), bl, tr) - matrix(colMeans(x), bl, tr, byrow = TRUE) + mean(x)
     W <- rowSums(R^2)
     sigmahat <- (bl * (bl - 1) * W - sum(W)) / ((bl - 1) * (bl - 2) * (tr - 1))

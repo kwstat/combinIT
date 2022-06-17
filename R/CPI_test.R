@@ -141,31 +141,31 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000, opvalue = NULL, alpha = 0.05,
     }
     PIC.pvalue <- mean(pstat < psimu)
     Malik.pvalue <- mean(Mstat < Msimu)
-    qMalik <- quantile(Msimu, prob = 1 - alpha, names = FALSE, na.rm = TRUE)
-    qBoik <- quantile(Bsimu, prob = alpha, names = FALSE, na.rm = TRUE)
     if (bl <= 3) {
       KKSA.pvalue <- NA
     } else {
       KKSA.pvalue <- mean(Kstat > Ksimu)
-      qKKSA <- quantile(Ksimu, prob = alpha, names = FALSE)
     }
     if (bl <= 2) {
       hiddenf.pvalue <- NA
-      piepho.pvalue <- NA
     } else {
       hiddenf.pvalue <- mean(Hstat < Hsimu)
-      piepho.pvalue <- mean(pistat < pisimu, na.rm = TRUE)
-      qPiepho <- quantile(pisimu, prob = 1 - alpha, names = FALSE, na.rm = TRUE)
-      qFranck <- quantile(Hsimu, prob = 1 - alpha, names = FALSE, na.rm = TRUE)
     }
+    if (bl <= 2 | is.nan(pistat) | any(is.nan(pisimu))) {
+      piepho.pvalue <- NA
+      warning("Piepho.test is not applicable since this data produce NaN.")
+    } else {
+      piepho.pvalue <- mean(pistat < pisimu)
+    }
+    
     pvalues <- c(Boik.pvalue, piepho.pvalue, hiddenf.pvalue, Malik.pvalue, PIC.pvalue, KKSA.pvalue, opvalue)
     if (is.null(opvalue)) {
       names(pvalues) <- c("Boik.test", "Piepho.test", "Franck.test", "Malik.test", "KKM.test", "KKSA.test")
     } else {
       names(pvalues) <- c("Boik.test", "Piepho.test", "Franck.test", "Malik.test", "KKM.test", "KKSA.test", paste0("added test", 1:length(opvalue)))
     }
-    if (bl <= 3 | any(is.na(pvalues)) | any(is.nan(pvalues))) {
-      pvalues1 <- pvalues[!is.na(pvalues) & !is.nan(pvalues)]
+    if (bl <= 3 | any(is.na(pvalues))) {
+      pvalues1 <- pvalues[!is.na(pvalues)]
     } else {
       pvalues1 <- pvalues
     }
@@ -197,7 +197,7 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000, opvalue = NULL, alpha = 0.05,
       } else {
         allstr <- c(str1, str2, str3, str4, str5, str6)
       }
-      allstr <- allstr[!is.na(pvalues) & !is.nan(pvalues)]
+      allstr <- allstr[!is.na(pvalues)]
       sstr <- allstr[sindex]
       if ((cp$Bon < alpha | cp$Sidak < alpha | cp$jacobi < alpha)) {
         str <- sstr[1]
@@ -223,6 +223,11 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000, opvalue = NULL, alpha = 0.05,
       piepho.pvalue <- NA
       pistat <- NA
     }
+    if (bl <= 2 | is.nan(pistat) | any(is.nan(pisimu))) {
+      piepho.pvalue <- NA
+      pistat <- NA
+    }
+      
     out <- list(
       nsim = nsim,
       Piepho.pvalue = piepho.pvalue,
