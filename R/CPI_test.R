@@ -44,9 +44,10 @@
 #'  86(3): 469-487.
 #'
 #' @examples
-#' data(RDWW)
-#' CPI.test(RDWW, nsim = 1000, Elapsed.time = FALSE)
-#'
+#' \dontrun{
+#' data(CNV)
+#' CPI.test(CNV, nsim = 1000, Elapsed.time = FALSE)
+#'}
 #' @importFrom stats pchisq pf qnorm var
 #'
 #' @export

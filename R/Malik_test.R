@@ -35,9 +35,10 @@
 #' 86(3): 469-487.
 #'
 #' @examples
+#' \dontrun{
 #' data(IDCP)
 #' Malik.test(IDCP, nsim = 1000, Elapsed.time = FALSE)
-#'
+#'}
 #' @export
 Malik.test <- function(x, nsim = 10000, alpha = 0.05, report = TRUE, Elapsed.time = TRUE) {
   if (!is.matrix(x)) {

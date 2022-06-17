@@ -64,9 +64,10 @@ Bonferroni, Sidak, Jacobi expansion, and Gaussian Copula. The results of these f
 The data matrix is divided based on the row of the data matrix for \code{KKSA.test} and \code{Franck.test}. Note that \code{KKSA.test} is not applicable when \eqn{a} is less than four. \code{Franck.test} and \code{Piepho.test} are not applicable when \eqn{a} is less than three. This function needs \code{mvtnorm} package.
 }
 \examples{
-data(RDWW)
-CPI.test(RDWW, nsim = 1000, Elapsed.time = FALSE)
-
+\dontrun{
+data(CNV)
+CPI.test(CNV, nsim = 1000, Elapsed.time = FALSE)
+}
 }
 \references{
 Shenavari, Z., Kharrati-Kopaei, M. (2018). A Method for Testing Additivity in
