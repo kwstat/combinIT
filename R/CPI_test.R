@@ -162,7 +162,7 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000, Elapsed.time = TRUE) {
       message("There are significant interaction types at the 5% level")
       if (min(pvalues) == Boik.pvalue) message("The multiplicative form of interaction migth exist")
       if (min(pvalues) == piepho.pvalue) message("The detected significant interaction might due to the Grubbs type estimators of variances are heterogeneous across the levels of one factor")
-      if (min(pvalues) == hiddenf.pvalue) message("A hidden structure of intercation might exist")
+      if (min(pvalues) == hiddenf.pvalue) message("A hidden structure of interaction might exist")
       if (min(pvalues) == Malik.pvalue) message("Some cells produce large negative or positive residuals due to the significant interaction")
       if (min(pvalues) == PIC.pvalue) message("Significant interactions are caused by some cells")
       if (min(pvalues) == KKSA.pvalue) message("The magnitude of interaction effects is heteroscedastic across the sub-tables of observations")
@@ -171,7 +171,7 @@ CPI.test <- function(x, nsim = 10000, nc0 = 10000, Elapsed.time = TRUE) {
       message("There are significant interaction types at the 5% level")
       if (min(pvalues) == Boik.pvalue) message("The multiplicative form of interaction migth exist")
       if (min(pvalues) == piepho.pvalue) message("The detected significant interaction might due to the Grubbs type estimators of variances are heterogeneous across the levels of one factor")
-      if (min(pvalues) == hiddenf.pvalue) message("A hidden structure of intercation might exist")
+      if (min(pvalues) == hiddenf.pvalue) message("A hidden structure of interaction might exist")
       if (min(pvalues) == Malik.pvalue) message("Some cells produce large negative or positive residuals due to the significant interaction")
       if (min(pvalues) == PIC.pvalue) message("Significant interactions are caused by some cells")
     }
